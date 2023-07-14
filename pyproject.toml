@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "vlasiator"
+name = "pyvlasiator"
 version = "0.1.0"
 description = ""
 authors = ["Hongyang Zhou <hyzhou@umich.edu>"]
