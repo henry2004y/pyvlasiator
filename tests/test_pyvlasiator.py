@@ -1,6 +1,28 @@
 import pytest
-
+import requests
+import tarfile
+import os
 from pyvlasiator.vlsv.reader import VlsvReader
+
+filedir = os.path.dirname(__file__)
+
+if os.path.isfile(filedir + "/data/bulk.1d.vlsv"):
+    pass
+else:
+    url = (
+        "https://raw.githubusercontent.com/henry2004y/vlsv_data/master/testdata.tar.gz"
+    )
+    testfiles = url.rsplit("/", 1)[1]
+    r = requests.get(url, allow_redirects=True)
+    open(testfiles, "wb").write(r.content)
+
+    path = filedir + "/data"
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    with tarfile.open(testfiles) as file:
+        file.extractall(path)
 
 
 class TestVlsvReader:

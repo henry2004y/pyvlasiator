@@ -4,3 +4,5 @@ poetry.lock
 coverage.xml
 *.vlsv
 .vscode/
+*.tar.gz
+tests/data/
