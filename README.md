@@ -1,7 +1,6 @@
 # pyvlasiator
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/henry2004y/Vlasiator.jl/master/docs/src/assets/logo.png" height="200"><br>
   <a href="https://github.com/henry2004y/pyvlasiator/actions">
     <img src="https://github.com/henry2004y/pyvlasiator/actions/workflows/CI.yml/badge.svg">
   </a>
