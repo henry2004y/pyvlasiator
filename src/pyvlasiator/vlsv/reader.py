@@ -2,6 +2,7 @@ from xml.etree import ElementTree
 import numpy as np
 import math
 
+
 class VMeshInfo:
     def __init__(self, vblocks, vblock_size, vmin, vmax, dv):
         self.vblocks = vblocks
@@ -9,21 +10,17 @@ class VMeshInfo:
         self.vmin = vmin
         self.vmax = vmax
         self.dv = dv
+        self.cellwithVDF = np.empty(0, dtype=np.uint64)
+        self.nblock_C = np.empty(0, dtype=np.int64)
 
 
 class VlsvReader:
-    def __init__(self, filename : str):
+    def __init__(self, filename: str):
         self.filename = filename
         self.fid = open(self.filename, "rb")
         self.xmlroot = ElementTree.fromstring("<VLSV></VLSV>")
         self.celldict = {}
         self.maxamr = -1
-        #TODO: rename variable for the velocity blocks
-        self.fileindex_for_cellid_blocks = {}  # [0] is index, [1] is blockcount
-        self.cells_with_blocks = {}  # per-pop
-        self.blocks_per_cell = {}  # per-pop
-        self.blocks_per_cell_offsets = {}  # per-pop
-        self.order_for_cellid_blocks = {}  # per-pop
         self.vg_indexes_on_fg = np.array([])  # SEE: map_vg_onto_fg(self)
 
         self._read_xml_footer()
@@ -81,7 +78,7 @@ class VlsvReader:
                 range(0, 3),
             )
         )
-
+        # TODO: use TypedDict
         self.meshes = {}
 
         # Iterate through the XML tree, find all populations
@@ -99,7 +96,7 @@ class VlsvReader:
             bbox = self.read(tag="MESH_BBOX", mesh=popname)
             if bbox is None:
                 if self.read_parameter("vxblocks_ini") is not None:
-                    # Older vlsv files where the mesh is defined with parameters
+                    # Vlasiator 4- files where the mesh is defined with parameters
                     vblocks = (
                         (int)(self.read_parameter("vxblocks_ini")),
                         (int)(self.read_parameter("vyblocks_ini")),
@@ -124,7 +121,7 @@ class VlsvReader:
                     vmax = (0.0, 0.0, 0.0)
                     dv = (1.0, 1.0, 1.0)
 
-            else:  # new style vlsv file with bounding box
+            else:  # Vlasiator 5+ file with bounding box
                 nodeX = self.read(tag="MESH_NODE_CRDS_X", mesh=popname)
                 nodeY = self.read(tag="MESH_NODE_CRDS_Y", mesh=popname)
                 nodeZ = self.read(tag="MESH_NODE_CRDS_Z", mesh=popname)
@@ -214,11 +211,18 @@ class VlsvReader:
         operator: str = "pass",
         cellids=-1,
     ):
-        """Return data as an numpy array from the vlsv file.
+        """Read data of name, tag, and mesh from the vlsv file.
 
-        :param operator: Datareduction operator. "pass" does no operation on data.
-        :param cellids:  If -1 then all data is read. If nonzero then only the vector
-                         for the specified cell id or cellids is read
+        Parameters
+        ----------
+        operator : str
+            Data reduction operator. "pass" does no operation on data.
+        cellids : int or list of int
+            If -1 then all data is read. If nonzero then only the vector for the specified
+            cell id or cellids is read.
+        Returns
+        -------
+        numpy.ndarray
 
         .. seealso:: :func:`read_variable` :func:`read_variable_info`
         """
@@ -244,10 +248,10 @@ class VlsvReader:
             if mesh and "mesh" in child.attrib and child.attrib["mesh"] != mesh:
                 continue
             if child.tag == tag:
-                vector_size = int(child.attrib["vectorsize"])
+                vsize = int(child.attrib["vectorsize"])
                 array_size = int(child.attrib["arraysize"])
-                element_size = int(child.attrib["datasize"])
-                datatype = child.attrib["datatype"]
+                dsize = int(child.attrib["datasize"])
+                dtype = child.attrib["datatype"]
                 variable_offset = int(child.text)
 
                 # Select efficient method to read data based on number of cells
@@ -265,8 +269,7 @@ class VlsvReader:
                         result_size = ncellids
                         read_size = 1
                         read_offsets = [
-                            self.celldict[cid] * element_size * vector_size
-                            for cid in cellids
+                            self.celldict[cid] * dsize * vsize for cid in cellids
                         ]
                 else:
                     if cellids < 0:  # all cells
@@ -276,28 +279,26 @@ class VlsvReader:
                     else:  # parameter or single cell
                         result_size = 1
                         read_size = 1
-                        read_offsets = [
-                            self.celldict[cellids] * element_size * vector_size
-                        ]
+                        read_offsets = [self.celldict[cellids] * dsize * vsize]
 
                 for r_offset in read_offsets:
                     use_offset = int(variable_offset + r_offset)
                     fid.seek(use_offset)
 
-                    if datatype == "float" and element_size == 4:
+                    if dtype == "float" and dsize == 4:
                         dtype = np.float32
-                    elif datatype == "float" and element_size == 8:
+                    elif dtype == "float" and dsize == 8:
                         dtype = np.float64
-                    elif datatype == "int" and element_size == 4:
+                    elif dtype == "int" and dsize == 4:
                         dtype = np.int32
-                    elif datatype == "int" and element_size == 8:
+                    elif dtype == "int" and dsize == 8:
                         dtype = np.int64
-                    elif datatype == "uint" and element_size == 4:
+                    elif dtype == "uint" and dsize == 4:
                         dtype = np.uint32
-                    elif datatype == "uint" and element_size == 8:
+                    elif dtype == "uint" and dsize == 8:
                         dtype = np.uint64
 
-                    data = np.fromfile(fid, dtype, count=vector_size * read_size)
+                    data = np.fromfile(fid, dtype, count=vsize * read_size)
 
                     if len(read_offsets) != 1:
                         arraydata.append(data)
@@ -306,17 +307,15 @@ class VlsvReader:
                     # Many single cell IDs requested
                     # Pick the elements corresponding to the requested cells
                     for cid in cellids:
-                        append_offset = self.celldict[cid] * vector_size
-                        arraydata.append(
-                            data[append_offset : append_offset + vector_size]
-                        )
+                        append_offset = self.celldict[cid] * vsize
+                        arraydata.append(data[append_offset : append_offset + vsize])
                     data = np.squeeze(np.array(arraydata))
                 elif len(read_offsets) != 1:
                     # Not so many single cell IDs requested
                     data = np.squeeze(np.array(arraydata))
 
-                if vector_size > 1:
-                    data = data.reshape(result_size, vector_size)
+                if vsize > 1:
+                    data = data.reshape(result_size, vsize)
 
                 if result_size == 1:
                     return data[0]
@@ -363,6 +362,66 @@ class VlsvReader:
     def read_parameter(self, name: str):
         return self.read(name=name, tag="PARAMETER")
 
+    def read_vcells(self, cellid, species: str = "proton"):
+        """Read raw velocity block data.
+
+        Parameters
+        ----------
+        cellid :
+            Cell ID of the cell whose velocity blocks are read.
+        species : str
+            Population required.
+
+        Returns
+        -------
+        numpy.ndarray
+            A numpy array with block ids and their data.
+        """
+
+        fid = self.fid
+        mesh = self.meshes[species]
+
+        if np.any(mesh.cellwithVDF):
+            for node in self.cellwithVDF:
+                if node.attrib["name"] == species:
+                    asize = int(node.attrib["arraysize"])
+                    offset = int(node.text)
+                    fid.seek(offset)
+                    cellwithVDF = np.fromfile(fid, dtype=np.uint64, count=asize)
+                    mesh.cellwithVDF = cellwithVDF
+                    break
+
+            for node in self.xmlroot.findall("BLOCKSPERCELL"):
+                if node.attrib["name"] == species:
+                    asize = int(node.attrib["arraysize"])
+                    dsize = int(node.attrib["datasize"])
+                    offset = int(node.text)
+                    fid.seek(offset)
+                    T = np.int32 if dsize == 4 else np.int64
+                    nblock_C = np.fromfile(fid, dtype=T, count=asize).astype(np.int64)
+                    mesh.nblock_C = nblock_C
+
+        # Check that cells have VDF stored
+        try:
+            cellWithVDFIndex = np.where(mesh.cellwithVDF == cellid)[0][0]
+            nblocks = mesh.nblock_C[cellWithVDFIndex]
+            if nblocks == 0:
+                raise ValueError(f"Cell ID {cellid} does not store VDF!")
+        except:
+            raise ValueError(f"Cell ID {cellid} does not store VDF!")
+        # Offset position to vcell storage
+        offset_v = np.sum(mesh.nblock_C[0 : cellWithVDFIndex - 1])
+
+        # TODO: translate from Julia
+
+        bsize = math.prod(self.vblock_size)
+
+        # Velocity cell IDs and distributions (ordered by blocks)
+        vcellids = np.empty(bsize * nblocks, dtype=np.int32)
+        vcellf = np.empty(bsize * nblocks, dtype=np.float32)
+
+        return vcellids, vcellf
+
     def _has_attribute(self, attribute: str, name: str):
         "Check if a given attribute exists in the xml."
         for child in self.xmlroot:
@@ -385,3 +444,49 @@ class VlsvReader:
             cid += ncell * 8 ^ maxamr
 
         return maxamr
+
+    def getvcellcoordinates(self, vcellids: np.ndarray, species: str = "proton"):
+        mesh = self.meshes[species]
+        vblocks = mesh.vblocks
+        vblock_size = mesh.vblock_size
+        dv = mesh.dv
+        vmin = mesh.vmin
+
+        bsize = math.prod(vblock_size)
+        blockid = tuple(vid // bsize for vid in vcellids)
+        # Get block coordinates
+        blockInd = [
+            (
+                bid % vblocks[0],
+                bid // vblocks[0] % vblocks[1],
+                bid // (vblocks[0] * vblocks[1]),
+            )
+            for bid in blockid
+        ]
+        blockCoord = [
+            (
+                bInd[0] * dv[0] * vblock_size[0] + vmin[0],
+                bInd[1] * dv[1] * vblock_size[1] + vmin[1],
+                bInd[2] * dv[2] * vblock_size[2] + vmin[2],
+            )
+            for bInd in blockInd
+        ]
+
+        # Get cell indices
+        vcellblockids = tuple(vid % bsize for vid in vcellids)
+        cellidxyz = [
+            (
+                cid % vblock_size[0],
+                cid // vblock_size[0] % vblock_size[1],
+                cid // (vblock_size[0] * vblock_size[1]),
+            )
+            for cid in vcellblockids
+        ]
+
+        # Get cell coordinates
+        cellCoords = [
+            tuple(blockCoord[i][j] + (cellidxyz[i][j] + 0.5) * dv[j] for j in range(3))
+            for i in range(len(vcellids))
+        ]
+
+        return cellCoords

@@ -37,7 +37,13 @@ class TestVlsvReader:
         with pytest.raises(FileNotFoundError):
             meta = VlsvReader("None")
 
-    def test_variable(self):
+    def test_read_variable(self):
         meta = VlsvReader(self.file)
         n = meta.read_variable("proton/vg_rho")
         assert len(n) == 10 and n[0] == pytest.approx(1.0214901)
+
+    def test_read_vspace(self):
+        meta = VlsvReader(self.file)
+        vcellids, vcellf =  meta.read_vcells(5)
+        V = meta.getvcellcoordinates(vcellids)
+
