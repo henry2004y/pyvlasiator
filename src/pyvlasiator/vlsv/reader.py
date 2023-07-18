@@ -1,6 +1,5 @@
 from xml.etree import ElementTree
 import numpy as np
-import math
 
 
 class VMeshInfo:
@@ -128,7 +127,7 @@ class VlsvReader:
                 vblocks = (*bbox[0:3],)
                 vblock_size = (*bbox[3:6],)
                 vmin = (nodeX[0], nodeY[0], nodeZ[0])
-                vmax = (nodeX[1], nodeY[1], nodeZ[1])
+                vmax = (nodeX[-1], nodeY[-1], nodeZ[-1])
 
             dv = tuple(
                 map(
@@ -162,16 +161,16 @@ class VlsvReader:
 
         cellid = self.read(mesh="SpatialGrid", name="CellID", tag="VARIABLE")
         self.cellindex = np.argsort(cellid)
-        self.celldict = {cid: i for (cid, i) in enumerate(cellid)}
+        self.celldict = {cid: i for (i, cid) in enumerate(cellid)}
 
         self.maxamr = self.getmaxrefinement(cellid)
 
-        self.cellwithVDF = self.xmlroot.findall("CELLSWITHBLOCKS")
+        self.nodecellwithVDF = self.xmlroot.findall("CELLSWITHBLOCKS")
 
-        if len(self.cellwithVDF) == 0:
+        if len(self.nodecellwithVDF) == 0:
             self.hasvdf = False
         else:
-            self.hasvdf = self.cellwithVDF[0].attrib["arraysize"] != "0"
+            self.hasvdf = self.nodecellwithVDF[0].attrib["arraysize"] != "0"
 
     def __repr__(self):
         str = (
@@ -249,7 +248,7 @@ class VlsvReader:
                 continue
             if child.tag == tag:
                 vsize = int(child.attrib["vectorsize"])
-                array_size = int(child.attrib["arraysize"])
+                asize = int(child.attrib["arraysize"])
                 dsize = int(child.attrib["datasize"])
                 dtype = child.attrib["datatype"]
                 variable_offset = int(child.text)
@@ -263,7 +262,7 @@ class VlsvReader:
                     arraydata = []
                     if ncellids > 5000:
                         result_size = ncellids
-                        read_size = array_size
+                        read_size = asize
                         read_offsets = [0]
                     else:  # Read multiple cell ids one-by-one
                         result_size = ncellids
@@ -273,8 +272,8 @@ class VlsvReader:
                         ]
                 else:
                     if cellids < 0:  # all cells
-                        result_size = array_size
-                        read_size = array_size
+                        result_size = asize
+                        read_size = asize
                         read_offsets = [0]
                     else:  # parameter or single cell
                         result_size = 1
@@ -362,7 +361,7 @@ class VlsvReader:
     def read_parameter(self, name: str):
         return self.read(name=name, tag="PARAMETER")
 
-    def read_vcells(self, cellid, species: str = "proton"):
+    def read_vcells(self, cellid: int, species: str = "proton"):
         """Read raw velocity block data.
 
         Parameters
@@ -380,9 +379,10 @@ class VlsvReader:
 
         fid = self.fid
         mesh = self.meshes[species]
+        vblock_size = mesh.vblock_size
 
-        if np.any(mesh.cellwithVDF):
-            for node in self.cellwithVDF:
+        if not np.any(mesh.cellwithVDF):
+            for node in self.nodecellwithVDF:
                 if node.attrib["name"] == species:
                     asize = int(node.attrib["arraysize"])
                     offset = int(node.text)
@@ -400,6 +400,7 @@ class VlsvReader:
                     T = np.int32 if dsize == 4 else np.int64
                     nblock_C = np.fromfile(fid, dtype=T, count=asize).astype(np.int64)
                     mesh.nblock_C = nblock_C
+                    break
 
         # Check that cells have VDF stored
         try:
@@ -410,15 +411,44 @@ class VlsvReader:
         except:
             raise ValueError(f"Cell ID {cellid} does not store VDF!")
         # Offset position to vcell storage
-        offset_v = np.sum(mesh.nblock_C[0 : cellWithVDFIndex - 1])
+        offset_v = np.sum(mesh.nblock_C[0 : cellWithVDFIndex - 1], initial=0).item()
 
-        # TODO: translate from Julia
+        # Read raw VDF
+        for node in self.xmlroot.findall("BLOCKVARIABLE"):
+            if node.attrib["name"] == species:
+                dsize = int(node.attrib["datasize"])
+                offset = int(node.text)
+            break
 
-        bsize = math.prod(self.vblock_size)
+        bsize = np.prod(vblock_size).item()
+        fid.seek(offset_v * bsize * dsize + offset)
+        T = np.float32 if dsize == 4 else np.float64
+        data = np.fromfile(
+            fid,
+            dtype=T,
+            count=bsize * nblocks,
+        ).reshape(nblocks, bsize)
+
+        # Read block IDs
+        for node in self.xmlroot.findall("BLOCKIDS"):
+            if node.attrib["name"] == species:
+                dsize = int(node.attrib["datasize"])
+                offset = int(node.text)
+            break
+
+        fid.seek(offset_v * dsize + offset)
+        T = np.int32 if dsize == 4 else np.int64
+        blockIDs = np.fromfile(fid, dtype=T, count=nblocks)
 
         # Velocity cell IDs and distributions (ordered by blocks)
         vcellids = np.empty(bsize * nblocks, dtype=np.int32)
         vcellf = np.empty(bsize * nblocks, dtype=np.float32)
+
+        for i, bid in enumerate(blockIDs):
+            for j in range(bsize):
+                index_ = i * bsize + j
+                vcellids[index_] = j + bsize * bid
+                vcellf[index_] = data[i, j]
 
         return vcellids, vcellf
 
@@ -437,7 +467,7 @@ class VlsvReader:
         return self._has_attribute("PARAMETER", name)
 
     def getmaxrefinement(self, cellid):
-        ncell = math.prod(self.ncells)
+        ncell = np.prod(self.ncells)
         maxamr, cid = 0, ncell
         while cid < max(cellid):
             maxamr += 1
@@ -452,26 +482,25 @@ class VlsvReader:
         dv = mesh.dv
         vmin = mesh.vmin
 
-        bsize = math.prod(vblock_size)
-        blockid = tuple(vid // bsize for vid in vcellids)
+        bsize = np.prod(vblock_size).item()
+        blockid = tuple(cid // bsize for cid in vcellids)
         # Get block coordinates
         blockInd = [
             (
-                bid % vblocks[0],
-                bid // vblocks[0] % vblocks[1],
-                bid // (vblocks[0] * vblocks[1]),
+                bid.item() % vblocks[0].item(),
+                bid.item() // vblocks[0].item() % vblocks[1].item(),
+                bid.item() // (vblocks[0].item() * vblocks[1].item()),
             )
             for bid in blockid
         ]
         blockCoord = [
             (
-                bInd[0] * dv[0] * vblock_size[0] + vmin[0],
-                bInd[1] * dv[1] * vblock_size[1] + vmin[1],
-                bInd[2] * dv[2] * vblock_size[2] + vmin[2],
+                bInd[0] * dv[0].item() * vblock_size[0].item() + vmin[0].item(),
+                bInd[1] * dv[1].item() * vblock_size[1].item() + vmin[1].item(),
+                bInd[2] * dv[2].item() * vblock_size[2].item() + vmin[2].item(),
             )
             for bInd in blockInd
         ]
-
         # Get cell indices
         vcellblockids = tuple(vid % bsize for vid in vcellids)
         cellidxyz = [
@@ -482,10 +511,12 @@ class VlsvReader:
             )
             for cid in vcellblockids
         ]
-
         # Get cell coordinates
         cellCoords = [
-            tuple(blockCoord[i][j] + (cellidxyz[i][j] + 0.5) * dv[j] for j in range(3))
+            tuple(
+                blockCoord[i][j] + (cellidxyz[i][j].item() + 0.5) * dv[j].item()
+                for j in range(3)
+            )
             for i in range(len(vcellids))
         ]
 

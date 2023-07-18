@@ -44,6 +44,6 @@ class TestVlsvReader:
 
     def test_read_vspace(self):
         meta = VlsvReader(self.file)
-        vcellids, vcellf =  meta.read_vcells(5)
+        vcellids, vcellf = meta.read_vcells(5)
         V = meta.getvcellcoordinates(vcellids)
-
+        assert V[-1] == pytest.approx((2.45, 1.95, 1.95))
