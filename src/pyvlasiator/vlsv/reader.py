@@ -1,5 +1,6 @@
 from xml.etree import ElementTree
 import numpy as np
+import os
 
 
 class VMeshInfo:
@@ -15,8 +16,8 @@ class VMeshInfo:
 
 class VlsvReader:
     def __init__(self, filename: str):
-        self.filename = filename
-        self.fid = open(self.filename, "rb")
+        self.dir, self.name = os.path.split(filename)
+        self.fid = open(filename, "rb")
         self.xmlroot = ElementTree.fromstring("<VLSV></VLSV>")
         self.celldict = {}
         self.maxamr = -1
@@ -31,7 +32,7 @@ class VlsvReader:
         else:
             self.time = -1.0
 
-        # Check if the file is using new or old vlsv format
+        # Check if the file is using new or old VLSV format
         # Read parameters
 
         meshName = "SpatialGrid"
@@ -66,10 +67,10 @@ class VlsvReader:
             nodeX = self.read(tag="MESH_NODE_CRDS_X", mesh=meshName)
             nodeY = self.read(tag="MESH_NODE_CRDS_Y", mesh=meshName)
             nodeZ = self.read(tag="MESH_NODE_CRDS_Z", mesh=meshName)
-            self.ncells = (*bbox[0:3],)
-            self.block_size = (*bbox[3:6],)
+            self.ncells = tuple(i.item() for i in bbox[0:3])
+            self.block_size = tuple(i.item() for i in bbox[3:6])
             self.coordmin = (nodeX[0], nodeY[0], nodeZ[0])
-            self.coordmax = (nodeX[1], nodeY[1], nodeZ[1])
+            self.coordmax = (nodeX[-1], nodeY[-1], nodeZ[-1])
 
         self.dcoord = tuple(
             map(
@@ -172,9 +173,9 @@ class VlsvReader:
         else:
             self.hasvdf = self.nodecellwithVDF[0].attrib["arraysize"] != "0"
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         str = (
-            f"File       : {self.filename}\n"
+            f"File       : {self.name}\n"
             f"Time       : {self.time:.4f}\n"
             f"Dimension  : {self.ndims()}\n"
             f"Max AMR lvl: {self.maxamr}\n"
@@ -183,7 +184,7 @@ class VlsvReader:
         )
         return str
 
-    def ndims(self):
+    def ndims(self) -> int:
         return sum(i > 1 for i in self.ncells)
 
     def _read_xml_footer(self):
@@ -207,15 +208,12 @@ class VlsvReader:
         name: str = "",
         tag: str = "",
         mesh: str = "",
-        operator: str = "pass",
         cellids=-1,
-    ):
+    ) -> np.ndarray:
         """Read data of name, tag, and mesh from the vlsv file.
 
         Parameters
         ----------
-        operator : str
-            Data reduction operator. "pass" does no operation on data.
         cellids : int or list of int
             If -1 then all data is read. If nonzero then only the vector for the specified
             cell id or cellids is read.
@@ -323,40 +321,152 @@ class VlsvReader:
 
         if name:
             raise NameError(
-                "variable "
-                + name
+                name
                 + "/"
                 + tag
                 + "/"
                 + mesh
-                + "/"
-                + operator
                 + " not found in .vlsv file or in data reducers!"
             )
 
-    def read_variable(self, name, cellids=-1, operator="pass"):
+    def read_variable(self, name: str, cellids=-1, sorted: bool = True):
         "Read variables as numpy arrays from the open vlsv file."
 
         if self.has_variable(name) and name.startswith("fg_"):
             if not cellids == -1:
                 raise ValueError("CellID requests not supported for FSgrid.")
-            return self.read_fsgrid_variable(name=name, operator=operator)
+            return self.read_fg_variable(name=name)
 
         if self.has_variable(name) and name.startswith("ig_"):
             if not cellids == -1:
                 raise ValueError("CellID requests not supported for ionosphere.")
-            return self.read_ionosphere_variable(name=name, operator=operator)
+            return self.read_ionosphere_variable(name=name)
 
-        data = self.read(
+        raw = self.read(
             mesh="SpatialGrid",
             name=name,
             tag="VARIABLE",
-            operator=operator,
             cellids=cellids,
         )
-        if type(data[0]) == np.float64:  # 32-bit is enough for analysis
-            data = np.float32(data)
-        return data
+        if sorted:
+            if raw.ndim == 1:
+                v = raw[self.cellindex]
+            else:
+                v = raw[self.cellindex, :]
+            if v.dtype == np.float64:  # 32-bit is enough for analysis
+                v = np.float32(v)
+        else:
+            v = raw
+
+        return v
+
+    def read_fg_variable(self, name: str):
+        raw = self.read(
+            mesh="fsgrid",
+            name=name,
+            tag="VARIABLE",
+        )
+
+        bbox = tuple(ncell * 2**self.maxamr for ncell in self.ncells)
+
+        # Determine fsgrid domain decomposition
+        nIORanks = self.read_parameter("numWritingRanks")  # Int32
+
+        if raw.ndim > 1:
+            dataOrdered = np.empty((*bbox, raw.shape[-1]), dtype=np.float32)
+        else:
+            dataOrdered = np.empty(bbox, dtype=np.float32)
+
+        def getDomainDecomposition(globalsize, nproc: int) -> list[int]:
+            """Obtain decomposition of this grid over the given number of processors.
+            Reference: fsgrid.hpp"""
+            domainDecomp = (1, 1, 1)
+            minValue = 1e20
+            for i in range(1, min(nproc, globalsize[0]) + 1):
+                iBox = max(globalsize[0] / i, 1.0)
+                for j in range(1, min(nproc, globalsize[1]) + 1):
+                    if i * j > nproc:
+                        break
+                    jBox = max(globalsize[1] / j, 1.0)
+                    for k in range(1, min(nproc, globalsize[2]) + 1):
+                        if i * j * k > nproc:
+                            continue
+                        kBox = max(globalsize[2] / k, 1.0)
+                        v = (
+                            10 * iBox * jBox * kBox
+                            + ((jBox * kBox) if i > 1 else 0)
+                            + ((iBox * kBox) if j > 1 else 0)
+                            + ((iBox * jBox) if k > 1 else 0)
+                        )
+                        if i * j * k == nproc and v < minValue:
+                            minValue = v
+                            domainDecomp = (i, j, k)
+
+            return domainDecomp
+
+        def calcLocalStart(globalCells, nprocs: int, lcells: int) -> int:
+            ncells = globalCells // nprocs
+            remainder = globalCells % nprocs
+            lstart = (
+                lcells * (ncells + 1)
+                if lcells < remainder
+                else lcells * ncells + remainder
+            )
+
+            return lstart
+
+        def calcLocalSize(globalCells, nprocs: int, lcells: int) -> int:
+            ncells = globalCells // nprocs
+            remainder = globalCells % nprocs
+            lsize = ncells + 1 if lcells < remainder else ncells
+
+            return lsize
+
+        fgDecomposition = getDomainDecomposition(bbox, nIORanks)
+
+        offsetnow = 0
+
+        for i in range(nIORanks):
+            xyz = (
+                i // fgDecomposition[2] // fgDecomposition[1],
+                i // fgDecomposition[2] % fgDecomposition[1],
+                i % fgDecomposition[2],
+            )
+
+            lsize = tuple(
+                map(
+                    lambda i: calcLocalSize(bbox[i], fgDecomposition[i], xyz[i]),
+                    range(0, 3),
+                )
+            )
+
+            lstart = tuple(
+                map(
+                    lambda i: calcLocalStart(bbox[i], fgDecomposition[i], xyz[i]),
+                    range(0, 3),
+                )
+            )
+
+            offsetnext = offsetnow + np.prod(lsize)
+            lend = tuple(st + si for st, si in zip(lstart, lsize))
+
+            # Reorder data
+            if raw.ndim > 1:
+                ldata = raw[offsetnow:offsetnext, :].reshape(*lsize, raw.shape[-1])
+                dataOrdered[
+                    lstart[0] : lend[0], lstart[1] : lend[1], lstart[2] : lend[2], :
+                ] = ldata
+            else:
+                ldata = raw[offsetnow:offsetnext].reshape(*lsize)
+                dataOrdered[
+                    lstart[0] : lend[0], lstart[1] : lend[1], lstart[2] : lend[2]
+                ] = ldata
+
+            offsetnow = offsetnext
+
+        v = np.squeeze(dataOrdered)
+
+        return v
 
     def read_parameter(self, name: str):
         return self.read(name=name, tag="PARAMETER")
@@ -471,7 +581,7 @@ class VlsvReader:
         maxamr, cid = 0, ncell
         while cid < max(cellid):
             maxamr += 1
-            cid += ncell * 8 ^ maxamr
+            cid += ncell * 8**maxamr
 
         return maxamr
 
