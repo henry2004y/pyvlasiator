@@ -34,7 +34,6 @@ class VlsvReader:
 
         # Check if the file is using new or old VLSV format
         # Read parameters
-
         meshName = "SpatialGrid"
         bbox = self.read(tag="MESH_BBOX", mesh=meshName)
         if bbox is None:
@@ -185,6 +184,7 @@ class VlsvReader:
         return str
 
     def ndims(self) -> int:
+        """Get the spatial dimension of data."""
         return sum(i > 1 for i in self.ncells)
 
     def _read_xml_footer(self):
@@ -200,9 +200,6 @@ class VlsvReader:
         xmlstring = fid.read()
         self.xmlroot = ElementTree.fromstring(xmlstring)
 
-        if self.fid.closed:
-            fid.close()
-
     def read(
         self,
         name: str = "",
@@ -212,6 +209,8 @@ class VlsvReader:
     ) -> np.ndarray:
         """Read data of name, tag, and mesh from the vlsv file.
 
+        This is the general reading function for all types of variables in VLSV files.
+
         Parameters
         ----------
         cellids : int or list of int
@@ -220,8 +219,6 @@ class VlsvReader:
         Returns
         -------
         numpy.ndarray
-
-        .. seealso:: :func:`read_variable` :func:`read_variable_info`
         """
         if not tag and not name:
             raise ValueError()
@@ -330,7 +327,7 @@ class VlsvReader:
             )
 
     def read_variable(self, name: str, cellids=-1, sorted: bool = True):
-        "Read variables as numpy arrays from the open vlsv file."
+        """Read variables as numpy arrays from the open vlsv file."""
 
         if self.has_variable(name) and name.startswith("fg_"):
             if not cellids == -1:
@@ -379,7 +376,8 @@ class VlsvReader:
 
         def getDomainDecomposition(globalsize, nproc: int) -> list[int]:
             """Obtain decomposition of this grid over the given number of processors.
-            Reference: fsgrid.hpp"""
+            Reference: fsgrid.hpp
+            """
             domainDecomp = (1, 1, 1)
             minValue = 1e20
             for i in range(1, min(nproc, globalsize[0]) + 1):
@@ -563,7 +561,7 @@ class VlsvReader:
         return vcellids, vcellf
 
     def _has_attribute(self, attribute: str, name: str):
-        "Check if a given attribute exists in the xml."
+        """Check if a given attribute exists in the xml."""
         for child in self.xmlroot:
             if child.tag == attribute and "name" in child.attrib:
                 if child.attrib["name"].lower() == name.lower():
@@ -573,10 +571,11 @@ class VlsvReader:
     def has_variable(self, name: str):
         return self._has_attribute("VARIABLE", name)
 
-    def has_parameter(self, name):
+    def has_parameter(self, name: str):
         return self._has_attribute("PARAMETER", name)
 
-    def getmaxrefinement(self, cellid):
+    def getmaxrefinement(self, cellid: np.ndarray):
+        """Get the maximum spatial refinement level."""
         ncell = np.prod(self.ncells)
         maxamr, cid = 0, ncell
         while cid < max(cellid):

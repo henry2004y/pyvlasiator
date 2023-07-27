@@ -6,3 +6,10 @@ coverage.xml
 .vscode/
 *.tar.gz
 tests/data/
+logfile.txt
+
+# MacOS
+.DS_Store
+
+# Sphinx documentation
+docs/_build/
