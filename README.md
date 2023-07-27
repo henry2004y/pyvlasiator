@@ -4,6 +4,12 @@
   <a href="https://github.com/henry2004y/pyvlasiator/actions">
     <img src="https://github.com/henry2004y/pyvlasiator/actions/workflows/CI.yml/badge.svg">
   </a>
+  <a href="https://henry2004y.github.io/pyvlasiator/">
+    <img src="https://img.shields.io/badge/docs-dev-blue">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue">
+  </a>
   <a href="https://app.codecov.io/gh/henry2004y/pyvlasiator/">
     <img src="https://img.shields.io/codecov/c/github/henry2004y/pyvlasiator">
   </a>
@@ -33,7 +39,7 @@ file = "test.vlsv"
 meta = VlsvReader(file)
 ```
 
-For more detailed usage, please refer to the documentation.
+For more detailed usage, please refer to the [documentation](https://henry2004y.github.io/pyvlasiator/).
 
 ## License
 
