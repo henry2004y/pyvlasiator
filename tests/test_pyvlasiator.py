@@ -3,7 +3,8 @@ import requests
 import tarfile
 import os
 import numpy as np
-from pyvlasiator.vlsv.reader import VlsvReader
+from pyvlasiator.vlsv import Vlsv
+import pyvlasiator.plot
 
 filedir = os.path.dirname(__file__)
 
@@ -26,21 +27,21 @@ else:
         file.extractall(path)
 
 
-class TestVlsvReader:
+class TestVlsv:
     dir = "tests/data/"
     files = (dir + "bulk.1d.vlsv", dir + "bulk.1d.vlsv", dir + "bulk.amr.vlsv")
 
     def test_load(self):
-        meta = VlsvReader(self.files[0])
+        meta = Vlsv(self.files[0])
         assert meta.__repr__().startswith("File")
         assert meta.time == 10.0
 
     def test_load_error(self):
         with pytest.raises(FileNotFoundError):
-            meta = VlsvReader("None")
+            meta = Vlsv("None")
 
     def test_read_variable(self):
-        meta = VlsvReader(self.files[0])
+        meta = Vlsv(self.files[0])
         assert np.array_equal(meta.cellindex, np.arange(9, -1, -1, dtype=np.uint64))
         # unsorted ID
         cellid = meta.read_variable("CellID", sorted=False)
@@ -56,17 +57,17 @@ class TestVlsvReader:
         # assert meta.read_variable("proton/vg_rho", id)[1] == 1.2288102e0
 
     def test_read_vspace(self):
-        meta = VlsvReader(self.files[0])
+        meta = Vlsv(self.files[0])
         vcellids, vcellf = meta.read_vcells(5)
         V = meta.getvcellcoordinates(vcellids)
         assert V[-1] == pytest.approx((2.45, 1.95, 1.95))
 
     def test_read_amr(self):
-        metaAMR = VlsvReader(self.files[2])
+        metaAMR = Vlsv(self.files[2])
         assert metaAMR.maxamr == 2
 
     def test_read_fg_variable(self):
-        metaAMR = VlsvReader(self.files[2])
+        metaAMR = Vlsv(self.files[2])
         data = metaAMR.read_variable("fg_e")
         ncells, namr = metaAMR.ncells, metaAMR.maxamr
         assert data.shape == (
@@ -77,3 +78,13 @@ class TestVlsvReader:
         ) and data[0, 0, 4, :] == pytest.approx(
             [7.603512e-07, 2.000000e-04, -2.000000e-04]
         )
+
+
+class TestPlot:
+    dir = "tests/data/"
+    files = (dir + "bulk.1d.vlsv", dir + "bulk.1d.vlsv", dir + "bulk.amr.vlsv")
+
+    def test_1d_plot(self):
+        meta = Vlsv(self.files[0])
+        line = meta.plot("proton/vg_rho")[0]
+        assert np.array_equal(line.get_ydata(), meta.read_variable("proton/vg_rho"))

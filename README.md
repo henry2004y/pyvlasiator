@@ -33,13 +33,13 @@ $ pip install pyvlasiator
 `pyvlasiator` can be used to process VLSV files generated from Vlasiator.
 
 ```python
-from pyvlasiator.vlsv.reader import VlsvReader
+from pyvlasiator.vlsv.reader import Vlsv
 
 file = "test.vlsv"
-meta = VlsvReader(file)
+meta = Vlsv(file)
 ```
 
-For more detailed usage, please refer to the [documentation](https://henry2004y.github.io/pyvlasiator/).
+Plotting is supported via Matplotlib. For more detailed usage, please refer to the [documentation](https://henry2004y.github.io/pyvlasiator/).
 
 ## License
 

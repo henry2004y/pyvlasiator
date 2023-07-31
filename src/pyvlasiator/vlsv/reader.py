@@ -14,7 +14,7 @@ class VMeshInfo:
         self.nblock_C = np.empty(0, dtype=np.int64)
 
 
-class VlsvReader:
+class Vlsv:
     def __init__(self, filename: str):
         self.dir, self.name = os.path.split(filename)
         self.fid = open(filename, "rb")
