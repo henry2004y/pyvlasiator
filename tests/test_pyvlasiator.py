@@ -29,7 +29,7 @@ else:
 
 class TestVlsv:
     dir = "tests/data/"
-    files = (dir + "bulk.1d.vlsv", dir + "bulk.1d.vlsv", dir + "bulk.amr.vlsv")
+    files = (dir + "bulk.1d.vlsv", dir + "bulk.2d.vlsv", dir + "bulk.amr.vlsv")
 
     def test_load(self):
         meta = Vlsv(self.files[0])
@@ -82,9 +82,14 @@ class TestVlsv:
 
 class TestPlot:
     dir = "tests/data/"
-    files = (dir + "bulk.1d.vlsv", dir + "bulk.1d.vlsv", dir + "bulk.amr.vlsv")
+    files = (dir + "bulk.1d.vlsv", dir + "bulk.2d.vlsv", dir + "bulk.amr.vlsv")
 
     def test_1d_plot(self):
         meta = Vlsv(self.files[0])
         line = meta.plot("proton/vg_rho")[0]
         assert np.array_equal(line.get_ydata(), meta.read_variable("proton/vg_rho"))
+
+    def test_2d_plot(self):
+        meta = Vlsv(self.files[1])
+        v = meta.pcolormesh("proton/vg_rho").get_array()
+        assert v[-3] == pytest.approx(999535.8) and v.data.size == 6300

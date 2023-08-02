@@ -33,7 +33,7 @@ $ pip install pyvlasiator
 `pyvlasiator` can be used to process VLSV files generated from Vlasiator.
 
 ```python
-from pyvlasiator.vlsv.reader import Vlsv
+from pyvlasiator.vlsv import Vlsv
 
 file = "test.vlsv"
 meta = Vlsv(file)

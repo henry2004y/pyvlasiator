@@ -1,6 +1,8 @@
 from xml.etree import ElementTree
 import numpy as np
 import os
+from collections import namedtuple
+from pyvlasiator.vlsv.variables import units_predefined
 
 
 class VMeshInfo:
@@ -12,6 +14,12 @@ class VMeshInfo:
         self.dv = dv
         self.cellwithVDF = np.empty(0, dtype=np.uint64)
         self.nblock_C = np.empty(0, dtype=np.int64)
+
+
+"Variable information from the VLSV footer."
+VarInfo = namedtuple(
+    "VarInfo", ["unit", "unitLaTeX", "variableLaTeX", "unitConversion"]
+)
 
 
 class Vlsv:
@@ -466,6 +474,24 @@ class Vlsv:
 
         return v
 
+    def read_variable_meta(self, var: str):
+        unit, unitLaTeX, variableLaTeX, unitConversion = "", "", "", ""
+
+        if var in units_predefined:
+            unit, variableLaTeX, unitLaTeX = units_predefined[var]
+        elif self.has_variable(var):  # For Vlasiator 5 files, MetaVLSV is included
+            for child in self.xmlroot:
+                if "name" in child.attrib and child.attrib["name"] == var:
+                    if not "unit" in child.attrib:
+                        break
+                    else:
+                        unit = child.attrib["unit"]
+                        unitLaTeX = child.attrib["unitLaTeX"]
+                        variableLaTeX = child.attrib["variableLaTeX"]
+                        unitConversion = child.attrib["unitConversion"]
+
+        return VarInfo(unit, unitLaTeX, variableLaTeX, unitConversion)
+
     def read_parameter(self, name: str):
         return self.read(name=name, tag="PARAMETER")
 
@@ -560,7 +586,7 @@ class Vlsv:
 
         return vcellids, vcellf
 
-    def _has_attribute(self, attribute: str, name: str):
+    def _has_attribute(self, attribute: str, name: str) -> bool:
         """Check if a given attribute exists in the xml."""
         for child in self.xmlroot:
             if child.tag == attribute and "name" in child.attrib:
@@ -568,10 +594,10 @@ class Vlsv:
                     return True
         return False
 
-    def has_variable(self, name: str):
+    def has_variable(self, name: str) -> bool:
         return self._has_attribute("VARIABLE", name)
 
-    def has_parameter(self, name: str):
+    def has_parameter(self, name: str) -> bool:
         return self._has_attribute("PARAMETER", name)
 
     def getmaxrefinement(self, cellid: np.ndarray):
