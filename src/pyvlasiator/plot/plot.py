@@ -70,7 +70,7 @@ def plot(
     x = np.linspace(self.coordmin[0], self.coordmax[0], self.ncells[0])
 
     data = self.read_variable(var)
-    axes = ax.plot(x, data)
+    axes = ax.plot(x, data, **kwargs)
 
     return axes
 
@@ -96,7 +96,7 @@ def pcolormesh(
     )
     if ax is None:
         ax = fig.gca()
-    # TODO: WIP
+
     return _plot2d(
         self,
         ax.pcolormesh,
@@ -125,7 +125,6 @@ def _plot2d(
     extent: list = [0.0, 0.0, 0.0, 0.0],
     comp: int = -1,
     ax=None,
-    figsize: tuple[float, float] | None = None,
     **kwargs,
 ):
     """
@@ -162,6 +161,8 @@ def _plot2d(
 
     c = f(x1, x2, data, **kwargs)
 
+    set_plot(c, ax, pArgs, ticks, addcolorbar)
+
     return c
 
 
@@ -171,7 +172,7 @@ def set_args(
     axisunit: AxisUnit = AxisUnit.EARTH,
     normal: str = "",
     origin: float = 0.0,
-):
+) -> PlotArgs:
     ncells, coordmin, coordmax = meta.ncells, meta.coordmin, meta.coordmax
 
     if normal == "x":
@@ -325,6 +326,38 @@ def set_lim(vmin: float, vmax: float, data, colorscale: ColorScale = ColorScale.
             v2 = vmax
 
     return v1, v2
+
+
+def set_plot(c, ax, pArgs: PlotArgs, ticks, addcolorbar: bool):
+    """
+    Configure customized plot.
+    """
+    import matplotlib
+    import matplotlib.pyplot as plt
+
+    str_title = pArgs.str_title
+    strx = pArgs.strx
+    stry = pArgs.stry
+    cb_title = pArgs.cb_title
+
+    if addcolorbar:
+        cb = plt.colorbar(c, ax=ax, ticks=ticks, fraction=0.04, pad=0.02)
+        if not cb_title:
+            cb.ax.set_ylabel(cb_title)
+        cb.ax.tick_params(direction="in")
+
+    ax.set_title(str_title, fontweight="bold")
+    ax.set_xlabel(strx)
+    ax.set_ylabel(stry)
+    ax.set_aspect("equal")
+
+    # Set border line widths
+    for loc in ("left", "bottom", "right", "top"):
+        ax.spines[loc].set_linewidth(2.0)
+
+    ax.xaxis.set_tick_params(width=2.0, length=3)
+    ax.yaxis.set_tick_params(width=2.0, length=3)
+
 
 # Append plotting functions
 Vlsv.plot = plot
