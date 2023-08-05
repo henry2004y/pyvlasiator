@@ -215,7 +215,8 @@ class Vlsv:
         mesh: str = "",
         cellids=-1,
     ) -> np.ndarray:
-        """Read data of name, tag, and mesh from the vlsv file.
+        """
+        Read data of name, tag, and mesh from the vlsv file.
 
         This is the general reading function for all types of variables in VLSV files.
 
@@ -656,3 +657,16 @@ class Vlsv:
         ]
 
         return cellCoords
+
+
+def _getdim2d(ncells: tuple, maxamr: int, normal: str):
+    ratio = 2**maxamr
+    if normal == "x":
+        i1, i2 = 1, 2
+    elif normal == "y":
+        i1, i2 = 0, 2
+    elif normal == "z":
+        i1, i2 = 0, 1
+    dims = (ncells[i1] * ratio, ncells[i2] * ratio)
+
+    return dims

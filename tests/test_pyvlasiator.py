@@ -5,6 +5,7 @@ import os
 import numpy as np
 from pyvlasiator.vlsv import Vlsv
 import pyvlasiator.plot
+import matplotlib
 
 filedir = os.path.dirname(__file__)
 
@@ -93,3 +94,8 @@ class TestPlot:
         meta = Vlsv(self.files[1])
         v = meta.pcolormesh("proton/vg_rho").get_array()
         assert v[-3] == pytest.approx(999535.8) and v.data.size == 6300
+
+    def test_stream_plot(self):
+        meta = Vlsv(self.files[1])
+        p = meta.streamplot("proton/vg_v", comp="xy")
+        assert type(p) == matplotlib.streamplot.StreamplotSet
