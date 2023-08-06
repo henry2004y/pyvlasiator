@@ -94,6 +94,10 @@ class TestPlot:
         meta = Vlsv(self.files[1])
         v = meta.pcolormesh("proton/vg_rho").get_array()
         assert v[-3] == pytest.approx(999535.8) and v.data.size == 6300
+        v = meta.contour("proton/vg_rho").get_array()
+        assert v[-3] == 4000000.0
+        v = meta.contourf("proton/vg_rho").get_array()
+        assert v[-3] == 4000000.0
 
     def test_stream_plot(self):
         meta = Vlsv(self.files[1])
