@@ -6,7 +6,14 @@ from pyvlasiator.vlsv.variables import units_predefined
 
 
 class VMeshInfo:
-    def __init__(self, vblocks, vblock_size, vmin, vmax, dv):
+    def __init__(
+        self,
+        vblocks: np.ndarray,
+        vblock_size: np.ndarray,
+        vmin: np.ndarray,
+        vmax: np.ndarray,
+        dv: np.ndarray,
+    ) -> None:
         self.vblocks = vblocks
         self.vblock_size = vblock_size
         self.vmin = vmin
@@ -14,6 +21,12 @@ class VMeshInfo:
         self.dv = dv
         self.cellwithVDF = np.empty(0, dtype=np.uint64)
         self.nblock_C = np.empty(0, dtype=np.int64)
+
+        self.vblocks.flags.writeable = False
+        self.vblock_size.flags.writeable = False
+        self.vmin.flags.writeable = False
+        self.vmax.flags.writeable = False
+        self.dv.flags.writeable = False
 
 
 "Variable information from the VLSV footer."
@@ -47,45 +60,58 @@ class Vlsv:
         if bbox is None:
             try:
                 # Vlasiator 4- files where the mesh is defined with parameters
-                self.ncells = (
-                    (int)(self.read_parameter("xcells_ini")),
-                    (int)(self.read_parameter("ycells_ini")),
-                    (int)(self.read_parameter("zcells_ini")),
+                self.ncells = np.array(
+                    (
+                        self.read_parameter("xcells_ini"),
+                        self.read_parameter("ycells_ini"),
+                        self.read_parameter("zcells_ini"),
+                    ),
+                    dtype=int,
                 )
-                self.block_size = (1, 1, 1)
-                self.coordmin = (
-                    self.read_parameter("xmin"),
-                    self.read_parameter("ymin"),
-                    self.read_parameter("zmin"),
+                self.block_size = np.array((1, 1, 1), dtype=int)
+                self.coordmin = np.array(
+                    (
+                        self.read_parameter("xmin"),
+                        self.read_parameter("ymin"),
+                        self.read_parameter("zmin"),
+                    ),
+                    dtype=float,
                 )
-                self.coordmax = (
-                    self.read_parameter("xmax"),
-                    self.read_parameter("ymax"),
-                    self.read_parameter("zmax"),
+                self.coordmax = np.array(
+                    (
+                        self.read_parameter("xmax"),
+                        self.read_parameter("ymax"),
+                        self.read_parameter("zmax"),
+                    ),
+                    dtype=float,
                 )
             except:  # dummy values
-                self.ncells = (1, 1, 1)
-                self.block_size = (1, 1, 1)
-                self.coordmin = (0.0, 0.0, 0.0)
-                self.coordmax = (1.0, 1.0, 1.0)
+                self.ncells = np.array((1, 1, 1), dtype=int)
+                self.block_size = np.array((1, 1, 1), dtype=int)
+                self.coordmin = np.array((0.0, 0.0, 0.0), dtype=float)
+                self.coordmax = np.array((1.0, 1.0, 1.0), dtype=float)
 
         else:
             # Vlasiator 5+ file
             nodeX = self.read(tag="MESH_NODE_CRDS_X", mesh=meshName)
             nodeY = self.read(tag="MESH_NODE_CRDS_Y", mesh=meshName)
             nodeZ = self.read(tag="MESH_NODE_CRDS_Z", mesh=meshName)
-            self.ncells = tuple(i.item() for i in bbox[0:3])
-            self.block_size = tuple(i.item() for i in bbox[3:6])
-            self.coordmin = (nodeX[0], nodeY[0], nodeZ[0])
-            self.coordmax = (nodeX[-1], nodeY[-1], nodeZ[-1])
+            self.ncells = np.fromiter((i for i in bbox[0:3]), dtype=int)
+            self.block_size = np.fromiter((i for i in bbox[3:6]), dtype=int)
+            self.coordmin = np.array((nodeX[0], nodeY[0], nodeZ[0]), dtype=float)
+            self.coordmax = np.array((nodeX[-1], nodeY[-1], nodeZ[-1]), dtype=float)
 
-        self.dcoord = tuple(
-            map(
-                lambda i: (self.coordmax[i] - self.coordmin[i]) / self.ncells[i],
-                range(0, 3),
-            )
+        self.dcoord = np.fromiter(
+            ((self.coordmax[i] - self.coordmin[i]) / self.ncells[i] for i in range(3)),
+            dtype=float,
         )
-        # TODO: use TypedDict
+
+        self.ncells.flags.writeable = False
+        self.block_size.flags.writeable = False
+        self.coordmin.flags.writeable = False
+        self.coordmax.flags.writeable = False
+        self.dcoord.flags.writeable = False
+
         self.meshes = {}
 
         # Iterate through the XML tree, find all populations
@@ -104,44 +130,52 @@ class Vlsv:
             if bbox is None:
                 if self.read_parameter("vxblocks_ini") is not None:
                     # Vlasiator 4- files where the mesh is defined with parameters
-                    vblocks = (
-                        (int)(self.read_parameter("vxblocks_ini")),
-                        (int)(self.read_parameter("vyblocks_ini")),
-                        (int)(self.read_parameter("vzblocks_ini")),
+                    vblocks = np.array(
+                        (
+                            self.read_parameter("vxblocks_ini"),
+                            self.read_parameter("vyblocks_ini"),
+                            self.read_parameter("vzblocks_ini"),
+                        ),
+                        dtype=int,
                     )
-                    vblock_size = (4, 4, 4)
-                    vmin = (
-                        self.read_parameter("vxmin"),
-                        self.read_parameter("vymin"),
-                        self.read_parameter("vzmin"),
+                    vblock_size = np.array((4, 4, 4), dtype=int)
+                    vmin = np.array(
+                        (
+                            self.read_parameter("vxmin"),
+                            self.read_parameter("vymin"),
+                            self.read_parameter("vzmin"),
+                        ),
+                        dtype=float,
                     )
-                    vmax = (
-                        self.read_parameter("vxmax"),
-                        self.read_parameter("vymax"),
-                        self.read_parameter("vzmax"),
+                    vmax = np.array(
+                        (
+                            self.read_parameter("vxmax"),
+                            self.read_parameter("vymax"),
+                            self.read_parameter("vzmax"),
+                        ),
+                        dtype=float,
                     )
 
                 else:  # no velocity space
-                    vblocks = (0, 0, 0)
-                    vblock_size = (4, 4, 4)
-                    vmin = (0.0, 0.0, 0.0)
-                    vmax = (0.0, 0.0, 0.0)
-                    dv = (1.0, 1.0, 1.0)
+                    vblocks = np.array((0, 0, 0), dtype=int)
+                    vblock_size = np.array((4, 4, 4), dtype=int)
+                    vmin = np.array((0.0, 0.0, 0.0), dtype=float)
+                    vmax = np.array((0.0, 0.0, 0.0), dtype=float)
+                    dv = np.array((1.0, 1.0, 1.0), dtype=float)
 
             else:  # Vlasiator 5+ file with bounding box
                 nodeX = self.read(tag="MESH_NODE_CRDS_X", mesh=popname)
                 nodeY = self.read(tag="MESH_NODE_CRDS_Y", mesh=popname)
                 nodeZ = self.read(tag="MESH_NODE_CRDS_Z", mesh=popname)
-                vblocks = (*bbox[0:3],)
-                vblock_size = (*bbox[3:6],)
-                vmin = (nodeX[0], nodeY[0], nodeZ[0])
-                vmax = (nodeX[-1], nodeY[-1], nodeZ[-1])
 
-            dv = tuple(
-                map(
-                    lambda i: (vmax[i] - vmin[i]) / vblocks[i] / vblock_size[i],
-                    range(0, 3),
-                )
+                vblocks = np.array((*bbox[0:3],), dtype=int)
+                vblock_size = np.array((*bbox[3:6],), dtype=int)
+                vmin = np.array((nodeX[0], nodeY[0], nodeZ[0]), dtype=float)
+                vmax = np.array((nodeX[-1], nodeY[-1], nodeZ[-1]), dtype=float)
+
+            dv = np.fromiter(
+                ((vmax[i] - vmin[i]) / vblocks[i] / vblock_size[i] for i in range(3)),
+                dtype=float,
             )
 
             self.meshes[popname] = VMeshInfo(vblocks, vblock_size, vmin, vmax, dv)
@@ -195,7 +229,7 @@ class Vlsv:
         """Get the spatial dimension of data."""
         return sum(i > 1 for i in self.ncells)
 
-    def _read_xml_footer(self):
+    def _read_xml_footer(self) -> None:
         """Read the XML footer of the VLSV file."""
         fid = self.fid
         # first 8 bytes indicate endianness
@@ -335,8 +369,23 @@ class Vlsv:
                 + " not found in .vlsv file or in data reducers!"
             )
 
-    def read_variable(self, name: str, cellids=-1, sorted: bool = True):
-        """Read variables as numpy arrays from the open vlsv file."""
+    def read_variable(
+        self, name: str, cellids: int | list[int] | np.ndarray = -1, sorted: bool = True
+    ) -> np.ndarray:
+        """
+        Read variables as numpy arrays from the open vlsv file.
+
+        Parameters
+        ----------
+        cellids : int or list[int] or np.ndarray
+            If -1 then all data is read. If nonzero then only the vector for the specified
+            cell id or cellids is read.
+        sorted : bool
+            If the returned array is sorted by cell IDs. Only applied for full arrays.
+        Returns
+        -------
+        numpy.ndarray
+        """
 
         if self.has_variable(name) and name.startswith("fg_"):
             if not cellids == -1:
@@ -354,6 +403,9 @@ class Vlsv:
             tag="VARIABLE",
             cellids=cellids,
         )
+        if hasattr(cellids, "__len__"):  # part of cells requested
+            return np.float32(raw)
+
         if sorted:
             if raw.ndim == 1:
                 v = raw[self.cellindex]
@@ -516,37 +568,16 @@ class Vlsv:
         mesh = self.meshes[species]
         vblock_size = mesh.vblock_size
 
-        if not np.any(mesh.cellwithVDF):
-            for node in self.nodecellwithVDF:
-                if node.attrib["name"] == species:
-                    asize = int(node.attrib["arraysize"])
-                    offset = int(node.text)
-                    fid.seek(offset)
-                    cellwithVDF = np.fromfile(fid, dtype=np.uint64, count=asize)
-                    mesh.cellwithVDF = cellwithVDF
-                    break
-
-            for node in self.xmlroot.findall("BLOCKSPERCELL"):
-                if node.attrib["name"] == species:
-                    asize = int(node.attrib["arraysize"])
-                    dsize = int(node.attrib["datasize"])
-                    offset = int(node.text)
-                    fid.seek(offset)
-                    T = np.int32 if dsize == 4 else np.int64
-                    nblock_C = np.fromfile(fid, dtype=T, count=asize).astype(np.int64)
-                    mesh.nblock_C = nblock_C
-                    break
+        self.init_cellswithVDF(species)
 
         # Check that cells have VDF stored
         try:
             cellWithVDFIndex = np.where(mesh.cellwithVDF == cellid)[0][0]
             nblocks = mesh.nblock_C[cellWithVDFIndex]
-            if nblocks == 0:
-                raise ValueError(f"Cell ID {cellid} does not store VDF!")
         except:
             raise ValueError(f"Cell ID {cellid} does not store VDF!")
         # Offset position to vcell storage
-        offset_v = np.sum(mesh.nblock_C[0 : cellWithVDFIndex - 1], initial=0).item()
+        offset_v = np.sum(mesh.nblock_C[0:cellWithVDFIndex], initial=0)
 
         # Read raw VDF
         for node in self.xmlroot.findall("BLOCKVARIABLE"):
@@ -555,7 +586,7 @@ class Vlsv:
                 offset = int(node.text)
             break
 
-        bsize = np.prod(vblock_size).item()
+        bsize = np.prod(vblock_size)
         fid.seek(offset_v * bsize * dsize + offset)
         T = np.float32 if dsize == 4 else np.float64
         data = np.fromfile(
@@ -587,6 +618,32 @@ class Vlsv:
 
         return vcellids, vcellf
 
+    def init_cellswithVDF(self, species: str = "proton") -> None:
+        fid = self.fid
+        mesh = self.meshes[species]
+        if not np.any(mesh.cellwithVDF):
+            for node in self.nodecellwithVDF:
+                if node.attrib["name"] == species:
+                    asize = int(node.attrib["arraysize"])
+                    offset = int(node.text)
+                    fid.seek(offset)
+                    cellwithVDF = np.fromfile(fid, dtype=np.uint64, count=asize)
+                    mesh.cellwithVDF = cellwithVDF
+                    break
+
+            for node in self.xmlroot.findall("BLOCKSPERCELL"):
+                if node.attrib["name"] == species:
+                    asize = int(node.attrib["arraysize"])
+                    dsize = int(node.attrib["datasize"])
+                    offset = int(node.text)
+                    fid.seek(offset)
+                    T = np.int32 if dsize == 4 else np.int64
+                    nblock_C = np.fromfile(fid, dtype=T, count=asize).astype(np.int64)
+                    mesh.nblock_C = nblock_C
+                    break
+
+            mesh.cellwithVDF = np.delete(mesh.cellwithVDF, np.where(mesh.nblock_C == 0))
+
     def _has_attribute(self, attribute: str, name: str) -> bool:
         """Check if a given attribute exists in the xml."""
         for child in self.xmlroot:
@@ -611,52 +668,162 @@ class Vlsv:
 
         return maxamr
 
-    def getvcellcoordinates(self, vcellids: np.ndarray, species: str = "proton"):
+    def getcell(self, loc: np.ndarray | tuple[int, ...] | list[int]):
+        coordmin, coordmax = self.coordmin, self.coordmax
+        dcoord = self.dcoord
+        ncells = self.ncells
+        celldict = self.celldict
+        maxamr = self.maxamr
+
+        for i in range(3):
+            if not coordmin[i] < loc[i] < coordmax[i]:
+                raise ValueError(f"{i} coordinate out of bound!")
+
+        indices = np.fromiter(
+            ((loc[i] - coordmin[i]) // dcoord[i] for i in range(3)), dtype=int
+        )
+
+        cid = (
+            indices[0] + indices[1] * ncells[0] + indices[2] * ncells[0] * ncells[1] + 1
+        )
+
+        ncells_lowerlevel = 0
+        ncell = np.prod(ncells)
+
+        for ilevel in range(maxamr):
+            if cid in celldict:
+                break
+            ncells_lowerlevel += (8**ilevel) * ncell
+            ratio = 2 ** (ilevel + 1)
+            indices = np.fromiter(
+                (
+                    np.floor((loc[i] - coordmin[i]) / dcoord[i] * ratio)
+                    for i in range(3)
+                ),
+                dtype=int,
+            )
+            cid = (
+                ncells_lowerlevel
+                + indices[0]
+                + ratio * ncells[0] * indices[1]
+                + ratio**2 * ncells[0] * ncells[1] * indices[2]
+                + 1
+            )
+
+        return cid
+
+    def getvcellcoordinates(
+        self, vcellids: np.ndarray, species: str = "proton"
+    ) -> np.ndarray:
         mesh = self.meshes[species]
         vblocks = mesh.vblocks
         vblock_size = mesh.vblock_size
         dv = mesh.dv
         vmin = mesh.vmin
 
-        bsize = np.prod(vblock_size).item()
-        blockid = tuple(cid // bsize for cid in vcellids)
+        bsize = np.prod(vblock_size)
+        blockid = np.fromiter((cid // bsize for cid in vcellids), dtype=int)
         # Get block coordinates
         blockInd = [
-            (
-                bid.item() % vblocks[0].item(),
-                bid.item() // vblocks[0].item() % vblocks[1].item(),
-                bid.item() // (vblocks[0].item() * vblocks[1].item()),
+            np.array(
+                (
+                    bid % vblocks[0],
+                    bid // vblocks[0] % vblocks[1],
+                    bid // (vblocks[0] * vblocks[1]),
+                ),
+                dtype=int,
             )
             for bid in blockid
         ]
         blockCoord = [
-            (
-                bInd[0] * dv[0].item() * vblock_size[0].item() + vmin[0].item(),
-                bInd[1] * dv[1].item() * vblock_size[1].item() + vmin[1].item(),
-                bInd[2] * dv[2].item() * vblock_size[2].item() + vmin[2].item(),
+            np.array(
+                (
+                    bInd[0] * dv[0] * vblock_size[0] + vmin[0],
+                    bInd[1] * dv[1] * vblock_size[1] + vmin[1],
+                    bInd[2] * dv[2] * vblock_size[2] + vmin[2],
+                ),
+                dtype=float,
             )
             for bInd in blockInd
         ]
         # Get cell indices
-        vcellblockids = tuple(vid % bsize for vid in vcellids)
-        cellidxyz = [
-            (
-                cid % vblock_size[0],
-                cid // vblock_size[0] % vblock_size[1],
-                cid // (vblock_size[0] * vblock_size[1]),
-            )
-            for cid in vcellblockids
-        ]
+        vcellblockids = np.fromiter((vid % bsize for vid in vcellids), dtype=int)
+        cellidxyz = np.array(
+            [
+                np.array(
+                    (
+                        cid % vblock_size[0],
+                        cid // vblock_size[0] % vblock_size[1],
+                        cid // (vblock_size[0] * vblock_size[1]),
+                    ),
+                    dtype=int,
+                )
+                for cid in vcellblockids
+            ]
+        )
         # Get cell coordinates
-        cellCoords = [
-            tuple(
-                blockCoord[i][j] + (cellidxyz[i][j].item() + 0.5) * dv[j].item()
-                for j in range(3)
-            )
-            for i in range(len(vcellids))
-        ]
+        cellCoords = np.array(
+            [
+                np.fromiter(
+                    (
+                        blockCoord[i][j] + (cellidxyz[i][j] + 0.5) * dv[j]
+                        for j in range(3)
+                    ),
+                    dtype=float,
+                )
+                for i in range(len(vcellids))
+            ]
+        )
 
         return cellCoords
+
+    def getnearestcellwithvdf(self, id: int, species: str = "proton"):
+        self.init_cellswithVDF(species)
+        cells = self.meshes[species].cellwithVDF
+        if not np.any(cells):
+            raise ValueError(f"No distribution saved in {self.name}")
+        coords_orig = self.getcellcoordinates(id)
+        coords = [self.getcellcoordinates(cid) for cid in cells]
+        min_ = np.argmin(np.sum(np.square(coords - coords_orig), axis=1))
+
+        return cells[min_]
+
+    def getcellcoordinates(self, cid: int):
+        ncells = self.ncells
+        coordmin, coordmax = self.coordmin, self.coordmax
+        cid -= 1  # for easy divisions
+
+        ncells_refmax = list(ncells)
+        reflevel = 0
+        subtraction = np.prod(ncells) * (2**reflevel) ** 3
+        # sizes on the finest level
+        while cid >= subtraction:
+            cid -= subtraction
+            reflevel += 1
+            subtraction *= 8
+            ncells_refmax[0] *= 2
+            ncells_refmax[1] *= 2
+            ncells_refmax[2] *= 2
+
+        indices = np.array(
+            (
+                cid % ncells_refmax[0],
+                cid // ncells_refmax[0] % ncells_refmax[1],
+                cid // (ncells_refmax[0] * ncells_refmax[1]),
+            ),
+            dtype=int,
+        )
+
+        coords = np.fromiter(
+            (
+                coordmin[i]
+                + (indices[i] + 0.5) * (coordmax[i] - coordmin[i]) / ncells_refmax[i]
+                for i in range(3)
+            ),
+            dtype=float,
+        )
+
+        return coords
 
 
 def _getdim2d(ncells: tuple, maxamr: int, normal: str):

@@ -10,4 +10,5 @@ from pyvlasiator.plot.plot import (
     contour,
     contourf,
     streamplot,
+    vdfslice,
 )

@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import warnings
 from typing import Callable
 from collections import namedtuple
 from enum import Enum
@@ -536,9 +537,265 @@ def set_plot(c, ax, pArgs: PlotArgs, ticks, addcolorbar: bool):
     ax.yaxis.set_tick_params(width=2.0, length=3)
 
 
+def vdfslice(
+    meta: Vlsv,
+    location: tuple | list,
+    ax=None,
+    limits: tuple = (float("-inf"), float("inf"), float("-inf"), float("inf")),
+    verbose: bool = False,
+    species: str = "proton",
+    unit: AxisUnit = AxisUnit.SI,
+    unitv: str = "km/s",
+    vmin: float = float("-inf"),
+    vmax: float = float("inf"),
+    slicetype: str = None,
+    vslicethick: float = 0.0,
+    center: str = None,
+    weight: str = "particle",
+    flimit: float = -1.0,
+    **kwargs,
+):
+    v1, v2, r1, r2, weights, strx, stry, str_title = prep_vdf(
+        meta,
+        location,
+        species,
+        unit,
+        unitv,
+        slicetype,
+        vslicethick,
+        center,
+        weight,
+        flimit,
+        verbose,
+    )
+
+    import matplotlib
+    import matplotlib.pyplot as plt
+
+    if math.isinf(vmin):
+        vmin = np.min(weights)
+    if math.isinf(vmax):
+        vmax = np.max(weights)
+
+    if verbose:
+        print(f"Active f range is {vmin}, {vmax}")
+
+    if not ax:
+        ax = plt.gca()
+
+    norm = matplotlib.colors.LogNorm(vmin, vmax)
+
+    h = ax.hist2d(v1, v2, bins=(r1, r2), weights=weights, norm=norm, shading="flat")
+
+    ax.set_title(str_title, fontweight="bold")
+    ax.set_xlabel(strx)
+    ax.set_ylabel(stry)
+    ax.set_aspect("equal")
+    ax.grid(color="grey", linestyle="-")
+    ax.tick_params(direction="in")
+
+    cb = plt.colorbar(h[3], ax=ax, fraction=0.04, pad=0.02)
+    cb.ax.tick_params(which="both", direction="in")
+    cb_title = cb.ax.set_ylabel("f(v)")
+
+    # TODO: Draw vector of magnetic field direction
+    # if slicetype in ("xy", "xz", "yz"):
+
+    return h[3]  # h[0] is 2D data, h[1] is x axis, h[2] is y axis
+
+
+def prep_vdf(
+    meta: Vlsv,
+    location: tuple | list,
+    species: str = "proton",
+    unit: AxisUnit = AxisUnit.SI,
+    unitv: str = "km/s",
+    slicetype: str = None,
+    vslicethick: float = 0.0,
+    center: str = None,
+    weight: str = "particle",
+    flimit: float = -1.0,
+    verbose: bool = False,
+):
+    ncells = meta.ncells
+
+    if species in meta.meshes:
+        vmesh = meta.meshes[species]
+    else:
+        raise ValueError(f"Unable to detect population {species}")
+
+    if not slicetype in (None, "xy", "xz", "yz", "bperp", "bpar1", "bpar2"):
+        raise ValueError(f"Unknown type {slicetype}")
+
+    if unit == AxisUnit.EARTH:
+        location = [loc * RE for loc in location]
+
+    # Set unit conversion factor
+    unitvfactor = 1e3 if unitv == "km/s" else 1.0
+
+    # Get closest cell ID from input coordinates
+    cidReq = meta.getcell(location)
+    cidNearest = meta.getnearestcellwithvdf(cidReq)
+
+    # Set normal direction
+    if not slicetype:
+        if ncells[1] == 1 and ncells[2] == 1:  # 1D, select xz
+            slicetype = "xz"
+        elif ncells[1] == 1:  # polar
+            slicetype = "xz"
+        elif ncells[2] == 1:  # ecliptic
+            slicetype = "xy"
+        else:
+            slicetype = "xy"
+
+    if slicetype in ("xy", "yz", "xz"):
+        if slicetype == "xy":
+            dir1, dir2, dir3 = 0, 1, 2
+            ŝ = [0.0, 0.0, 1.0]
+        elif slicetype == "xz":
+            dir1, dir2, dir3 = 0, 2, 1
+            ŝ = [0.0, 1.0, 0.0]
+        elif slicetype == "yz":
+            dir1, dir2, dir3 = 1, 2, 0
+            ŝ = [1.0, 0.0, 0.0]
+        v1size = vmesh.vblocks[dir1] * vmesh.vblock_size[dir1]
+        v2size = vmesh.vblocks[dir2] * vmesh.vblock_size[dir2]
+
+        v1min, v1max = vmesh.vmin[dir1], vmesh.vmax[dir1]
+        v2min, v2max = vmesh.vmin[dir2], vmesh.vmax[dir2]
+    elif slicetype in ("bperp", "bpar1", "bpar2"):
+        # TODO: WIP
+        pass
+
+    if not math.isclose((v1max - v1min) / v1size, (v2max - v2min) / v2size):
+        warnings.warn("Noncubic vgrid applied!")
+
+    cellsize = (v1max - v1min) / v1size
+
+    r1 = np.linspace(v1min / unitvfactor, v1max / unitvfactor, v1size + 1)
+    r2 = np.linspace(v2min / unitvfactor, v2max / unitvfactor, v2size + 1)
+
+    vcellids, vcellf = meta.read_vcells(cidNearest, species)
+
+    V = meta.getvcellcoordinates(vcellids, species)
+
+    if center:
+        if center == "bulk":  # centered with bulk velocity
+            if meta.has_variable("moments"):  # From a restart file
+                Vcenter = meta.read_variable("restart_V", cidNearest)
+            elif meta.has_variable(species * "/vg_v"):  # Vlasiator 5
+                Vcenter = meta.read_variable(species * "/vg_v", cidNearest)
+            elif meta.has_variable(species * "/V"):
+                Vcenter = meta.read_variable(species * "/V", cidNearest)
+            else:
+                Vcenter = meta.read_variable("V", cidNearest)
+        elif center == "peak":  # centered on highest VDF-value
+            Vcenter = np.maximum(vcellf)
+
+        V = np.array(
+            [np.fromiter((v[i] - Vcenter for i in range(3)), dtype=float) for v in V]
+        )
+
+    # Set sparsity threshold
+    if flimit < 0:
+        if meta.has_variable(species + "/vg_effectivesparsitythreshold"):
+            flimit = meta.readvariable(
+                species + "/vg_effectivesparsitythreshold", cidNearest
+            )
+        elif meta.has_variable(species + "/EffectiveSparsityThreshold"):
+            flimit = meta.read_variable(
+                species + "/EffectiveSparsityThreshold", cidNearest
+            )
+        else:
+            flimit = 1e-16
+
+    # Drop velocity cells which are below the sparsity threshold
+    findex_ = vcellf >= flimit
+    fselect = vcellf[findex_]
+    Vselect = V[findex_]
+
+    if slicetype in ("xy", "yz", "xz"):
+        v1select = np.array([v[dir1] for v in Vselect])
+        v2select = np.array([v[dir2] for v in Vselect])
+        vnormal = np.array([v[dir3] for v in Vselect])
+
+        vec = ("vx", "vy", "vz")
+        strx = vec[dir1]
+        stry = vec[dir2]
+    elif slicetype in ("bperp", "bpar1", "bpar2"):
+        v1select = np.empty(len(Vselect), dtype=Vselect.dtype)
+        v2select = np.empty(len(Vselect), dtype=Vselect.dtype)
+        vnormal = np.empty(len(Vselect), dtype=Vselect.dtype)
+        # TODO: WIP
+        # for v1s, v2s, vn, vs in zip(v1select, v2select, vnormal, Vselect):
+        #    v1s, v2s, vn = Rinv * Vselect
+
+        # if slicetype == "bperp":
+        #    strx = r"$v_{B \times V}$"
+        #    stry = r"$v_{B \times (B \times V)}$"
+        # elif slicetype == "bpar2":
+        #    strx = r"$v_{B}$"
+        #    stry = r"$v_{B \times V}$"
+        # elif slicetype == "bpar1":
+        #    strx = r"$v_{B \times (B \times V)}$"
+        #    stry = r"$v_{B}$"
+
+    unitstr = f" [{unitv}]"
+    strx += unitstr
+    stry += unitstr
+
+    if vslicethick < 0:  # Set a proper thickness
+        if any(
+            i == 1.0 for i in ŝ
+        ):  # Assure that the slice cut through at least 1 vcell
+            vslicethick = cellsize
+        else:  # Assume cubic vspace grid, add extra space
+            vslicethick = cellsize * (math.sqrt(3) + 0.05)
+
+    # Weights using particle flux or phase-space density
+    fweight = (
+        fselect * np.linalg.norm([v1select, v2select, vnormal])
+        if weight == "flux"
+        else fselect
+    )
+
+    # Select cells within the slice area
+    if vslicethick > 0.0:
+        ind_ = abs(vnormal) <= 0.5 * vslicethick
+        v1, v2, fweight = v1select[ind_], v2select[ind_], fweight[ind_]
+    else:
+        v1, v2 = v1select, v2select
+
+    v1 = [v / unitvfactor for v in v1]
+    v2 = [v / unitvfactor for v in v2]
+
+    str_title = f"t = {meta.time:4.1f}s"
+
+    if verbose:
+        print(f"Original coordinates : {location}")
+        print(f"Original cell        : {meta.getcellcoordinates(cidReq)}")
+        print(f"Nearest cell with VDF: {meta.getcellcoordinates(cidNearest)}")
+        print(f"CellID: {cidNearest}")
+
+        if center == "bulk":
+            print(f"Transforming to plasma frame, travelling at speed {Vcenter}")
+        elif center == "peak":
+            print(f"Transforming to peak f-value frame, travelling at speed {Vcenter}")
+
+        print(f"Using VDF threshold value of {flimit}.")
+
+        if vslicethick > 0:
+            print("Performing slice with a counting thickness of $vslicethick")
+        else:
+            print(f"Projecting total VDF to a single plane")
+
+    return v1, v2, r1, r2, fweight, strx, stry, str_title
+
+
 # Append plotting functions
 Vlsv.plot = plot
 Vlsv.pcolormesh = pcolormesh
 Vlsv.contourf = contourf
 Vlsv.contour = contour
 Vlsv.streamplot = streamplot
+Vlsv.vdfslice = vdfslice

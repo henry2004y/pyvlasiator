@@ -51,11 +51,13 @@ class TestVlsv:
         data = meta.read_variable("vg_boundarytype")
         assert np.array_equal(data, np.array([4, 4, 1, 1, 1, 1, 1, 1, 3, 3]))
         # ID finding (noAMR)
-        # loc = [2.0, 0.0, 0.0]
-        # id = getcell(meta, loc)
-        # coords = getcellcoordinates(meta, id)
-        # assert coords == [3.0, 0.0, 0.0]
-        # assert meta.read_variable("proton/vg_rho", id)[1] == 1.2288102e0
+        loc = [2.0, 0.0, 0.0]
+        id = meta.getcell(loc)
+        coords = meta.getcellcoordinates(id)
+        assert coords == pytest.approx([3.0, 0.0, 0.0])
+        assert meta.read_variable("proton/vg_rho", [id]) == pytest.approx(1.2288102e0)
+        # Nearest ID with VDF stored
+        assert meta.getnearestcellwithvdf(id) == 5
 
     def test_read_vspace(self):
         meta = Vlsv(self.files[0])
@@ -103,3 +105,9 @@ class TestPlot:
         meta = Vlsv(self.files[1])
         p = meta.streamplot("proton/vg_v", comp="xy")
         assert type(p) == matplotlib.streamplot.StreamplotSet
+
+    def test_vdf_plot(self):
+        meta = Vlsv(self.files[0])
+        loc = [2.0, 0.0, 0.0]
+        v = meta.vdfslice(loc).get_array()
+        assert v[785] == 238.24398578141802
