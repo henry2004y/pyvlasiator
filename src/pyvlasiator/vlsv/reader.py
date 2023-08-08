@@ -825,6 +825,58 @@ class Vlsv:
 
         return coords
 
+    def getslicecell(
+        self, sliceoffset: float, dir: int, minCoord: float, maxCoord: float
+    ):
+        if not dir in (0, 1, 2):
+            raise ValueError(f"Unknown slice direction {dir}")
+
+        ncells, maxamr, celldict = self.ncells, self.maxamr, self.celldict
+        nsize = ncells[dir]
+        sliceratio = sliceoffset / (maxCoord - minCoord)
+        if not (0.0 <= sliceratio <= 1.0):
+            raise ValueError("slice plane index out of bound!")
+
+        # Find the ids
+        nlen = 0
+        ncell = np.prod(ncells)
+        # number of cells up to each refinement level
+        lvlC = np.fromiter((ncell * 8**ilvl for ilvl in range(maxamr)), dtype=int)
+        lvlAccum = np.add.accumulate(lvlC)
+        nStart = np.insert(lvlAccum, 0, 0)
+
+        indexlist = np.empty(0, dtype=int)
+        idlist = np.empty(0, dtype=int)
+
+        cellidsorted = np.fromiter(celldict.keys(), dtype=int).sort()
+
+        for ilvl in range(maxamr):
+            nLow, nHigh = nStart[ilvl], nStart[ilvl + 1]
+            idfirst_ = np.searchsorted(cellidsorted, nLow + 1)
+            idlast_ = np.searchsorted(cellidsorted, nHigh, side="right")
+
+            ids = cellidsorted[idfirst_:idlast_]
+
+            ix, iy, iz = getindexes(ilvl, ncells[1], ncells[2], nLow, ids)
+
+            if dir == 1:
+                coords = ix
+            elif dir == 2:
+                coords = iy
+            else:
+                coords = iz
+
+            # Find the cut plane index for each refinement level (0-based)
+            depth = int(np.floor(sliceratio * nsize * 2**ilvl))
+            # Find the needed elements to create the cut and save the results
+            elements = coords == depth
+            np.append(indexlist, np.arange(nlen + 1, nlen + len(ids))[elements])
+            np.append(idlist, ids[elements])
+
+            nlen += len(ids)
+
+        return idlist, indexlist
+
 
 def _getdim2d(ncells: tuple, maxamr: int, normal: str):
     ratio = 2**maxamr
@@ -837,3 +889,21 @@ def _getdim2d(ncells: tuple, maxamr: int, normal: str):
     dims = (ncells[i1] * ratio, ncells[i2] * ratio)
 
     return dims
+
+
+def getindexes(
+    ilevel: int, xcells: int, ycells: int, nCellUptoLowerLvl: int, ids: np.ndarray
+):
+    ratio = 2**ilevel
+    slicesize = xcells * ycells * ratio**2
+
+    iz = (ids - nCellUptoLowerLvl - 1) // slicesize
+    iy = np.zeros_like(iz)
+    ix = np.zeros_like(iz)
+    for i in enumerate(iz):
+        # number of ids up to the coordinate z in the refinement level ilevel
+        idUpToZ = iz[i] * slicesize + nCellUptoLowerLvl
+        iy[i] = (ids[i] - idUpToZ - 1) // (xcells * ratio)
+        ix[i] = ids[i] - idUpToZ - iy[i] * xcells * ratio - 1
+
+    return ix, iy, iz

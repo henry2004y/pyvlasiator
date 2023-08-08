@@ -100,6 +100,8 @@ class TestPlot:
         assert v[-3] == 4000000.0
         v = meta.contourf("proton/vg_rho").get_array()
         assert v[-3] == 4000000.0
+        v = meta.pcolormesh("vg_b_vol").get_array()
+        assert v[2] == pytest.approx(3.0045673e-09)
 
     def test_stream_plot(self):
         meta = Vlsv(self.files[1])

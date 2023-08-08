@@ -275,12 +275,12 @@ def set_vector(meta: Vlsv, var: str, comp: str, axisunit: AxisUnit):
             v1 = data[:, :, v1_]
             v2 = data[:, :, v2_]
         else:
-            idlist, indexlist = getslicecell(
-                meta, -coordmin[dir], dir, coordmin[dir], coordmax[dir]
+            idlist, indexlist = meta.getslicecell(
+                -coordmin[dir], dir, coordmin[dir], coordmax[dir]
             )
             v2D = data[:, indexlist]
-            v1 = refineslice(meta, idlist, v2D[v1_, :], dir)
-            v2 = refineslice(meta, idlist, v2D[v2_, :], dir)
+            v1 = meta.refineslice(idlist, v2D[v1_, :], dir)
+            v2 = meta.refineslice(idlist, v2D[v2_, :], dir)
     else:
         v1 = data[:, :, v1_]
         v2 = data[:, :, v2_]
