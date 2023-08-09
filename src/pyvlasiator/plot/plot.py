@@ -351,7 +351,7 @@ def set_args(
     sizes = tuple(ncells[i] << meta.maxamr for i in seq)
 
     if not normal:
-        idlist, indexlist = [], []
+        idlist, indexlist = np.empty(0, dtype=int), np.empty(0, dtype=int)
     else:
         sliceoffset = origin - coordmin[dir]
         idlist, indexlist = meta.getslicecell(

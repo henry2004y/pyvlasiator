@@ -877,6 +877,59 @@ class Vlsv:
 
         return idlist, indexlist
 
+    def refineslice(self, idlist: np.ndarray, data: np.ndarray, normal: int):
+        ncells, maxamr = self.ncells, self.maxamr
+
+        dims = _getdim2d(ncells, maxamr, normal)
+
+        dpoints = np.empty(dims, dtype=data.dtype)
+
+        # Create the plot grid
+        ncell = np.prod(ncells)
+        nHigh, nLow = ncell, 0
+
+        for i in range(maxamr):
+            idfirst_ = np.searchsorted(idlist, nLow + 1)
+            idlast_ = np.searchsorted(idlist, nHigh, side="right")
+
+            ids = idlist[idfirst_:idlast_]
+            d = data[idfirst_:idlast_]
+
+            ix, iy, iz = getindexes(i, ncells[1], ncells[2], nLow, ids)
+
+            # Get the correct coordinate values and the widths for the plot
+            if normal == 0:
+                a, b = iy, iz
+            elif normal == 1:
+                a, b = ix, iz
+            elif normal == 2:
+                a, b = ix, iy
+
+            # Insert the data values into dpoints
+            refineRatio = 2 ** (maxamr - i)
+            iRange = range(refineRatio)
+            X, Y = np.meshgrid(iRange, iRange, indexing="ij")
+            #TODO: test this
+            # X, Y = np.meshgrid(iRange, iRange, indexing="ij", sparse=True)
+
+            coords = np.empty((len(a), 2 ** (2 * (maxamr - i)), 2), dtype=int)
+
+            for ic, (ac, bc) in enumerate(zip(a, b)):
+                for ir in range(2 ** (2 * (maxamr - i))):
+                    coords[ic, ir] = [
+                        ac * refineRatio + X[ir],
+                        bc * refineRatio + Y[ir],
+                    ]
+
+            for ic, dc in enumerate(d):
+                for ir in range(2 ** (2 * (maxamr - i))):
+                    dpoints[coords[ic, ir, 0], coords[ic, ir, 1]] = dc
+
+            nLow = nHigh
+            nHigh += ncell * 8 ** (i + 1)
+
+        return dpoints
+
 
 def _getdim2d(ncells: tuple, maxamr: int, normal: str):
     ratio = 2**maxamr
