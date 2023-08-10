@@ -882,8 +882,8 @@ class Vlsv:
         ncells, maxamr = self.ncells, self.maxamr
 
         dims = _getdim2d(ncells, maxamr, normal)
-
-        dpoints = np.empty(dims, dtype=data.dtype)
+        # meshgrid-like 2D input for matplotlib
+        dpoints = np.empty((dims[1], dims[0]), dtype=data.dtype)
 
         # Create the plot grid
         ncell = np.prod(ncells)
@@ -938,7 +938,7 @@ def _getdim2d(ncells: tuple, maxamr: int, normal: int):
         i1, i2 = 0, 2
     elif normal == 2:
         i1, i2 = 0, 1
-    dims = (ncells[i2] * ratio, ncells[i1] * ratio)
+    dims = (ncells[i1] * ratio, ncells[i2] * ratio)
 
     return dims
 
