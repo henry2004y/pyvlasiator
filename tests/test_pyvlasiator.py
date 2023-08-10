@@ -68,6 +68,20 @@ class TestVlsv:
     def test_read_amr(self):
         metaAMR = Vlsv(self.files[2])
         assert metaAMR.maxamr == 2
+        # AMR data reading, DCCRG grid
+        sliceoffset = abs(metaAMR.coordmin[1])
+        idlist, indexlist = metaAMR.getslicecell(
+            sliceoffset, 1, metaAMR.coordmin[1], metaAMR.coordmax[1]
+        )
+
+        # ID finding (AMR)
+        loc = [2.5e6, 2.5e6, 2.5e6]  # exact cell center
+        id = metaAMR.getcell(loc)
+        assert metaAMR.getcellcoordinates(id) == pytest.approx(loc)
+
+        data = metaAMR.read_variable("proton/vg_rho")
+        dataslice = metaAMR.refineslice(idlist, data[indexlist], 1)
+        assert np.sum(dataslice) == pytest.approx(7.6903526e8)
 
     def test_read_fg_variable(self):
         metaAMR = Vlsv(self.files[2])
@@ -102,6 +116,11 @@ class TestPlot:
         assert v[-3] == 4000000.0
         v = meta.pcolormesh("vg_b_vol").get_array()
         assert v[2] == pytest.approx(3.0045673e-09)
+
+    def test_3d_amr_slice(self):
+        meta = Vlsv(self.files[1])
+        v = meta.pcolormesh("proton/vg_rho").get_array()
+        assert v[254] == pytest.approx(1.0483886e6) and len(v) == 512
 
     def test_stream_plot(self):
         meta = Vlsv(self.files[1])

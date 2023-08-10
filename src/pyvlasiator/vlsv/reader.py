@@ -841,27 +841,28 @@ class Vlsv:
         nlen = 0
         ncell = np.prod(ncells)
         # number of cells up to each refinement level
-        lvlC = np.fromiter((ncell * 8**ilvl for ilvl in range(maxamr)), dtype=int)
+        lvlC = np.fromiter((ncell * 8**ilvl for ilvl in range(maxamr + 1)), dtype=int)
         lvlAccum = np.add.accumulate(lvlC)
         nStart = np.insert(lvlAccum, 0, 0)
 
         indexlist = np.empty(0, dtype=int)
         idlist = np.empty(0, dtype=int)
 
-        cellidsorted = np.fromiter(celldict.keys(), dtype=int).sort()
+        cellidsorted = np.fromiter(celldict.keys(), dtype=int)
+        cellidsorted.sort()
 
-        for ilvl in range(maxamr):
+        for ilvl in range(maxamr + 1):
             nLow, nHigh = nStart[ilvl], nStart[ilvl + 1]
             idfirst_ = np.searchsorted(cellidsorted, nLow + 1)
             idlast_ = np.searchsorted(cellidsorted, nHigh, side="right")
 
             ids = cellidsorted[idfirst_:idlast_]
 
-            ix, iy, iz = getindexes(ilvl, ncells[1], ncells[2], nLow, ids)
+            ix, iy, iz = getindexes(ilvl, ncells[0], ncells[1], nLow, ids)
 
-            if dir == 1:
+            if dir == 0:
                 coords = ix
-            elif dir == 2:
+            elif dir == 1:
                 coords = iy
             else:
                 coords = iz
@@ -870,8 +871,8 @@ class Vlsv:
             depth = int(np.floor(sliceratio * nsize * 2**ilvl))
             # Find the needed elements to create the cut and save the results
             elements = coords == depth
-            np.append(indexlist, np.arange(nlen + 1, nlen + len(ids))[elements])
-            np.append(idlist, ids[elements])
+            indexlist = np.append(indexlist, np.arange(nlen, nlen + len(ids))[elements])
+            idlist = np.append(idlist, ids[elements])
 
             nlen += len(ids)
 
@@ -888,14 +889,14 @@ class Vlsv:
         ncell = np.prod(ncells)
         nHigh, nLow = ncell, 0
 
-        for i in range(maxamr):
+        for i in range(maxamr + 1):
             idfirst_ = np.searchsorted(idlist, nLow + 1)
             idlast_ = np.searchsorted(idlist, nHigh, side="right")
 
             ids = idlist[idfirst_:idlast_]
             d = data[idfirst_:idlast_]
 
-            ix, iy, iz = getindexes(i, ncells[1], ncells[2], nLow, ids)
+            ix, iy, iz = getindexes(i, ncells[0], ncells[1], nLow, ids)
 
             # Get the correct coordinate values and the widths for the plot
             if normal == 0:
@@ -909,21 +910,19 @@ class Vlsv:
             refineRatio = 2 ** (maxamr - i)
             iRange = range(refineRatio)
             X, Y = np.meshgrid(iRange, iRange, indexing="ij")
-            #TODO: test this
-            # X, Y = np.meshgrid(iRange, iRange, indexing="ij", sparse=True)
-
             coords = np.empty((len(a), 2 ** (2 * (maxamr - i)), 2), dtype=int)
 
             for ic, (ac, bc) in enumerate(zip(a, b)):
                 for ir in range(2 ** (2 * (maxamr - i))):
+                    index_ = np.unravel_index(ir, (refineRatio, refineRatio))
                     coords[ic, ir] = [
-                        ac * refineRatio + X[ir],
-                        bc * refineRatio + Y[ir],
+                        ac * refineRatio + X[index_],
+                        bc * refineRatio + Y[index_],
                     ]
 
             for ic, dc in enumerate(d):
                 for ir in range(2 ** (2 * (maxamr - i))):
-                    dpoints[coords[ic, ir, 0], coords[ic, ir, 1]] = dc
+                    dpoints[coords[ic, ir, 1], coords[ic, ir, 0]] = dc
 
             nLow = nHigh
             nHigh += ncell * 8 ** (i + 1)
@@ -931,15 +930,15 @@ class Vlsv:
         return dpoints
 
 
-def _getdim2d(ncells: tuple, maxamr: int, normal: str):
+def _getdim2d(ncells: tuple, maxamr: int, normal: int):
     ratio = 2**maxamr
-    if normal == "x":
+    if normal == 0:
         i1, i2 = 1, 2
-    elif normal == "y":
+    elif normal == 1:
         i1, i2 = 0, 2
-    elif normal == "z":
+    elif normal == 2:
         i1, i2 = 0, 1
-    dims = (ncells[i1] * ratio, ncells[i2] * ratio)
+    dims = (ncells[i2] * ratio, ncells[i1] * ratio)
 
     return dims
 
@@ -953,10 +952,10 @@ def getindexes(
     iz = (ids - nCellUptoLowerLvl - 1) // slicesize
     iy = np.zeros_like(iz)
     ix = np.zeros_like(iz)
-    for i in enumerate(iz):
-        # number of ids up to the coordinate z in the refinement level ilevel
-        idUpToZ = iz[i] * slicesize + nCellUptoLowerLvl
-        iy[i] = (ids[i] - idUpToZ - 1) // (xcells * ratio)
-        ix[i] = ids[i] - idUpToZ - iy[i] * xcells * ratio - 1
+
+    # number of ids up to the coordinate z in the refinement level ilevel
+    idUpToZ = iz * slicesize + nCellUptoLowerLvl
+    iy = (ids - idUpToZ - 1) // (xcells * ratio)
+    ix = ids - idUpToZ - iy * xcells * ratio - 1
 
     return ix, iy, iz

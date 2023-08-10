@@ -202,8 +202,18 @@ def _plot2d(
     if not meta.has_variable(var):
         raise ValueError(f"Variable {var} not found in the file")
 
-    pArgs = set_args(meta, var, axisunit)
-    data = prep2d(meta, var, comp)
+    if meta.ndims() == 3 or meta.maxamr > 0:
+        # check if origin and normal exist in kwargs
+        normal = kwargs["normal"] if "normal" in kwargs else 1
+        origin = kwargs["origin"] if "origin" in kwargs else 0.0
+        kwargs.pop("normal", None)
+        kwargs.pop("origin", None)
+
+        pArgs = set_args(meta, var, axisunit, normal, origin)
+        data = prep2dslice(meta, var, normal, comp, pArgs)
+    else:
+        pArgs = set_args(meta, var, axisunit)
+        data = prep2d(meta, var, comp)
 
     x1, x2 = get_axis(pArgs.axisunit, pArgs.plotrange, pArgs.sizes)
 
@@ -306,7 +316,7 @@ def set_args(
     meta: Vlsv,
     var: str,
     axisunit: AxisUnit = AxisUnit.EARTH,
-    normal: str = "",
+    dir: int = -1,
     origin: float = 0.0,
 ) -> PlotArgs:
     """
@@ -318,8 +328,8 @@ def set_args(
         Variable name from the VLSV file.
     axisunit : AxisUnit
         Unit of the axis.
-    normal : str
-        Normal direction of the 2D slice, "x", "y", or "z".
+    dir : int
+        Normal direction of the 2D slice, 0 for x, 1 for y, and 2 for z.
     origin : float
         Origin of the 2D slice.
 
@@ -333,13 +343,12 @@ def set_args(
     """
     ncells, coordmin, coordmax = meta.ncells, meta.coordmin, meta.coordmax
 
-    if normal == "x":
+    if dir == 0:
         seq = (1, 2)
-        dir = 0
-    elif normal == "y" or (ncells[1] == 1 and ncells[2] != 1):  # polar
+    elif dir == 1 or (ncells[1] == 1 and ncells[2] != 1):  # polar
         seq = (0, 2)
         dir = 1
-    elif normal == "z" or (ncells[2] == 1 and ncells[1] != 1):  # ecliptic
+    elif dir == 2 or (ncells[2] == 1 and ncells[1] != 1):  # ecliptic
         seq = (0, 1)
         dir = 2
     else:
@@ -350,7 +359,7 @@ def set_args(
     # Scale the sizes to the highest refinement level for data to be refined later
     sizes = tuple(ncells[i] << meta.maxamr for i in seq)
 
-    if not normal:
+    if dir == -1:
         idlist, indexlist = np.empty(0, dtype=int), np.empty(0, dtype=int)
     else:
         sliceoffset = origin - coordmin[dir]
@@ -413,6 +422,67 @@ def prep2d(meta: Vlsv, var: str, comp: int = -1):
             data = np.linalg.norm(dataRaw, axis=2)
     else:
         data = dataRaw
+
+    return data
+
+
+def prep2dslice(meta: Vlsv, var: str, dir: int, comp: int, pArgs: PlotArgs):
+    origin = pArgs.origin
+    idlist = pArgs.idlist
+    indexlist = pArgs.indexlist
+
+    data3D = meta.read_variable(var)
+
+    if var.startswith("fg_") or data3D.ndim > 2:  # field or derived quantities, fsgrid
+        ncells = meta.ncells * 2**meta.maxamr
+        if not dir in (0,1,2): 
+            raise ValueError(f"Unknown normal direction {dir}")
+
+        sliceratio = (origin - meta.coordmin[dir]) / (
+            meta.coordmax[dir] - meta.coordmin[dir]
+        )
+        if not (0.0 <= sliceratio <= 1.0):
+            raise ValueError("slice plane index out of bound!")
+        # Find the cut plane index for each refinement level
+        icut = int(np.floor(sliceratio * ncells[dir]))
+        if dir == 0:
+            if comp != -1:
+                data = data3D[icut, :, :, comp]
+            else:
+                data = np.linalg.norm(data3D[icut, :, :, :], axis=3)
+        elif dir == 1:
+            if comp != -1:
+                data = data3D[:, icut, :, comp]
+            else:
+                data = np.linalg.norm(data3D[:, icut, :, :], axis=3)
+        elif dir == 2:
+            if comp != -1:
+                data = data3D[:, :, icut, comp]
+            else:
+                data = np.linalg.norm(data3D[:, :, icut, :], axis=3)
+    else:  # moments, dccrg grid
+        # vlasov grid, AMR
+        if data3D.ndim == 1:
+            data2D = data3D[indexlist]
+
+            data = meta.refineslice(idlist, data2D, dir)
+        elif data3D.ndim == 2:
+            data2D = data3D[indexlist, :]
+
+            if comp in (0, 1, 2):
+                slice = data2D[:, comp]
+                data = meta.refineslice(idlist, slice, dir)
+            elif comp == -1:
+                datax = meta.refineslice(idlist, data2D[:, 0], dir)
+                datay = meta.refineslice(idlist, data2D[:, 1], dir)
+                dataz = meta.refineslice(idlist, data2D[:, 2], dir)
+                data = np.fromiter(
+                    (np.linalg.norm([x, y, z]) for x, y, z in zip(datax, datay, dataz)),
+                    dtype=float,
+                )
+            else:
+                slice = data2D[:, comp]
+                data = meta.refineslice(idlist, slice, dir)
 
     return data
 
