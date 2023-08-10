@@ -118,7 +118,7 @@ class TestPlot:
         assert v[2] == pytest.approx(3.0045673e-09)
 
     def test_3d_amr_slice(self):
-        meta = Vlsv(self.files[1])
+        meta = Vlsv(self.files[2])
         v = meta.pcolormesh("proton/vg_rho").get_array()
         assert v[254] == pytest.approx(1.0483886e6) and len(v) == 512
 

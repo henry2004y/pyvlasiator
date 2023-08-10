@@ -262,17 +262,17 @@ def set_vector(meta: Vlsv, var: str, comp: str, axisunit: AxisUnit):
         if "y" in comp:
             dir = 2
             v2_ = 1
-            sizes = _getdim2d(ncells, maxamr, "z")
+            sizes = _getdim2d(ncells, maxamr, 2)
             plotrange = (coordmin[0], coordmax[0], coordmin[1], coordmax[1])
         else:
             dir = 1
             v2_ = 2
-            sizes = _getdim2d(ncells, maxamr, "y")
+            sizes = _getdim2d(ncells, maxamr, 1)
             plotrange = (coordmin[0], coordmax[0], coordmin[2], coordmax[2])
     else:
         dir = 0
         v1_, v2_ = 1, 2
-        sizes = _getdim2d(ncells, maxamr, "x")
+        sizes = _getdim2d(ncells, maxamr, 0)
         plotrange = (coordmin[1], coordmax[1], coordmin[2], coordmax[2])
 
     data = meta.read_variable(var)
