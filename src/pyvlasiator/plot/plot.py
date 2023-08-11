@@ -268,9 +268,10 @@ def streamplot(
     ax=None,
     comp: str = "xy",
     axisunit: AxisUnit = AxisUnit.EARTH,
+    origin: float = 0.0,
     **kwargs,
 ):
-    X, Y, v1, v2 = set_vector(meta, var, comp, axisunit)
+    X, Y, v1, v2 = set_vector(meta, var, comp, axisunit, origin)
     fig, ax = set_figure(ax, **kwargs)
 
     s = ax.streamplot(X, Y, v1, v2, **kwargs)
@@ -278,7 +279,9 @@ def streamplot(
     return s
 
 
-def set_vector(meta: Vlsv, var: str, comp: str, axisunit: AxisUnit):
+def set_vector(
+    meta: Vlsv, var: str, comp: str, axisunit: AxisUnit, origin: float = 0.0
+):
     ncells = meta.ncells
     maxamr = meta.maxamr
     coordmin, coordmax = meta.coordmin, meta.coordmax
@@ -311,12 +314,13 @@ def set_vector(meta: Vlsv, var: str, comp: str, axisunit: AxisUnit):
             v1 = data[:, :, v1_]
             v2 = data[:, :, v2_]
         else:
+            sliceoffset = origin - coordmin[dir]
             idlist, indexlist = meta.getslicecell(
-                -coordmin[dir], dir, coordmin[dir], coordmax[dir]
+                sliceoffset, dir, coordmin[dir], coordmax[dir]
             )
-            v2D = data[:, indexlist]
-            v1 = meta.refineslice(idlist, v2D[v1_, :], dir)
-            v2 = meta.refineslice(idlist, v2D[v2_, :], dir)
+            v2D = data[indexlist, :]
+            v1 = meta.refineslice(idlist, v2D[:, v1_], dir)
+            v2 = meta.refineslice(idlist, v2D[:, v2_], dir)
     else:
         v1 = data[:, :, v1_]
         v2 = data[:, :, v2_]

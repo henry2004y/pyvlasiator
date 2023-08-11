@@ -130,5 +130,5 @@ class TestPlot:
     def test_vdf_plot(self):
         meta = Vlsv(self.files[0])
         loc = [2.0, 0.0, 0.0]
-        v = meta.vdfslice(loc).get_array()
+        v = meta.vdfslice(loc, verbose=True).get_array()
         assert v[785] == 238.24398578141802
