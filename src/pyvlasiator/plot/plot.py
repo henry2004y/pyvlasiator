@@ -91,6 +91,32 @@ def pcolormesh(
     figsize: tuple[float, float] | None = None,
     **kwargs,
 ):
+    """
+    Plot 2d VLSV data with pcolormesh.
+
+    Parameters
+    ----------
+    var : str
+        Variable name from the VLSV file.
+    axisunit : AxisUnit
+        Unit of the axis, `AxisUnit.EARTH` or `AxisUnit.SI`.
+    addcolorbar : bool
+        Add colorbar to the right.
+    colorscale: ColorScale
+        Color scale of the data, `ColorScale.Linear`, `ColorScale.Log`, or `ColorScale.SymLog`.
+    extent : list
+        Extent of the domain (WIP).
+    comp : int
+        Vector composition of data, -1 is magnitude, 0 is x, 1 is y, and 2 is z.
+    ax : matplotlib.axes._axes.Axes
+        Axes of the figure.
+    figsize : tuple[float, float]
+        Size of the figure.
+
+    Returns
+    -------
+
+    """
     fig, ax = set_figure(ax, figsize, **kwargs)
 
     return _plot2d(
@@ -435,7 +461,7 @@ def prep2dslice(meta: Vlsv, var: str, dir: int, comp: int, pArgs: PlotArgs):
 
     if var.startswith("fg_") or data3D.ndim > 2:  # field or derived quantities, fsgrid
         ncells = meta.ncells * 2**meta.maxamr
-        if not dir in (0,1,2): 
+        if not dir in (0, 1, 2):
             raise ValueError(f"Unknown normal direction {dir}")
 
         sliceratio = (origin - meta.coordmin[dir]) / (
