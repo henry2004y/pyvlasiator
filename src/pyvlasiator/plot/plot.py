@@ -522,7 +522,7 @@ def _getdata2d(meta: Vlsv, var: str):
         raise ValueError("2D outputs required")
     sizes = [i for i in meta.ncells if i != 1]
     data = meta.read_variable(var)
-    if data.ndim == 1 or data.shape[-1] == 1:
+    if data.ndim == 1 or data.shape[-1] == 1 or data.ndim == 3:
         data = data.reshape((sizes[1], sizes[0]))
     else:
         data = data.reshape((sizes[1], sizes[0], 3))

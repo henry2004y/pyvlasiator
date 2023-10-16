@@ -431,9 +431,9 @@ class Vlsv:
         nIORanks = self.read_parameter("numWritingRanks")  # Int32
 
         if raw.ndim > 1:
-            dataOrdered = np.empty((*bbox, raw.shape[-1]), dtype=np.float32)
+            v = np.empty((*bbox, raw.shape[-1]), dtype=np.float32)
         else:
-            dataOrdered = np.empty(bbox, dtype=np.float32)
+            v = np.empty(bbox, dtype=np.float32)
 
         def getDomainDecomposition(globalsize, nproc: int) -> list[int]:
             """Obtain decomposition of this grid over the given number of processors.
@@ -512,18 +512,14 @@ class Vlsv:
             # Reorder data
             if raw.ndim > 1:
                 ldata = raw[offsetnow:offsetnext, :].reshape(*lsize, raw.shape[-1])
-                dataOrdered[
+                v[
                     lstart[0] : lend[0], lstart[1] : lend[1], lstart[2] : lend[2], :
                 ] = ldata
             else:
                 ldata = raw[offsetnow:offsetnext].reshape(*lsize)
-                dataOrdered[
-                    lstart[0] : lend[0], lstart[1] : lend[1], lstart[2] : lend[2]
-                ] = ldata
+                v[lstart[0] : lend[0], lstart[1] : lend[1], lstart[2] : lend[2]] = ldata
 
             offsetnow = offsetnext
-
-        v = np.squeeze(dataOrdered)
 
         return v
 
