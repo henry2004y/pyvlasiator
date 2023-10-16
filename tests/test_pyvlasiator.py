@@ -112,7 +112,7 @@ class TestPlot:
         if matplotlib.__version__ < "3.8":
             assert v[-3] == pytest.approx(999535.8) and v.data.size == 6300
         else:
-            assert v[99, 60] == pytest.approx(999535.8) and v.data.size == (100, 63)
+            assert v[99, 60] == pytest.approx(999535.8) and v.data.size == 6300
         v = meta.contour("proton/vg_rho").get_array()
         assert v[-3] == 4000000.0
         v = meta.contourf("proton/vg_rho").get_array()
@@ -126,7 +126,7 @@ class TestPlot:
         if matplotlib.__version__ < "3.8":
             assert v[254] == pytest.approx(1.0483886e6) and len(v) == 512
         else:
-            assert v[15,31] == pytest.approx(1.0483886e6) and v.data.size == (16,32)
+            assert v[15,31] == pytest.approx(1.0483886e6) and len(v) == 512
 
     def test_stream_plot(self):
         meta = Vlsv(self.files[1])
