@@ -114,10 +114,7 @@ class TestPlot:
         else:
             assert v[99, 60] == pytest.approx(999535.8) and v.data.size == 6300
         v = meta.contour("proton/vg_rho").get_array()
-        if matplotlib.__version__ < "3.8":
-            assert v[-3] == 4000000.0
-        else:
-            assert v[-3] == 3600000.0
+        assert v[-3] == 4000000.0
         v = meta.contourf("proton/vg_rho").get_array()
         if matplotlib.__version__ < "3.8":
             assert v[-3] == 4000000.0
