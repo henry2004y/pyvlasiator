@@ -19,7 +19,7 @@ pytest-cov = "^4.1.0"
 requests = "^2.31.0"
 jupyter = "^1.0.0"
 myst-nb = "^0.17.2"
-sphinx-autoapi = "^2.1.1"
+sphinx-autoapi = "^3.0.0"
 sphinx-rtd-theme = "^1.2.2"
 
 [build-system]
