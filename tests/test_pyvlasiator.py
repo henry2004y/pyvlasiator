@@ -121,7 +121,7 @@ class TestPlot:
         else:
             assert v[-3] == 3600000.0
         v = meta.pcolormesh("vg_b_vol").get_array()
-        assert v[2] == pytest.approx(3.0045673e-09)
+        assert v[0, 1] == pytest.approx(3.0045673e-09)
 
     def test_3d_amr_slice(self):
         meta = Vlsv(self.files[2])
