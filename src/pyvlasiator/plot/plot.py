@@ -8,6 +8,9 @@ from pyvlasiator.vlsv import Vlsv
 from pyvlasiator.vlsv.reader import _getdim2d
 from pyvlasiator.vlsv.variables import RE
 
+#TODO: decide whether to add matplotlib in the beginning.
+#import matplotlib
+#import matplotlib.lines
 
 class ColorScale(Enum):
     Linear = 1
@@ -44,19 +47,38 @@ def plot(
     ax=None,
     figsize: tuple[float, float] | None = None,
     **kwargs,
-):
+):# -> list[matplotlib.lines.Line2D]
     """
-    Plot 1d data.
+    Plots 1D data from a VLSV file.
 
     Parameters
     ----------
     var : str
-        Variable name from the VLSV file.
+        Name of the variable to plot from the VLSV file.
+    ax : matplotlib.axes._axes.Axes, optional
+        Axes object to plot on. If not provided, a new figure and axes will be created.
+    figsize : tuple[float, float], optional
+        Size of the figure in inches (width, height). Only used if a new
+        figure is created.
+    **kwargs
+        Additional keyword arguments passed to Matplotlib's `plot` function.
 
     Returns
     -------
-    [matplotlib.lines.Line2D]
-        A list of Line2D.
+    list[matplotlib.lines.Line2D]
+        A list of created Line2D objects.
+
+    Raises
+    ------
+    ValueError
+        If the specified variable is not found in the VLSV file.
+
+    Examples
+    --------
+    >>> vlsv_file = Vlsv("my_vlsv_file.vlsv")
+    >>> axes = vlsv_file.plot("proton/vg_rho")  # Plot density on a new figure
+    >>> axes = vlsv_file.plot("helium/vg_v", ax=my_axes)  # Plot velocity on an
+    existing axes
     """
     import matplotlib.pyplot as plt
 
@@ -92,12 +114,12 @@ def pcolormesh(
     **kwargs,
 ):
     """
-    Plot 2d VLSV data with pcolormesh.
+    Plots 2D VLSV data using pcolormesh.
 
     Parameters
     ----------
     var : str
-        Variable name from the VLSV file.
+        Name of the variable to plot from the VLSV file.
     axisunit : AxisUnit
         Unit of the axis, `AxisUnit.EARTH` or `AxisUnit.SI`.
     addcolorbar : bool
@@ -108,14 +130,32 @@ def pcolormesh(
         Extent of the domain (WIP).
     comp : int
         Vector composition of data, -1 is magnitude, 0 is x, 1 is y, and 2 is z.
-    ax : matplotlib.axes._axes.Axes
-        Axes of the figure.
-    figsize : tuple[float, float]
-        Size of the figure.
+    ax : matplotlib.axes._axes.Axes, optional
+        Axes object to plot on. If not provided, a new figure and axes
+        will be created using `set_figure`.
+    figsize : tuple[float, float], optional
+        Size of the figure in inches. Only used if a new figure is created.
+    **kwargs
+        Additional keyword arguments passed to `ax.pcolormesh`.
 
     Returns
     -------
+    matplotlib.figure.Figure
+        The created or existing figure object.
 
+    Raises
+    ------
+    ValueError
+        If the specified variable is not found in the VLSV file.
+
+    Examples
+    --------
+    >>> vlsv_file = Vlsv("my_vlsv_file.vlsv")
+    >>> # Plot density on a new figure
+    >>> fig = vlsv_file.pcolormesh("proton/vg_rho")
+    >>> # Plot velocity on an existing axes
+    >>> ax = ...  # Existing axes object
+    >>> fig = vlsv_file.pcolormesh("proton/vg_v", ax=ax)
     """
     fig, ax = set_figure(ax, figsize, **kwargs)
 
@@ -201,7 +241,7 @@ def contour(
 
 def _plot2d(
     meta: Vlsv,
-    f: Callable,
+    plot_func: Callable,
     var: str = "",
     axisunit: AxisUnit = AxisUnit.EARTH,
     colorscale: ColorScale = ColorScale.Linear,
@@ -255,7 +295,7 @@ def _plot2d(
         np.searchsorted(x2, extent[2]), np.searchsorted(x2, extent[3], side="right")
     )
 
-    c = f(x1, x2, data, **kwargs)
+    c = plot_func(x1, x2, data, **kwargs)
 
     set_plot(c, ax, pArgs, ticks, addcolorbar)
 
@@ -560,6 +600,47 @@ def set_colorbar(
     logstep: float = 1.0,
     linscale: float = 0.03,
 ):
+    """
+    Creates a color normalization object and tick values for a colorbar.
+
+    Parameters
+    ----------
+    colorscale: ColorScale, optional
+        The type of color scale to use. Can be 'Linear', 'Log', or 'SymLog'.
+        Defaults to 'Linear'.
+    v1: float, optional
+        The minimum value for the colorbar. Defaults to np.nan, which means
+        it will be inferred from the data.
+    v2: float, optional
+        The maximum value for the colorbar. Defaults to np.nan, which means
+        it will be inferred from the data.
+    data: np.ndarray, optional
+        The data to use for inferring the colorbar limits if v1 and v2 are
+        not provided. Defaults to np.array([1.0]).
+    linthresh: float, optional
+        The threshold value for symmetric log color scales. Defaults to 1.0.
+    logstep: float, optional
+        The step size for tick values in log color scales. Defaults to 1.0.
+    linscale: float, optional
+        A scaling factor for linear regions in symmetric log color scales.
+        Defaults to 0.03.
+
+    Returns
+    -------
+    tuple
+        A tuple containing:
+            - norm: A Matplotlib color normalization object for the colorbar.
+            - ticks: A list of tick values for the colorbar.
+
+    Raises
+    ------
+    ValueError
+        If an invalid colorscale type is provided.
+
+    Notes
+    -----
+    - The 'SymLog' colorscale is currently not fully implemented.
+    """
     import matplotlib
 
     vmin, vmax = set_lim(v1, v2, data, colorscale)
