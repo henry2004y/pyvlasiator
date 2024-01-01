@@ -12,12 +12,29 @@ from pyvlasiator.vlsv.variables import RE
 
 
 class ColorScale(Enum):
+    """
+    Represents the available color scales for data visualization.
+
+    Attributes:
+        - Linear (1): A linear color scale, where colors are evenly distributed across the data range.
+        - Log (2): A logarithmic color scale, suitable for data with a wide range of values, where smaller values are more emphasized.
+        - SymLog (3): A symmetric logarithmic color scale, similar to Log but with symmetry around zero, useful for data with both positive and negative values.
+    """
+
     Linear = 1
     Log = 2
     SymLog = 3
 
 
 class AxisUnit(Enum):
+    """
+    Specifies the units for representing values on an axis.
+
+    Attributes:
+        - EARTH (1): Units based on Earth's physical properties, such as Earth's radius for distance and km/s for velocity.
+        - SI (2): Units from the International System of Units (SI), such as meters, seconds, kilograms, etc.
+    """
+
     EARTH = 1
     SI = 2
 
