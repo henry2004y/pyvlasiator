@@ -264,7 +264,7 @@ class Vlsv:
         numpy.ndarray
         """
         if not tag and not name:
-            raise ValueError()
+            raise ValueError("Must provide either tag or name")
 
         name = name.lower()
 
