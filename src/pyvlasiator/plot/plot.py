@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import numpy as np
 import math
 import warnings
@@ -8,9 +10,6 @@ from pyvlasiator.vlsv import Vlsv
 from pyvlasiator.vlsv.reader import _getdim2d
 from pyvlasiator.vlsv.variables import RE
 
-#TODO: decide whether to add matplotlib in the beginning.
-#import matplotlib
-#import matplotlib.lines
 
 class ColorScale(Enum):
     Linear = 1
@@ -47,7 +46,7 @@ def plot(
     ax=None,
     figsize: tuple[float, float] | None = None,
     **kwargs,
-):# -> list[matplotlib.lines.Line2D]
+) -> list[matplotlib.lines.Line2D]:
     """
     Plots 1D data from a VLSV file.
 
@@ -77,9 +76,9 @@ def plot(
     --------
     >>> vlsv_file = Vlsv("my_vlsv_file.vlsv")
     >>> axes = vlsv_file.plot("proton/vg_rho")  # Plot density on a new figure
-    >>> axes = vlsv_file.plot("helium/vg_v", ax=my_axes)  # Plot velocity on an
-    existing axes
+    >>> axes = vlsv_file.plot("helium/vg_v", ax=my_axes)  # Plot velocity on an existing axes
     """
+
     import matplotlib.pyplot as plt
 
     fig = kwargs.pop(
@@ -157,6 +156,7 @@ def pcolormesh(
     >>> ax = ...  # Existing axes object
     >>> fig = vlsv_file.pcolormesh("proton/vg_v", ax=ax)
     """
+
     fig, ax = set_figure(ax, figsize, **kwargs)
 
     return _plot2d(
@@ -265,6 +265,7 @@ def _plot2d(
     -------
 
     """
+
     if not meta.has_variable(var):
         raise ValueError(f"Variable {var} not found in the file")
 
@@ -297,7 +298,7 @@ def _plot2d(
 
     c = plot_func(x1, x2, data, **kwargs)
 
-    set_plot(c, ax, pArgs, ticks, addcolorbar)
+    configure_plot(c, ax, pArgs, ticks, addcolorbar)
 
     return c
 
@@ -310,7 +311,35 @@ def streamplot(
     axisunit: AxisUnit = AxisUnit.EARTH,
     origin: float = 0.0,
     **kwargs,
-):
+) -> matplotlib.streamplot.StreamplotSet:
+    """
+    Creates a streamplot visualization of a vector field from a VLSV dataset.
+
+    Parameters
+    ----------
+    meta: Vlsv
+        A VLSV metadata object containing the dataset information.
+    var: str
+        The name of the vector variable to visualize.
+    ax: matplotlib.axes.Axes, optional
+        The axes object to plot on. If not provided, a new figure and axes
+        will be created.
+    comp: str, optional
+        The components of the vector to plot, specified as a string containing
+        "x", "y", or "z" (e.g., "xy" for x-y components). Defaults to "xy".
+    axisunit: AxisUnit, optional
+        The unit system for the plot axes. Defaults to AxisUnit.EARTH.
+    origin: float, optional
+        The origin point for slice plots. Defaults to 0.0.
+    **kwargs
+        Additional keyword arguments passed to Matplotlib's streamplot function.
+
+    Returns
+    -------
+    matplotlib.streamplot.StreamplotSet
+        The streamplot object created by Matplotlib.
+    """
+
     X, Y, v1, v2 = set_vector(meta, var, comp, axisunit, origin)
     fig, ax = set_figure(ax, **kwargs)
 
@@ -322,6 +351,38 @@ def streamplot(
 def set_vector(
     meta: Vlsv, var: str, comp: str, axisunit: AxisUnit, origin: float = 0.0
 ):
+    """
+    Extracts and prepares vector data for plotting from a VLSV dataset.
+
+    Parameters
+    ----------
+    meta: Vlsv
+        A VLSV metadata object containing the dataset information.
+    var: str
+        The name of the vector variable to extract.
+    comp: str
+        The components of the vector to extract, specified as a string
+        containing "x", "y", or "z" (e.g., "xy" for x-y components).
+    axisunit: AxisUnit
+        The unit system for the plot axes.
+    origin: float, optional
+        The origin point for slice plots. Defaults to 0.0.
+
+    Returns
+    -------
+    tuple
+        A tuple containing:
+            - x: The x-axis coordinates for plotting.
+            - y: The y-axis coordinates for plotting.
+            - v1: The values of the first vector component.
+            - v2: The values of the second vector component.
+
+    Raises
+    ------
+    ValueError
+        If the specified variable is not a vector variable.
+    """
+
     ncells = meta.ncells
     maxamr = meta.maxamr
     coordmin, coordmax = meta.coordmin, meta.coordmax
@@ -370,7 +431,30 @@ def set_vector(
     return x, y, v1, v2
 
 
-def set_figure(ax, figsize: tuple = (10, 6), **kwargs):
+def set_figure(ax, figsize: tuple = (10, 6), **kwargs) -> tuple:
+    """
+    Sets up a Matplotlib figure and axes for plotting.
+
+    Parameters
+    ----------
+    ax: matplotlib.axes.Axes, optional
+        An existing axes object to use for plotting. If not provided, a new
+        figure and axes will be created.
+    figsize: tuple, optional
+        The desired figure size in inches, as a tuple (width, height).
+        Defaults to (10, 6).
+    **kwargs
+        Additional keyword arguments passed to Matplotlib's figure() function
+        if a new figure is created.
+
+    Returns
+    -------
+    tuple
+        A tuple containing:
+            - fig: The Matplotlib figure object.
+            - ax: The Matplotlib axes object.
+    """
+
     import matplotlib.pyplot as plt
 
     fig = kwargs.pop(
@@ -411,6 +495,7 @@ def set_args(
     --------
     :func:`pcolormesh`
     """
+
     ncells, coordmin, coordmax = meta.ncells, meta.coordmin, meta.coordmax
 
     if dir == 0:
@@ -483,6 +568,7 @@ def prep2d(meta: Vlsv, var: str, comp: int = -1):
         -------
         numpy.ndarray
     """
+
     dataRaw = _getdata2d(meta, var)
 
     if dataRaw.ndim == 3:
@@ -557,12 +643,19 @@ def prep2dslice(meta: Vlsv, var: str, dir: int, comp: int, pArgs: PlotArgs):
     return data
 
 
-def _getdata2d(meta: Vlsv, var: str):
+def _getdata2d(meta: Vlsv, var: str) -> np.ndarray:
+    """
+    Retrieves and reshapes 2D data from a VLSV dataset.
+
+    Raises:
+        ValueError: If the dataset is not 2D.
+    """
+
     if meta.ndims() != 2:
         raise ValueError("2D outputs required")
     sizes = [i for i in meta.ncells if i != 1]
     data = meta.read_variable(var)
-    if data.ndim == 1 or data.shape[-1] == 1 or data.ndim == 3:
+    if data.ndim in (1, 3) or data.shape[-1] == 1:
         data = data.reshape((sizes[1], sizes[0]))
     else:
         data = data.reshape((sizes[1], sizes[0], 3))
@@ -570,16 +663,31 @@ def _getdata2d(meta: Vlsv, var: str):
     return data
 
 
-def get_axis(axisunit: AxisUnit, plotrange: tuple, sizes: tuple):
+def get_axis(axisunit: AxisUnit, plotrange: tuple, sizes: tuple) -> tuple:
     """
-    Get the 2D domain axis.
+    Generates the 2D domain axis coordinates, potentially applying Earth radius scaling.
+
+    Parameters
+    ----------
+    axisunit: AxisUnit
+        The unit system for the plot axes.
+    plotrange: tuple
+        A tuple containing the minimum and maximum values for both axes (xmin, xmax, ymin, ymax).
+    sizes: tuple
+        A tuple containing the number of points for each axis (nx, ny).
+
+    Returns
+    -------
+    tuple
+        A tuple containing the x and y axis coordinates.
     """
-    if axisunit == AxisUnit.EARTH:
-        x = np.linspace(plotrange[0] / RE, plotrange[1] / RE, sizes[0])
-        y = np.linspace(plotrange[2] / RE, plotrange[3] / RE, sizes[1])
-    else:
-        x = np.linspace(plotrange[0], plotrange[1], sizes[0])
-        y = np.linspace(plotrange[2], plotrange[3], sizes[1])
+
+    scale_factor = 1.0 / RE if axisunit == AxisUnit.EARTH else 1.0
+    start = tuple(s * scale_factor for s in plotrange[:2])
+    stop = tuple(s * scale_factor for s in plotrange[2:])
+
+    # Vectorized generation of coordinates for efficiency
+    x, y = np.linspace(*start, num=sizes[0]), np.linspace(*stop, num=sizes[1])
 
     return x, y
 
@@ -643,7 +751,7 @@ def set_colorbar(
     """
     import matplotlib
 
-    vmin, vmax = set_lim(v1, v2, data, colorscale)
+    vmin, vmax = set_plot_limits(v1, v2, data, colorscale)
     if colorscale == ColorScale.Linear:
         levels = matplotlib.ticker.MaxNLocator(nbins=255).tick_values(vmin, vmax)
         norm = matplotlib.colors.BoundaryNorm(levels, ncolors=256, clip=True)
@@ -663,59 +771,62 @@ def set_colorbar(
     return norm, ticks
 
 
-def set_lim(vmin: float, vmax: float, data, colorscale: ColorScale = ColorScale.Linear):
+def set_plot_limits(
+    vmin: float,
+    vmax: float,
+    data: np.ndarray,
+    colorscale: ColorScale = ColorScale.Linear,
+) -> tuple:
+    """
+    Calculates appropriate plot limits based on data and colorscale.
+    """
+
     if colorscale in (ColorScale.Linear, ColorScale.SymLog):
-        if math.isinf(vmin):
-            v1 = np.nanmin(data)
-        else:
-            v1 = vmin
-        if math.isinf(vmax):
-            v2 = np.nanmax(data)
-        else:
-            v2 = vmax
-    else:  # logarithmic
-        datapositive = data[data > 0.0]
-        if math.isinf(vmin):
-            v1 = np.minimum(datapositive)
-        else:
-            v1 = vmin
-        if math.isinf(vmax):
-            v2 = np.nanmax(data)
-        else:
-            v2 = vmax
+        vmin = vmin if not math.isinf(vmin) else np.nanmin(data)
+        vmax = vmax if not math.isinf(vmax) else np.nanmax(data)
+    else:  # Logarithmic colorscale
+        positive_data = data[data > 0.0]  # Exclude non-positive values
+        vmin = vmin if not math.isinf(vmin) else np.min(positive_data)
+        vmax = vmax if not math.isinf(vmax) else np.max(positive_data)
 
-    return v1, v2
+    return vmin, vmax
 
 
-def set_plot(c, ax, pArgs: PlotArgs, ticks, addcolorbar: bool):
+def configure_plot(
+    c: matplotlib.cm.ScalarMappable,  # Assuming c is a colormap or similar
+    ax: matplotlib.pyplot.Axes,
+    plot_args: PlotArgs,
+    ticks: list,
+    add_colorbar: bool = True,
+):
     """
-    Configure customized plot.
+    Configures plot elements based on provided arguments.
     """
-    import matplotlib
+
     import matplotlib.pyplot as plt
 
-    str_title = pArgs.str_title
-    strx = pArgs.strx
-    stry = pArgs.stry
-    cb_title = pArgs.cb_title
+    title = plot_args.str_title
+    x_label = plot_args.strx
+    y_label = plot_args.stry
+    colorbar_title = plot_args.cb_title
 
-    if addcolorbar:
+    # Add colorbar if requested
+    if add_colorbar:
         cb = plt.colorbar(c, ax=ax, ticks=ticks, fraction=0.04, pad=0.02)
-        if not cb_title:
-            cb.ax.set_ylabel(cb_title)
+        if colorbar_title:
+            cb.ax.set_ylabel(colorbar_title)
         cb.ax.tick_params(direction="in")
 
-    ax.set_title(str_title, fontweight="bold")
-    ax.set_xlabel(strx)
-    ax.set_ylabel(stry)
+    # Set plot title and labels
+    ax.set_title(title, fontweight="bold")
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
     ax.set_aspect("equal")
 
-    # Set border line widths
-    for loc in ("left", "bottom", "right", "top"):
-        ax.spines[loc].set_linewidth(2.0)
-
-    ax.xaxis.set_tick_params(width=2.0, length=3)
-    ax.yaxis.set_tick_params(width=2.0, length=3)
+    # Style plot borders and ticks
+    for spine in ax.spines.values():
+        spine.set_linewidth(2.0)
+    ax.tick_params(axis="both", which="major", width=2.0, length=3)
 
 
 def vdfslice(
