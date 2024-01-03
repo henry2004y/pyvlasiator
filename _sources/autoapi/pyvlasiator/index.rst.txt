@@ -1,0 +1,25 @@
+:py:mod:`pyvlasiator`
+=====================
+
+.. py:module:: pyvlasiator
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   plot/index.rst
+   vlsv/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   pyvlasiator/index.rst
+
+
