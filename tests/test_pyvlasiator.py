@@ -147,3 +147,20 @@ class TestPlot:
             assert v[785] == 238.24398578141802
         else:
             assert v[19,25] == 238.24398578141802
+
+
+def load(files):
+    """
+    Benchmarking VLSV loading.
+    """
+    meta = Vlsv(files[0])
+    meta = Vlsv(files[1])
+    meta = Vlsv(files[2])
+    return meta
+
+def test_load(benchmark):
+    dir = "tests/data/"
+    files = (dir + "bulk.1d.vlsv", dir + "bulk.2d.vlsv", dir + "bulk.amr.vlsv")
+    result = benchmark(load, files)
+
+    assert type(result) == Vlsv
