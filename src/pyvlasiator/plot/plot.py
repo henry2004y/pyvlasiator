@@ -439,9 +439,10 @@ def set_vector(
             v2D = data[indexlist, :]
             v1 = meta.refineslice(idlist, v2D[:, v1_], dir)
             v2 = meta.refineslice(idlist, v2D[:, v2_], dir)
-    else:
-        v1 = data[:, :, v1_]
-        v2 = data[:, :, v2_]
+    else:  # FS grid
+        data = np.squeeze(data)
+        v1 = np.transpose(data[:, :, v1_])
+        v2 = np.transpose(data[:, :, v2_])
 
     x, y = get_axis(axisunit, plotrange, sizes)
 
@@ -593,6 +594,8 @@ def prep2d(meta: Vlsv, var: str, comp: int = -1):
             data = dataRaw[:, :, comp]
         else:
             data = np.linalg.norm(dataRaw, axis=2)
+        if var.startswith("fg_"):
+            data = np.transpose(data)
     else:
         data = dataRaw
 
@@ -674,6 +677,8 @@ def _getdata2d(meta: Vlsv, var: str) -> np.ndarray:
     data = meta.read_variable(var)
     if data.ndim in (1, 3) or data.shape[-1] == 1:
         data = data.reshape((sizes[1], sizes[0]))
+    elif var.startswith("fg_"):
+        data = data.reshape((sizes[0], sizes[1], 3))
     else:
         data = data.reshape((sizes[1], sizes[0], 3))
 

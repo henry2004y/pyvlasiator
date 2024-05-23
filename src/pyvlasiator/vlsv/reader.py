@@ -511,13 +511,15 @@ class Vlsv:
 
             # Reorder data
             if raw.ndim > 1:
-                ldata = raw[offsetnow:offsetnext, :].reshape(*lsize, raw.shape[-1])
-                v[
-                    lstart[0] : lend[0], lstart[1] : lend[1], lstart[2] : lend[2], :
-                ] = ldata
+                v[lstart[0] : lend[0], lstart[1] : lend[1], lstart[2] : lend[2], :] = (
+                    raw[offsetnow:offsetnext, :].reshape(
+                        *lsize, raw.shape[-1], order="F"
+                    )
+                )
             else:
-                ldata = raw[offsetnow:offsetnext].reshape(*lsize)
-                v[lstart[0] : lend[0], lstart[1] : lend[1], lstart[2] : lend[2]] = ldata
+                v[lstart[0] : lend[0], lstart[1] : lend[1], lstart[2] : lend[2]] = raw[
+                    offsetnow:offsetnext
+                ].reshape(*lsize, order="F")
 
             offsetnow = offsetnext
 

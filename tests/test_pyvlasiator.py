@@ -92,8 +92,8 @@ class TestVlsv:
             ncells[1] * namr**2,
             ncells[2] * namr**2,
             3,
-        ) and data[0, 0, 4, :] == pytest.approx(
-            [7.603512e-07, 2.000000e-04, -2.000000e-04]
+        ) and data[4, 0, 0, :] == pytest.approx(
+            [7.603512e-07, 2e-04, -2e-04]
         )
 
 
@@ -125,6 +125,11 @@ class TestPlot:
             assert v[2] == pytest.approx(3.0045673e-09)
         else:
             assert v[0, 1] == pytest.approx(3.0045673e-09)
+        v = meta.pcolormesh("fg_b", comp=0).get_array()
+        if matplotlib.__version__ < "3.8":
+            assert v[-3] == pytest.approx(-2.999047e-09) and v.data.size == 6300
+        else:
+            assert v[99, 60] == pytest.approx(-2.999047e-09) and v.data.size == 6300
 
     def test_3d_amr_slice(self):
         meta = Vlsv(self.files[2])
