@@ -1,0 +1,155 @@
+pyvlasiator.vlsv.reader
+=======================
+
+.. py:module:: pyvlasiator.vlsv.reader
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   pyvlasiator.vlsv.reader.units_predefined
+   pyvlasiator.vlsv.reader.VarInfo
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   pyvlasiator.vlsv.reader.VMeshInfo
+   pyvlasiator.vlsv.reader.Vlsv
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   pyvlasiator.vlsv.reader._getdim2d
+   pyvlasiator.vlsv.reader.getindexes
+
+
+Module Contents
+---------------
+
+.. py:data:: units_predefined
+
+.. py:class:: VMeshInfo(vblocks: numpy.ndarray, vblock_size: numpy.ndarray, vmin: numpy.ndarray, vmax: numpy.ndarray, dv: numpy.ndarray)
+
+.. py:data:: VarInfo
+
+.. py:class:: Vlsv(filename: str)
+
+   .. py:method:: __repr__() -> Vlsv.__repr__.str
+
+      Return repr(self).
+
+
+
+   .. py:method:: ndims() -> int
+
+      Get the spatial dimension of data.
+
+
+
+   .. py:method:: _read_xml_footer() -> None
+
+      Read the XML footer of the VLSV file.
+
+
+
+   .. py:method:: read(name: str = '', tag: str = '', mesh: str = '', cellids=-1) -> numpy.ndarray
+
+      Read data of name, tag, and mesh from the vlsv file.
+
+      This is the general reading function for all types of variables in VLSV files.
+
+      :param cellids: If -1 then all data is read. If nonzero then only the vector for the specified
+                      cell id or cellids is read.
+      :type cellids: int or list of int
+
+      :rtype: numpy.ndarray
+
+
+
+   .. py:method:: read_variable(name: str, cellids: int | list[int] | numpy.ndarray = -1, sorted: bool = True) -> numpy.ndarray
+
+      Read variables as numpy arrays from the open vlsv file.
+
+      :param cellids: If -1 then all data is read. If nonzero then only the vector for the specified
+                      cell id or cellids is read.
+      :type cellids: int or list[int] or np.ndarray
+      :param sorted: If the returned array is sorted by cell IDs. Only applied for full arrays.
+      :type sorted: bool
+
+      :rtype: numpy.ndarray
+
+
+
+   .. py:method:: read_fg_variable(name: str)
+
+
+   .. py:method:: read_variable_meta(var: str)
+
+
+   .. py:method:: read_parameter(name: str)
+
+
+   .. py:method:: read_vcells(cellid: int, species: str = 'proton')
+
+      Read raw velocity block data.
+
+      :param cellid: Cell ID of the cell whose velocity blocks are read.
+      :param species: Population required.
+      :type species: str
+
+      :returns: A numpy array with block ids and their data.
+      :rtype: numpy.ndarray
+
+
+
+   .. py:method:: init_cellswithVDF(species: str = 'proton') -> None
+
+
+   .. py:method:: _has_attribute(attribute: str, name: str) -> bool
+
+      Check if a given attribute exists in the xml.
+
+
+
+   .. py:method:: has_variable(name: str) -> bool
+
+
+   .. py:method:: has_parameter(name: str) -> bool
+
+
+   .. py:method:: getmaxrefinement(cellid: numpy.ndarray)
+
+      Get the maximum spatial refinement level.
+
+
+
+   .. py:method:: getcell(loc: numpy.ndarray | tuple[int, Ellipsis] | list[int])
+
+
+   .. py:method:: getvcellcoordinates(vcellids: numpy.ndarray, species: str = 'proton') -> numpy.ndarray
+
+
+   .. py:method:: getnearestcellwithvdf(id: int, species: str = 'proton')
+
+
+   .. py:method:: getcellcoordinates(cid: int)
+
+
+   .. py:method:: getslicecell(sliceoffset: float, dir: int, minCoord: float, maxCoord: float)
+
+
+   .. py:method:: refineslice(idlist: numpy.ndarray, data: numpy.ndarray, normal: int)
+
+
+.. py:function:: _getdim2d(ncells: tuple, maxamr: int, normal: int)
+
+.. py:function:: getindexes(ilevel: int, xcells: int, ycells: int, nCellUptoLowerLvl: int, ids: numpy.ndarray)
+

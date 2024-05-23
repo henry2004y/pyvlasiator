@@ -1,0 +1,25 @@
+pyvlasiator
+===========
+
+.. py:module:: pyvlasiator
+
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/pyvlasiator/plot/index
+   /autoapi/pyvlasiator/vlsv/index
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/pyvlasiator/pyvlasiator/index
+
+
