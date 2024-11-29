@@ -7,7 +7,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u"pyvlasiator"
-copyright = u"2023, Hongyang Zhou"
+copyright = u"2024, Hongyang Zhou"
 author = u"Hongyang Zhou"
 
 # -- General configuration ---------------------------------------------------

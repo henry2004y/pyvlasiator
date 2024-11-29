@@ -2,6 +2,6 @@
 
 <!--next-version-placeholder-->
 
-## v0.1.0 (27/07/2023)
+## v0.1.0 (29/11/2024)
 
 - First release of `pyvlasiator`!
