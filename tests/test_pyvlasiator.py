@@ -100,11 +100,12 @@ class TestVlsv:
 class TestPlot:
     dir = "tests/data/"
     files = (dir + "bulk.1d.vlsv", dir + "bulk.2d.vlsv", dir + "bulk.amr.vlsv")
+    matplotlib.use("Agg")
 
     def test_1d_plot(self):
         meta = Vlsv(self.files[0])
-        line = meta.plot("proton/vg_rho")[0]
-        assert np.array_equal(line.get_ydata(), meta.read_variable("proton/vg_rho"))
+        v = meta.plot("proton/vg_rho")[0].get_ydata()
+        assert np.array_equal(v, meta.read_variable("proton/vg_rho"))
 
     def test_2d_plot(self):
         meta = Vlsv(self.files[1])
