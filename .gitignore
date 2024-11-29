@@ -2,6 +2,7 @@ __pycache__/
 poetry.lock
 .coverage
 coverage.xml
+dist/
 *.vlsv
 .vscode/
 *.tar.gz
