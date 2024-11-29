@@ -22,7 +22,7 @@ Lightweight Python package for processing Vlasiator data.
 `pyvlasiator` can be installed via
 
 ```bash
-$ pip install pyvlasiator
+python -m pip install pyvlasiator
 ```
 
 ## Usage
