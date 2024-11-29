@@ -15,14 +15,11 @@
   </a>
 </p>
 
-Python package for processing Vlasiator data.
+Lightweight Python package for processing Vlasiator data.
 
 ## Installation
 
-`pyvlasiator` has not been registered yet since it's under development and being considered
-as an experiment to refactor [`analysator`](https://github.com/fmihpc/analysator).
-Once reaching a stable stage we plan to release the package under `pip`, and then it can be
-installed via
+`pyvlasiator` can be installed via
 
 ```bash
 $ pip install pyvlasiator
