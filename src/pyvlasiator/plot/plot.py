@@ -867,6 +867,7 @@ def vdfslice(
     center: str = None,
     weight: str = "particle",
     flimit: float = -1.0,
+    addcolorbar: bool = True,
     **kwargs,
 ):
     v1, v2, r1, r2, weights, strx, stry, str_title = prep_vdf(
@@ -908,9 +909,10 @@ def vdfslice(
     ax.grid(color="grey", linestyle="-")
     ax.tick_params(direction="in")
 
-    cb = plt.colorbar(h[3], ax=ax, fraction=0.04, pad=0.02)
-    cb.ax.tick_params(which="both", direction="in")
-    cb_title = cb.ax.set_ylabel("f(v)")
+    if addcolorbar:
+        cb = plt.colorbar(h[3], ax=ax, fraction=0.04, pad=0.02)
+        cb.ax.tick_params(which="both", direction="in")
+        cb_title = cb.ax.set_ylabel("f(v)")
 
     # TODO: Draw vector of magnetic field direction
     # if slicetype in ("xy", "xz", "yz"):
