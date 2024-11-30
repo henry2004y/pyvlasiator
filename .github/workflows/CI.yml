@@ -14,12 +14,12 @@ jobs:
     # Define job steps
     steps:
     - name: Set up Python 3.11
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v5
       with:
         python-version: 3.11
 
     - name: Check-out repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install poetry
       uses: snok/install-poetry@v1
@@ -31,7 +31,7 @@ jobs:
       run: poetry run pytest tests/ --cov --cov-report=xml
 
     - name: Track code coverage
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v5
       with:
         files: ./coverage.xml   # coverage report
 
@@ -39,7 +39,7 @@ jobs:
       run: poetry run make html --directory docs/
 
     - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       with:
         publish_branch: gh-pages
