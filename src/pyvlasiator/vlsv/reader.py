@@ -405,14 +405,16 @@ class Vlsv:
         )
         if hasattr(cellids, "__len__"):  # part of cells requested
             return np.float32(raw)
-
-        if sorted:
-            if raw.ndim == 1:
-                v = raw[self.cellindex]
+        elif cellids == -1:
+            if sorted:
+                if raw.ndim == 1:
+                    v = raw[self.cellindex]
+                else:
+                    v = raw[self.cellindex, :]
+                if v.dtype == np.float64:  # 32-bit is enough for analysis
+                    v = np.float32(v)
             else:
-                v = raw[self.cellindex, :]
-            if v.dtype == np.float64:  # 32-bit is enough for analysis
-                v = np.float32(v)
+                v = raw
         else:
             v = raw
 

@@ -55,6 +55,7 @@ class TestVlsv:
         id = meta.getcell(loc)
         coords = meta.getcellcoordinates(id)
         assert coords == pytest.approx([3.0, 0.0, 0.0])
+        assert meta.read_variable("proton/vg_rho", id) == pytest.approx(1.2288102e0)
         assert meta.read_variable("proton/vg_rho", [id]) == pytest.approx(1.2288102e0)
         # Nearest ID with VDF stored
         assert meta.getnearestcellwithvdf(id) == 5
