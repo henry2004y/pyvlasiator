@@ -26,6 +26,7 @@ else:
 
     with tarfile.open(testfiles) as file:
         file.extractall(path)
+    os.remove(testfiles)
 
 
 class TestVlsv:
