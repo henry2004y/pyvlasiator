@@ -96,24 +96,91 @@ def plot(
     >>> axes = vlsv_file.plot("helium/vg_v", ax=my_axes)  # Plot velocity on an existing axes
     """
 
-    import matplotlib.pyplot as plt
+    fig, ax = set_figure(ax, figsize, **kwargs)
 
-    fig = kwargs.pop(
-        "figure", plt.gcf() if plt.get_fignums() else plt.figure(figsize=figsize)
+    return _plot1d(
+        self,
+        ax.plot,
+        var=var,
+        **kwargs,
     )
-    if ax is None:
-        ax = fig.gca()
 
-    if not self.has_variable(var):
+
+def scatter(
+    self: Vlsv,
+    var: str = "",
+    ax=None,
+    figsize: tuple[float, float] | None = None,
+    **kwargs,
+) -> matplotlib.collections.PathCollection:
+    """
+    Plots 1D VLSV data as scattered points.
+
+    Parameters
+    ----------
+    var : str
+        Name of the variable to plot from the VLSV file.
+    ax : matplotlib.axes._axes.Axes, optional
+        Axes object to plot on. If not provided, a new figure and axes will be created.
+    figsize : tuple[float, float], optional
+        Size of the figure in inches (width, height). Only used if a new
+        figure is created.
+    **kwargs
+        Additional keyword arguments passed to Matplotlib's `plot` function.
+
+    Returns
+    -------
+    matplotlib.collections.PathCollection
+
+    Raises
+    ------
+    ValueError
+        If the specified variable is not found in the VLSV file.
+
+    Examples
+    --------
+    >>> vlsv_file = Vlsv("my_vlsv_file.vlsv")
+    >>> axes = vlsv_file.scatter("proton/vg_rho")  # Plot density on a new figure
+    """
+
+    fig, ax = set_figure(ax, figsize, **kwargs)
+
+    return _plot1d(
+        self,
+        ax.scatter,
+        var=var,
+        **kwargs,
+    )
+
+
+def _plot1d(
+    meta: Vlsv,
+    plot_func: Callable,
+    var: str = "",
+    **kwargs,
+):
+    """
+    Plot 1d data with `plot_func`.
+
+    Parameters
+    ----------
+    var : str
+        Variable name from the VLSV file.
+
+    Returns
+    -------
+
+    """
+
+    if not meta.has_variable(var):
         raise ValueError(f"Variable {var} not found in the file")
 
-    x = np.linspace(self.coordmin[0], self.coordmax[0], self.ncells[0])
+    x = np.linspace(meta.coordmin[0], meta.coordmax[0], meta.ncells[0])
+    y = meta.read_variable(var)
 
-    data = self.read_variable(var)
-    axes = ax.plot(x, data, **kwargs)
+    c = plot_func(x, y, **kwargs)
 
-    return axes
-
+    return c
 
 def pcolormesh(
     self: Vlsv,
@@ -839,13 +906,13 @@ def configure_plot(
             cb.ax.set_ylabel(colorbar_title)
         cb.ax.tick_params(direction="in")
 
-    # Set plot title and labels
+    # Set title and labels
     ax.set_title(title, fontweight="bold")
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
     ax.set_aspect("equal")
 
-    # Style plot borders and ticks
+    # Style borders and ticks
     for spine in ax.spines.values():
         spine.set_linewidth(2.0)
     ax.tick_params(axis="both", which="major", width=2.0, length=3)
@@ -1110,6 +1177,7 @@ def prep_vdf(
 
 # Append plotting functions
 Vlsv.plot = plot
+Vlsv.scatter = scatter
 Vlsv.pcolormesh = pcolormesh
 Vlsv.contourf = contourf
 Vlsv.contour = contour

@@ -107,6 +107,8 @@ class TestPlot:
         meta = Vlsv(self.files[0])
         v = meta.plot("proton/vg_rho")[0].get_ydata()
         assert np.array_equal(v, meta.read_variable("proton/vg_rho"))
+        v = meta.scatter("proton/vg_rho").get_offsets()
+        assert np.array_equal(v[0].data[0], -10.0)
 
     def test_2d_plot(self):
         meta = Vlsv(self.files[1])
