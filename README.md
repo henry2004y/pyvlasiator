@@ -1,6 +1,9 @@
 # pyvlasiator
 
 <p align="center">
+  <a href="https://badge.fury.io/py/pyvlasiator">
+    <img src="https://badge.fury.io/py/pyvlasiator.svg" alt="PyPI version" height="18">
+  </a>
   <a href="https://github.com/henry2004y/pyvlasiator/actions">
     <img src="https://github.com/henry2004y/pyvlasiator/actions/workflows/CI.yml/badge.svg">
   </a>
