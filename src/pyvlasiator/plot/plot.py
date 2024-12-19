@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import numpy as np
+from numpy.typing import ArrayLike
 import math
 import warnings
 from typing import Callable
@@ -922,7 +923,7 @@ def vdfslice(
     meta: Vlsv,
     location: tuple | list,
     ax=None,
-    limits: tuple = (float("-inf"), float("inf"), float("-inf"), float("inf")),
+    range: ArrayLike | None = None,
     verbose: bool = False,
     species: str = "proton",
     unit: AxisUnit = AxisUnit.SI,
@@ -967,7 +968,9 @@ def vdfslice(
 
     norm = matplotlib.colors.LogNorm(vmin, vmax)
 
-    h = ax.hist2d(v1, v2, bins=(r1, r2), weights=weights, norm=norm, shading="flat")
+    h = ax.hist2d(
+        v1, v2, bins=(r1, r2), weights=weights, norm=norm, range=range, shading="flat"
+    )
 
     ax.set_title(str_title, fontweight="bold")
     ax.set_xlabel(strx)
