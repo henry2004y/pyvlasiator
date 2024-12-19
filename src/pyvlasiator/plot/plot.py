@@ -183,6 +183,7 @@ def _plot1d(
 
     return c
 
+
 def pcolormesh(
     self: Vlsv,
     var: str = "",
@@ -923,7 +924,6 @@ def vdfslice(
     meta: Vlsv,
     location: tuple | list,
     ax=None,
-    range: ArrayLike | None = None,
     verbose: bool = False,
     species: str = "proton",
     unit: AxisUnit = AxisUnit.SI,
@@ -969,7 +969,13 @@ def vdfslice(
     norm = matplotlib.colors.LogNorm(vmin, vmax)
 
     h = ax.hist2d(
-        v1, v2, bins=(r1, r2), weights=weights, norm=norm, range=range, shading="flat"
+        v1,
+        v2,
+        bins=(r1, r2),
+        weights=weights,
+        norm=norm,
+        shading="flat",
+        **kwargs,
     )
 
     ax.set_title(str_title, fontweight="bold")
