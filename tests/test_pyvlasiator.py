@@ -6,6 +6,7 @@ import numpy as np
 from pyvlasiator.vlsv import Vlsv
 import pyvlasiator.plot
 import matplotlib
+import packaging.version
 
 filedir = os.path.dirname(__file__)
 
@@ -94,15 +95,15 @@ class TestVlsv:
             ncells[1] * namr**2,
             ncells[2] * namr**2,
             3,
-        ) and data[4, 0, 0, :] == pytest.approx(
-            [7.603512e-07, 2e-04, -2e-04]
-        )
+        ) and data[4, 0, 0, :] == pytest.approx([7.603512e-07, 2e-04, -2e-04])
 
 
 class TestPlot:
     dir = "tests/data/"
     files = (dir + "bulk.1d.vlsv", dir + "bulk.2d.vlsv", dir + "bulk.amr.vlsv")
     matplotlib.use("Agg")
+    version_str = matplotlib.__version__
+    version = packaging.version.parse(version_str)
 
     def test_1d_plot(self):
         meta = Vlsv(self.files[0])
@@ -114,27 +115,27 @@ class TestPlot:
     def test_2d_plot(self):
         meta = Vlsv(self.files[1])
         v = meta.pcolormesh("proton/vg_rho").get_array()
-        if matplotlib.__version__ < "3.8":
-            assert v[-3] == pytest.approx(999535.8) and v.data.size == 6300
-        else:
+        if self.version.major == 3 and self.version.minor == 9:
             assert v[99, 60] == pytest.approx(999535.8) and v.data.size == 6300
+        else:
+            assert v[-3] == pytest.approx(999535.8) and v.data.size == 6300
         v = meta.contour("proton/vg_rho").get_array()
         assert v[-3] == 4000000.0
         v = meta.contourf("proton/vg_rho").get_array()
-        if matplotlib.__version__ < "3.8":
-            assert v[-3] == 4000000.0
-        else:
+        if self.version.major == 3 and self.version.minor == 9:
             assert v[-3] == 3600000.0
+        else:
+            assert v[-3] == 4000000.0
         v = meta.pcolormesh("vg_b_vol").get_array()
-        if matplotlib.__version__ < "3.8":
-            assert v[2] == pytest.approx(3.0045673e-09)
-        else:
+        if self.version.major == 3 and self.version.minor == 9:
             assert v[0, 1] == pytest.approx(3.0045673e-09)
-        v = meta.pcolormesh("fg_b", comp=0).get_array()
-        if matplotlib.__version__ < "3.8":
-            assert v[-3] == pytest.approx(-2.999047e-09) and v.data.size == 6300
         else:
+            assert v[2] == pytest.approx(3.0045673e-09)
+        v = meta.pcolormesh("fg_b", comp=0).get_array()
+        if self.version.major == 3 and self.version.minor == 9:
             assert v[99, 60] == pytest.approx(-2.999047e-09) and v.data.size == 6300
+        else:
+            assert v[-3] == pytest.approx(-2.999047e-09) and v.data.size == 6300
 
     def test_3d_amr_slice(self):
         meta = Vlsv(self.files[2])
@@ -142,7 +143,7 @@ class TestPlot:
         if matplotlib.__version__ < "3.8":
             assert v[254] == pytest.approx(1.0483886e6) and len(v) == 512
         else:
-            assert v[15,31] == pytest.approx(1.0483886e6) and v.data.size == 512
+            assert v[15, 31] == pytest.approx(1.0483886e6) and v.data.size == 512
 
     def test_stream_plot(self):
         meta = Vlsv(self.files[1])
@@ -156,7 +157,7 @@ class TestPlot:
         if matplotlib.__version__ < "3.8":
             assert v[785] == 238.24398578141802
         else:
-            assert v[19,25] == 238.24398578141802
+            assert v[19, 25] == 238.24398578141802
 
 
 def load(files):
@@ -167,6 +168,7 @@ def load(files):
     meta = Vlsv(files[1])
     meta = Vlsv(files[2])
     return meta
+
 
 def test_load(benchmark):
     dir = "tests/data/"
