@@ -375,16 +375,17 @@ class Vlsv:
         """
         Read variables as numpy arrays from the open vlsv file.
 
-        Parameters
-        ----------
-        cellids : int or list[int] or np.ndarray
-            If -1 then all data is read. If nonzero then only the vector for the specified
-            cell id or cellids is read.
-        sorted : bool
-            If the returned array is sorted by cell IDs. Only applied for full arrays.
-        Returns
-        -------
-        numpy.ndarray
+        Args:
+            name (str): The name of the variable to read.
+            cellids (int, list[int], np.ndarray, optional):
+                Specifies which cell IDs to read data for. Defaults to -1, which reads data for all cells.
+            - If an integer (except -1), only the data for that specific cell ID is read.
+            - If a list or NumPy array of integers, only the data for the specified cell IDs are read.
+            - Specifying cell IDs is not supported for "FSgrid" or "ionosphere" variables.
+            sorted (bool, optional): If True, the returned array is sorted by cell IDs (only applicable when reading all cells, cellids=-1). Defaults to True.
+
+        Returns:
+            numpy.ndarray
         """
 
         if self.has_variable(name) and name.startswith("fg_"):
