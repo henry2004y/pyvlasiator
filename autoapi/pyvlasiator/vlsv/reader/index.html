@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyvlasiator.vlsv.reader &mdash; pyvlasiator  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="pyvlasiator.vlsv.variables" href="../variables/index.html" />
+    <link rel="prev" title="pyvlasiator.vlsv" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyvlasiator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">pyvlasiator</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../plot/index.html">pyvlasiator.plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../pyvlasiator/index.html">pyvlasiator.pyvlasiator</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html">pyvlasiator.vlsv</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyvlasiator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">pyvlasiator</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">pyvlasiator.vlsv</a></li>
+      <li class="breadcrumb-item active">pyvlasiator.vlsv.reader</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/pyvlasiator/vlsv/reader/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyvlasiator.vlsv.reader">
+<span id="pyvlasiator-vlsv-reader"></span><h1>pyvlasiator.vlsv.reader<a class="headerlink" href="#module-pyvlasiator.vlsv.reader" title="Link to this heading"></a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.vlsv.reader.VMeshInfo" title="pyvlasiator.vlsv.reader.VMeshInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VMeshInfo</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.vlsv.reader.VarInfo" title="pyvlasiator.vlsv.reader.VarInfo"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VarInfo</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.vlsv.reader.Vlsv" title="pyvlasiator.vlsv.reader.Vlsv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vlsv</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.vlsv.reader._getdim2d" title="pyvlasiator.vlsv.reader._getdim2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_getdim2d</span></code></a>(ncells, maxamr, normal)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.vlsv.reader.getindexes" title="pyvlasiator.vlsv.reader.getindexes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getindexes</span></code></a>(ilevel, xcells, ycells, nCellUptoLowerLvl, ids)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VMeshInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvlasiator.vlsv.reader.</span></span><span class="sig-name descname"><span class="pre">VMeshInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vblocks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vblock_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#VMeshInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.VMeshInfo" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VMeshInfo.vblocks">
+<span class="sig-name descname"><span class="pre">vblocks</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VMeshInfo.vblocks" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VMeshInfo.vblock_size">
+<span class="sig-name descname"><span class="pre">vblock_size</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VMeshInfo.vblock_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VMeshInfo.vmin">
+<span class="sig-name descname"><span class="pre">vmin</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VMeshInfo.vmin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VMeshInfo.vmax">
+<span class="sig-name descname"><span class="pre">vmax</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VMeshInfo.vmax" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VMeshInfo.dv">
+<span class="sig-name descname"><span class="pre">dv</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VMeshInfo.dv" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VMeshInfo.cellwithVDF">
+<span class="sig-name descname"><span class="pre">cellwithVDF</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VMeshInfo.cellwithVDF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VMeshInfo.nblock_C">
+<span class="sig-name descname"><span class="pre">nblock_C</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VMeshInfo.nblock_C" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VarInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvlasiator.vlsv.reader.</span></span><span class="sig-name descname"><span class="pre">VarInfo</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VarInfo" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VarInfo.unit">
+<span class="sig-name descname"><span class="pre">unit</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VarInfo.unit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VarInfo.unitLaTeX">
+<span class="sig-name descname"><span class="pre">unitLaTeX</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VarInfo.unitLaTeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VarInfo.variableLaTeX">
+<span class="sig-name descname"><span class="pre">variableLaTeX</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VarInfo.variableLaTeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.VarInfo.unitConversion">
+<span class="sig-name descname"><span class="pre">unitConversion</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.VarInfo.unitConversion" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvlasiator.vlsv.reader.</span></span><span class="sig-name descname"><span class="pre">Vlsv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.fid">
+<span class="sig-name descname"><span class="pre">fid</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.fid" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.xmlroot">
+<span class="sig-name descname"><span class="pre">xmlroot</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.xmlroot" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.celldict">
+<span class="sig-name descname"><span class="pre">celldict</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.celldict" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.maxamr">
+<span class="sig-name descname"><span class="pre">maxamr</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.maxamr" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.vg_indexes_on_fg">
+<span class="sig-name descname"><span class="pre">vg_indexes_on_fg</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.vg_indexes_on_fg" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.dcoord">
+<span class="sig-name descname"><span class="pre">dcoord</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.dcoord" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.meshes">
+<span class="sig-name descname"><span class="pre">meshes</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.meshes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.species">
+<span class="sig-name descname"><span class="pre">species</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[]</span></em><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.species" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.variable">
+<span class="sig-name descname"><span class="pre">variable</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.variable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.cellindex">
+<span class="sig-name descname"><span class="pre">cellindex</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.cellindex" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.nodecellwithVDF">
+<span class="sig-name descname"><span class="pre">nodecellwithVDF</span></span><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.nodecellwithVDF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vlsv.__repr__.str</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.__repr__" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.ndims">
+<span class="sig-name descname"><span class="pre">ndims</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.ndims"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.ndims" title="Link to this definition"></a></dt>
+<dd><p>Get the spatial dimension of data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv._read_xml_footer">
+<span class="sig-name descname"><span class="pre">_read_xml_footer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv._read_xml_footer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv._read_xml_footer" title="Link to this definition"></a></dt>
+<dd><p>Read the XML footer of the VLSV file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mesh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellids</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.read" title="Link to this definition"></a></dt>
+<dd><p>Read data of name, tag, and mesh from the vlsv file.</p>
+<p>This is the general reading function for all types of variables in VLSV files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cellids</strong> (<em>int</em><em> or </em><em>list</em><em> of </em><em>int</em>) – If -1 then all data is read. If nonzero then only the vector for the specified
+cell id or cellids is read.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.read_variable">
+<span class="sig-name descname"><span class="pre">read_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cellids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sorted</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.read_variable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.read_variable" title="Link to this definition"></a></dt>
+<dd><p>Read variables as numpy arrays from the open vlsv file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the variable to read.</p></li>
+<li><p><strong>cellids</strong> (<em>int</em><em>, </em><em>list</em><em>[</em><em>int</em><em>]</em><em>, </em><em>np.ndarray</em><em>, </em><em>optional</em>) – Specifies which cell IDs to read data for. Defaults to -1, which reads data for all cells.</p></li>
+<li><p><strong>integer</strong> (<em>- If an</em>)</p></li>
+<li><p><strong>integers</strong> (<em>- If a list</em><em> or </em><em>NumPy array of</em>)</p></li>
+<li><p><strong>read.</strong> (<em>only the data for the specified cell IDs are</em>)</p></li>
+<li><p><strong>variables.</strong> (<em>- Specifying cell IDs is not supported for &quot;FSgrid&quot;</em><em> or </em><em>&quot;ionosphere&quot;</em>)</p></li>
+<li><p><strong>sorted</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, the returned array is sorted by cell IDs (only applicable when reading all cells, cellids=-1). Defaults to True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.read_fg_variable">
+<span class="sig-name descname"><span class="pre">read_fg_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.read_fg_variable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.read_fg_variable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.read_variable_meta">
+<span class="sig-name descname"><span class="pre">read_variable_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.read_variable_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.read_variable_meta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.read_parameter">
+<span class="sig-name descname"><span class="pre">read_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.read_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.read_parameter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.read_vcells">
+<span class="sig-name descname"><span class="pre">read_vcells</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cellid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'proton'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.read_vcells"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.read_vcells" title="Link to this definition"></a></dt>
+<dd><p>Read raw velocity block data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cellid</strong> – Cell ID of the cell whose velocity blocks are read.</p></li>
+<li><p><strong>species</strong> (<em>str</em>) – Population required.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A numpy array with block ids and their data.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.init_cellswithVDF">
+<span class="sig-name descname"><span class="pre">init_cellswithVDF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'proton'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.init_cellswithVDF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.init_cellswithVDF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv._has_attribute">
+<span class="sig-name descname"><span class="pre">_has_attribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">attribute</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv._has_attribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv._has_attribute" title="Link to this definition"></a></dt>
+<dd><p>Check if a given attribute exists in the xml.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.has_variable">
+<span class="sig-name descname"><span class="pre">has_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.has_variable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.has_variable" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.has_parameter">
+<span class="sig-name descname"><span class="pre">has_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.has_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.has_parameter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.getmaxrefinement">
+<span class="sig-name descname"><span class="pre">getmaxrefinement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cellid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.getmaxrefinement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.getmaxrefinement" title="Link to this definition"></a></dt>
+<dd><p>Get the maximum spatial refinement level.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.getcell">
+<span class="sig-name descname"><span class="pre">getcell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Ellipsis</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.getcell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.getcell" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.getvcellcoordinates">
+<span class="sig-name descname"><span class="pre">getvcellcoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vcellids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'proton'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.getvcellcoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.getvcellcoordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.getnearestcellwithvdf">
+<span class="sig-name descname"><span class="pre">getnearestcellwithvdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'proton'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.getnearestcellwithvdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.getnearestcellwithvdf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.getcellcoordinates">
+<span class="sig-name descname"><span class="pre">getcellcoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.getcellcoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.getcellcoordinates" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.getslicecell">
+<span class="sig-name descname"><span class="pre">getslicecell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sliceoffset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minCoord</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxCoord</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.getslicecell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.getslicecell" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.Vlsv.refineslice">
+<span class="sig-name descname"><span class="pre">refineslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idlist</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#Vlsv.refineslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.Vlsv.refineslice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader._getdim2d">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.vlsv.reader.</span></span><span class="sig-name descname"><span class="pre">_getdim2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ncells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxamr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#_getdim2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader._getdim2d" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.vlsv.reader.getindexes">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.vlsv.reader.</span></span><span class="sig-name descname"><span class="pre">getindexes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ilevel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xcells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ycells</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nCellUptoLowerLvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/vlsv/reader.html#getindexes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.vlsv.reader.getindexes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="pyvlasiator.vlsv" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../variables/index.html" class="btn btn-neutral float-right" title="pyvlasiator.vlsv.variables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
