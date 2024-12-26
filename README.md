@@ -18,7 +18,7 @@
   </a>
 </p>
 
-Lightweight Python package for processing Vlasiator data.
+Lightweight Python package for processing [Vlasiator](https://github.com/fmihpc/vlasiator) data, alternative to [Analysator](https://github.com/fmihpc/analysator).
 
 ## Installation
 
