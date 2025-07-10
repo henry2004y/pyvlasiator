@@ -11,6 +11,7 @@ MU0 = 4 * pi * 1e-7  # Vacuum permeability, [H/m]
 EPSILON0 = 1 / (C**2 * MU0)  # Vacuum permittivity, [F/m]
 KB = 1.38064852e-23  # Boltzmann constant, [m²kg/(s²K)]
 RE = 6.371e6  # Earth radius, [m]
+RMERCURY = 4.8794e6 # Mercury radius, [m]
 
 speciesdict = {
     "avgs": "p",

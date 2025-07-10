@@ -9,7 +9,7 @@ from collections import namedtuple
 from enum import Enum
 from pyvlasiator.vlsv import Vlsv
 from pyvlasiator.vlsv.reader import _getdim2d
-from pyvlasiator.vlsv.variables import RE
+from pyvlasiator.vlsv.variables import RE, RMERCURY
 
 
 class ColorScale(Enum):
@@ -36,8 +36,10 @@ class AxisUnit(Enum):
         - SI (2): Units from the International System of Units (SI), such as meters, seconds, kilograms, etc.
     """
 
-    EARTH = 1
-    SI = 2
+    SI = 1
+    KSI = 2
+    EARTH = 3
+    MERCURY = 4
 
 
 # Plotting arguments
@@ -611,8 +613,12 @@ def set_args(
 
     if axisunit == AxisUnit.EARTH:
         unitstr = r"$R_E$"
-    else:
-        unitstr = r"$m$"
+    elif axisunit == AxisUnit.SI:
+        unitstr = "m"
+    elif axisunit == AxisUnit.MERCURY:
+        unitstr = r"$R_M$"
+    elif axisunit == AxisUnit.KSI:
+        unitstr = "km"
     strx = axislabels[0] + " [" + unitstr + "]"
     stry = axislabels[1] + " [" + unitstr + "]"
 
@@ -773,7 +779,15 @@ def get_axis(axisunit: AxisUnit, plotrange: tuple, sizes: tuple) -> tuple:
         A tuple containing the x and y axis coordinates.
     """
 
-    scale_factor = 1.0 / RE if axisunit == AxisUnit.EARTH else 1.0
+    if axisunit == AxisUnit.EARTH:
+        scale_factor = 1.0 / RE
+    elif axisunit == AxisUnit.MERCURY:
+        scale_factor = 1.0 / RMERCURY
+    elif axisunit == AxisUnit.KSI:
+        scale_factor = 1.0 / 1e3
+    else:  # SI
+        scale_factor = 1.0
+
     start = tuple(s * scale_factor for s in plotrange[:2])
     stop = tuple(s * scale_factor for s in plotrange[2:])
 
@@ -796,7 +810,6 @@ def set_colorbar(
     v2: float = np.nan,
     data: np.ndarray = np.array([1.0]),
     linthresh: float = 1.0,
-    logstep: float = 1.0,
     linscale: float = 0.03,
 ):
     """
@@ -818,8 +831,6 @@ def set_colorbar(
         not provided. Defaults to np.array([1.0]).
     linthresh: float, optional
         The threshold value for symmetric log color scales. Defaults to 1.0.
-    logstep: float, optional
-        The step size for tick values in log color scales. Defaults to 1.0.
     linscale: float, optional
         A scaling factor for linear regions in symmetric log color scales.
         Defaults to 0.03.
@@ -835,10 +846,6 @@ def set_colorbar(
     ------
     ValueError
         If an invalid colorscale type is provided.
-
-    Notes
-    -----
-    - The 'SymLog' colorscale is currently not fully implemented.
     """
     import matplotlib
 
@@ -851,13 +858,10 @@ def set_colorbar(
         norm = matplotlib.colors.LogNorm(vmin, vmax)
         ticks = matplotlib.ticker.LogLocator(base=10, subs=range(0, 9))
     else:  # symmetric log
-        logthresh = int(math.floor(math.log10(linthresh)))
-        minlog = int(math.ceil(math.log10(-vmin)))
-        maxlog = int(math.ceil(math.log10(vmax)))
-        # TODO: fix this!
-        # norm = matplotlib.colors.SymLogNorm(linthresh, linscale, vmin, vmax, base=10)
-        # ticks = [ [-(10.0**x) for x in minlog:-logstep:logthresh]..., 0.0,
-        #   [10.0**x for x in logthresh:logstep:maxlog]..., ]
+        norm = matplotlib.colors.SymLogNorm(
+            linthresh=linthresh, linscale=linscale, vmin=vmin, vmax=vmax, base=10
+        )
+        ticks = matplotlib.ticker.SymmetricalLogLocator(linthresh=linthresh, base=10)
 
     return norm, ticks
 
@@ -1021,6 +1025,10 @@ def prep_vdf(
 
     if unit == AxisUnit.EARTH:
         location = [loc * RE for loc in location]
+    elif unit == AxisUnit.MERCURY:
+        location = [loc * RMERCURY for loc in location]
+    elif unit == AxisUnit.KSI:
+        location = [loc * 1e3 for loc in location]
 
     # Set unit conversion factor
     unitvfactor = 1e3 if unitv == "km/s" else 1.0
