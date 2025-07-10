@@ -12,4 +12,6 @@ from pyvlasiator.plot.plot import (
     contourf,
     streamplot,
     vdfslice,
+    AxisUnit,
+    ColorScale,
 )
