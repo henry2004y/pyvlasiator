@@ -9,7 +9,7 @@ from collections import namedtuple
 from enum import Enum
 from pyvlasiator.vlsv import Vlsv
 from pyvlasiator.vlsv.reader import _getdim2d
-from pyvlasiator.vlsv.variables import RE
+from pyvlasiator.vlsv.variables import RE, RMERCURY
 
 
 class ColorScale(Enum):
@@ -36,8 +36,10 @@ class AxisUnit(Enum):
         - SI (2): Units from the International System of Units (SI), such as meters, seconds, kilograms, etc.
     """
 
-    EARTH = 1
-    SI = 2
+    SI = 1
+    KSI = 2
+    EARTH = 3
+    MERCURY = 4
 
 
 # Plotting arguments
@@ -611,8 +613,12 @@ def set_args(
 
     if axisunit == AxisUnit.EARTH:
         unitstr = r"$R_E$"
-    else:
-        unitstr = r"$m$"
+    elif axisunit == AxisUnit.SI:
+        unitstr = "m"
+    elif axisunit == AxisUnit.MERCURY:
+        unitstr = r"$R_M$"
+    elif axisunit == AxisUnit.KSI:
+        unitstr = "km"
     strx = axislabels[0] + " [" + unitstr + "]"
     stry = axislabels[1] + " [" + unitstr + "]"
 
@@ -773,7 +779,15 @@ def get_axis(axisunit: AxisUnit, plotrange: tuple, sizes: tuple) -> tuple:
         A tuple containing the x and y axis coordinates.
     """
 
-    scale_factor = 1.0 / RE if axisunit == AxisUnit.EARTH else 1.0
+    if axisunit == AxisUnit.EARTH:
+        scale_factor = 1.0 / RE
+    elif axisunit == AxisUnit.MERCURY:
+        scale_factor = 1.0 / RMERCURY
+    elif axisunit == AxisUnit.KSI:
+        scale_factor = 1.0 / 1e3
+    else:  # SI
+        scale_factor = 1.0
+
     start = tuple(s * scale_factor for s in plotrange[:2])
     stop = tuple(s * scale_factor for s in plotrange[2:])
 
@@ -1011,6 +1025,10 @@ def prep_vdf(
 
     if unit == AxisUnit.EARTH:
         location = [loc * RE for loc in location]
+    elif unit == AxisUnit.MERCURY:
+        location = [loc * RMERCURY for loc in location]
+    elif unit == AxisUnit.KSI:
+        location = [loc * 1e3 for loc in location]
 
     # Set unit conversion factor
     unitvfactor = 1e3 if unitv == "km/s" else 1.0
