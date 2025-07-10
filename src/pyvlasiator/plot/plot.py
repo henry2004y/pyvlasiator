@@ -796,7 +796,6 @@ def set_colorbar(
     v2: float = np.nan,
     data: np.ndarray = np.array([1.0]),
     linthresh: float = 1.0,
-    logstep: float = 1.0,
     linscale: float = 0.03,
 ):
     """
@@ -818,8 +817,6 @@ def set_colorbar(
         not provided. Defaults to np.array([1.0]).
     linthresh: float, optional
         The threshold value for symmetric log color scales. Defaults to 1.0.
-    logstep: float, optional
-        The step size for tick values in log color scales. Defaults to 1.0.
     linscale: float, optional
         A scaling factor for linear regions in symmetric log color scales.
         Defaults to 0.03.
@@ -835,10 +832,6 @@ def set_colorbar(
     ------
     ValueError
         If an invalid colorscale type is provided.
-
-    Notes
-    -----
-    - The 'SymLog' colorscale is currently not fully implemented.
     """
     import matplotlib
 
@@ -851,13 +844,10 @@ def set_colorbar(
         norm = matplotlib.colors.LogNorm(vmin, vmax)
         ticks = matplotlib.ticker.LogLocator(base=10, subs=range(0, 9))
     else:  # symmetric log
-        logthresh = int(math.floor(math.log10(linthresh)))
-        minlog = int(math.ceil(math.log10(-vmin)))
-        maxlog = int(math.ceil(math.log10(vmax)))
-        # TODO: fix this!
-        # norm = matplotlib.colors.SymLogNorm(linthresh, linscale, vmin, vmax, base=10)
-        # ticks = [ [-(10.0**x) for x in minlog:-logstep:logthresh]..., 0.0,
-        #   [10.0**x for x in logthresh:logstep:maxlog]..., ]
+        norm = matplotlib.colors.SymLogNorm(
+            linthresh=linthresh, linscale=linscale, vmin=vmin, vmax=vmax, base=10
+        )
+        ticks = matplotlib.ticker.SymmetricalLogLocator(linthresh=linthresh, base=10)
 
     return norm, ticks
 

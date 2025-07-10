@@ -116,12 +116,24 @@ class TestPlot:
         meta = Vlsv(self.files[1])
         v = meta.pcolormesh("proton/vg_rho").get_array()
         assert v[99, 60] == pytest.approx(999535.8) and v.data.size == 6300
+        v = meta.pcolormesh(
+            "proton/vg_rho", axisunit=pyvlasiator.plot.AxisUnit.SI
+        ).get_array()
+        assert v[99, 60] == pytest.approx(999535.8) and v.data.size == 6300
         v = meta.contour("proton/vg_rho").get_array()
         assert v[-3] == 4000000.0
         v = meta.contourf("proton/vg_rho").get_array()
         assert v[-3] == 3600000.0
+        v = meta.contourf(
+            "proton/vg_rho", colorscale=pyvlasiator.plot.ColorScale.Log
+        ).get_array()
+        assert v[-3] == 3600000.0
         v = meta.pcolormesh("vg_b_vol").get_array()
         assert v[0, 1] == pytest.approx(3.0051286e-09)
+        v = meta.pcolormesh(
+            "vg_b_vol", comp=1, colorscale=pyvlasiator.plot.ColorScale.SymLog
+        ).get_array()
+        assert v[0, 1] == pytest.approx(-9.284285146238247e-12)
         v = meta.pcolormesh("fg_b", comp=0).get_array()
         assert v[99, 60] == pytest.approx(-2.999047e-09) and v.data.size == 6300
 
