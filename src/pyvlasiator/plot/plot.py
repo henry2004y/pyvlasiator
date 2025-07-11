@@ -700,17 +700,17 @@ def prep2dslice(meta: Vlsv, var: str, dir: int, comp: int, pArgs: PlotArgs):
             if comp != -1:
                 data = data3D[icut, :, :, comp]
             else:
-                data = np.linalg.norm(data3D[icut, :, :, :], axis=3)
+                data = np.linalg.norm(data3D[icut, :, :, :], axis=2)
         elif dir == 1:
             if comp != -1:
                 data = data3D[:, icut, :, comp]
             else:
-                data = np.linalg.norm(data3D[:, icut, :, :], axis=3)
+                data = np.linalg.norm(data3D[:, icut, :, :], axis=2)
         elif dir == 2:
             if comp != -1:
                 data = data3D[:, :, icut, comp]
             else:
-                data = np.linalg.norm(data3D[:, :, icut, :], axis=3)
+                data = np.linalg.norm(data3D[:, :, icut, :], axis=2)
     else:  # moments, dccrg grid
         # vlasov grid, AMR
         if data3D.ndim == 1:
