@@ -430,13 +430,13 @@ class Vlsv:
 
         bbox = tuple(ncell * 2**self.maxamr for ncell in self.ncells)
 
-        # Determine fsgrid domain decomposition
-        nIORanks = self.read_parameter("numWritingRanks")  # Int32
-
         if raw.ndim > 1:
             v = np.empty((*bbox, raw.shape[-1]), dtype=np.float32)
         else:
             v = np.empty(bbox, dtype=np.float32)
+
+        # Determine fsgrid domain decomposition
+        fgDecomposition = self.read(tag="MESH_DECOMPOSITION", mesh="fsgrid")
 
         def getDomainDecomposition(globalsize, nproc: int) -> list[int]:
             """Obtain decomposition of this grid over the given number of processors.
@@ -484,7 +484,9 @@ class Vlsv:
 
             return lsize
 
-        fgDecomposition = getDomainDecomposition(bbox, nIORanks)
+        if fgDecomposition is None:
+            nIORanks = self.read_parameter("numWritingRanks")  # Int32
+            fgDecomposition = getDomainDecomposition(bbox, nIORanks)
 
         offsetnow = 0
 
