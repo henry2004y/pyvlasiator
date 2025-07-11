@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyvlasiator"
-version = "0.1.6"
+version = "0.1.7"
 description = "Python utilities for processing Vlasiator data"
 authors = ["Hongyang Zhou <hyzhou@umich.edu>"]
 readme = "README.md"
