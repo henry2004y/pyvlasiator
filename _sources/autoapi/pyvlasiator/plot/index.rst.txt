@@ -1,0 +1,245 @@
+pyvlasiator.plot
+================
+
+.. py:module:: pyvlasiator.plot
+
+.. autoapi-nested-parse::
+
+   Plotting functionality API.
+
+   This provides supports for plotting VLSV data via Matplotlib.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/pyvlasiator/plot/plot/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   pyvlasiator.plot.AxisUnit
+   pyvlasiator.plot.ColorScale
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   pyvlasiator.plot.plot
+   pyvlasiator.plot.scatter
+   pyvlasiator.plot.pcolormesh
+   pyvlasiator.plot.contour
+   pyvlasiator.plot.contourf
+   pyvlasiator.plot.streamplot
+   pyvlasiator.plot.vdfslice
+
+
+Package Contents
+----------------
+
+.. py:function:: plot(self: pyvlasiator.vlsv.Vlsv, var: str = '', ax=None, figsize: tuple[float, float] | None = None, **kwargs) -> list[matplotlib.lines.Line2D]
+
+   Plots 1D data from a VLSV file.
+
+   :param var: Name of the variable to plot from the VLSV file.
+   :type var: str
+   :param ax: Axes object to plot on. If not provided, a new figure and axes will be created.
+   :type ax: matplotlib.axes._axes.Axes, optional
+   :param figsize: Size of the figure in inches (width, height). Only used if a new
+                   figure is created.
+   :type figsize: tuple[float, float], optional
+   :param \*\*kwargs: Additional keyword arguments passed to Matplotlib's `plot` function.
+
+   :returns: A list of created Line2D objects.
+   :rtype: list[matplotlib.lines.Line2D]
+
+   :raises ValueError: If the specified variable is not found in the VLSV file.
+
+   .. rubric:: Examples
+
+   >>> vlsv_file = Vlsv("my_vlsv_file.vlsv")
+   >>> axes = vlsv_file.plot("proton/vg_rho")  # Plot density on a new figure
+   >>> axes = vlsv_file.plot("helium/vg_v", ax=my_axes)  # Plot velocity on an existing axes
+
+
+.. py:function:: scatter(self: pyvlasiator.vlsv.Vlsv, var: str = '', ax=None, figsize: tuple[float, float] | None = None, **kwargs) -> matplotlib.collections.PathCollection
+
+   Plots 1D VLSV data as scattered points.
+
+   :param var: Name of the variable to plot from the VLSV file.
+   :type var: str
+   :param ax: Axes object to plot on. If not provided, a new figure and axes will be created.
+   :type ax: matplotlib.axes._axes.Axes, optional
+   :param figsize: Size of the figure in inches (width, height). Only used if a new
+                   figure is created.
+   :type figsize: tuple[float, float], optional
+   :param \*\*kwargs: Additional keyword arguments passed to Matplotlib's `plot` function.
+
+   :rtype: matplotlib.collections.PathCollection
+
+   :raises ValueError: If the specified variable is not found in the VLSV file.
+
+   .. rubric:: Examples
+
+   >>> vlsv_file = Vlsv("my_vlsv_file.vlsv")
+   >>> axes = vlsv_file.scatter("proton/vg_rho")  # Plot density on a new figure
+
+
+.. py:function:: pcolormesh(self: pyvlasiator.vlsv.Vlsv, var: str = '', axisunit: AxisUnit = AxisUnit.EARTH, colorscale: ColorScale = ColorScale.Linear, addcolorbar: bool = True, vmin: float = float('-inf'), vmax: float = float('inf'), extent: list = [0.0, 0.0, 0.0, 0.0], comp: int = -1, ax=None, figsize: tuple[float, float] | None = None, **kwargs)
+
+   Plots 2D VLSV data using pcolormesh.
+
+   :param var: Name of the variable to plot from the VLSV file.
+   :type var: str
+   :param axisunit: Unit of the axis, `AxisUnit.EARTH` or `AxisUnit.SI`.
+   :type axisunit: AxisUnit
+   :param addcolorbar: Add colorbar to the right.
+   :type addcolorbar: bool
+   :param colorscale: Color scale of the data, `ColorScale.Linear`, `ColorScale.Log`, or `ColorScale.SymLog`.
+   :type colorscale: ColorScale
+   :param extent: Extent of the domain (WIP).
+   :type extent: list
+   :param comp: Vector composition of data, -1 is magnitude, 0 is x, 1 is y, and 2 is z.
+   :type comp: int
+   :param ax: Axes object to plot on. If not provided, a new figure and axes
+              will be created using `set_figure`.
+   :type ax: matplotlib.axes._axes.Axes, optional
+   :param figsize: Size of the figure in inches. Only used if a new figure is created.
+   :type figsize: tuple[float, float], optional
+   :param \*\*kwargs: Additional keyword arguments passed to `ax.pcolormesh`.
+
+   :returns: The created or existing figure object.
+   :rtype: matplotlib.figure.Figure
+
+   :raises ValueError: If the specified variable is not found in the VLSV file.
+
+   .. rubric:: Examples
+
+   >>> vlsv_file = Vlsv("my_vlsv_file.vlsv")
+   >>> # Plot density on a new figure
+   >>> fig = vlsv_file.pcolormesh("proton/vg_rho")
+   >>> # Plot velocity on an existing axes
+   >>> ax = ...  # Existing axes object
+   >>> fig = vlsv_file.pcolormesh("proton/vg_v", ax=ax)
+
+
+.. py:function:: contour(self: pyvlasiator.vlsv.Vlsv, var: str = '', axisunit: AxisUnit = AxisUnit.EARTH, colorscale: ColorScale = ColorScale.Linear, addcolorbar: bool = True, vmin: float = float('-inf'), vmax: float = float('inf'), extent: list = [0.0, 0.0, 0.0, 0.0], comp: int = -1, ax=None, figsize: tuple[float, float] | None = None, **kwargs)
+
+.. py:function:: contourf(self: pyvlasiator.vlsv.Vlsv, var: str = '', axisunit: AxisUnit = AxisUnit.EARTH, colorscale: ColorScale = ColorScale.Linear, addcolorbar: bool = True, vmin: float = float('-inf'), vmax: float = float('inf'), extent: list = [0.0, 0.0, 0.0, 0.0], comp: int = -1, ax=None, figsize: tuple[float, float] | None = None, **kwargs)
+
+.. py:function:: streamplot(meta: pyvlasiator.vlsv.Vlsv, var: str, ax=None, comp: str = 'xy', axisunit: AxisUnit = AxisUnit.EARTH, origin: float = 0.0, **kwargs) -> matplotlib.streamplot.StreamplotSet
+
+   Creates a streamplot visualization of a vector field from a VLSV dataset.
+
+   :param meta: A VLSV metadata object containing the dataset information.
+   :type meta: Vlsv
+   :param var: The name of the vector variable to visualize.
+   :type var: str
+   :param ax: The axes object to plot on. If not provided, a new figure and axes
+              will be created.
+   :type ax: matplotlib.axes.Axes, optional
+   :param comp: The components of the vector to plot, specified as a string containing
+                "x", "y", or "z" (e.g., "xy" for x-y components). Defaults to "xy".
+   :type comp: str, optional
+   :param axisunit: The unit system for the plot axes. Defaults to AxisUnit.EARTH.
+   :type axisunit: AxisUnit, optional
+   :param origin: The origin point for slice plots. Defaults to 0.0.
+   :type origin: float, optional
+   :param \*\*kwargs: Additional keyword arguments passed to Matplotlib's streamplot function.
+
+   :returns: The streamplot object created by Matplotlib.
+   :rtype: matplotlib.streamplot.StreamplotSet
+
+
+.. py:function:: vdfslice(meta: pyvlasiator.vlsv.Vlsv, location: tuple | list, ax=None, verbose: bool = False, species: str = 'proton', unit: AxisUnit = AxisUnit.SI, unitv: str = 'km/s', vmin: float = float('-inf'), vmax: float = float('inf'), slicetype: str = None, vslicethick: float = 0.0, center: str = None, weight: str = 'particle', flimit: float = -1.0, addcolorbar: bool = True, **kwargs)
+
+.. py:class:: AxisUnit(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+
+   Specifies the units for representing values on an axis.
+
+   .. attribute:: - EARTH
+
+      Units based on Earth's physical properties, such as Earth's radius for distance and km/s for velocity.
+
+      :type: 1
+
+   .. attribute:: - SI
+
+      Units from the International System of Units (SI), such as meters, seconds, kilograms, etc.
+
+      :type: 2
+
+
+   .. py:attribute:: SI
+      :value: 1
+
+
+
+   .. py:attribute:: KSI
+      :value: 2
+
+
+
+   .. py:attribute:: EARTH
+      :value: 3
+
+
+
+   .. py:attribute:: MERCURY
+      :value: 4
+
+
+
+.. py:class:: ColorScale(*args, **kwds)
+
+   Bases: :py:obj:`enum.Enum`
+
+
+   Represents the available color scales for data visualization.
+
+   .. attribute:: - Linear
+
+      A linear color scale, where colors are evenly distributed across the data range.
+
+      :type: 1
+
+   .. attribute:: - Log
+
+      A logarithmic color scale, suitable for data with a wide range of values, where smaller values are more emphasized.
+
+      :type: 2
+
+   .. attribute:: - SymLog
+
+      A symmetric logarithmic color scale, similar to Log but with symmetry around zero, useful for data with both positive and negative values.
+
+      :type: 3
+
+
+   .. py:attribute:: Linear
+      :value: 1
+
+
+
+   .. py:attribute:: Log
+      :value: 2
+
+
+
+   .. py:attribute:: SymLog
+      :value: 3
+
+
+

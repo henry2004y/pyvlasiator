@@ -1,0 +1,95 @@
+pyvlasiator.vlsv.variables
+==========================
+
+.. py:module:: pyvlasiator.vlsv.variables
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   pyvlasiator.vlsv.variables.QE
+   pyvlasiator.vlsv.variables.ME
+   pyvlasiator.vlsv.variables.QI
+   pyvlasiator.vlsv.variables.MI
+   pyvlasiator.vlsv.variables.C
+   pyvlasiator.vlsv.variables.MU0
+   pyvlasiator.vlsv.variables.EPSILON0
+   pyvlasiator.vlsv.variables.KB
+   pyvlasiator.vlsv.variables.RE
+   pyvlasiator.vlsv.variables.RMERCURY
+   pyvlasiator.vlsv.variables.speciesdict
+   pyvlasiator.vlsv.variables.speciesamu
+   pyvlasiator.vlsv.variables.speciescharge
+   pyvlasiator.vlsv.variables.units_predefined
+   pyvlasiator.vlsv.variables.data_operators
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   pyvlasiator.vlsv.variables.pass_op
+   pyvlasiator.vlsv.variables.magnitude
+   pyvlasiator.vlsv.variables.sumv
+
+
+Module Contents
+---------------
+
+.. py:data:: QE
+   :value: -1.60217662e-19
+
+
+.. py:data:: ME
+   :value: 9.10938356e-31
+
+
+.. py:data:: QI
+   :value: 1.60217662e-19
+
+
+.. py:data:: MI
+   :value: 1.673557546e-27
+
+
+.. py:data:: C
+   :value: 299792458.0
+
+
+.. py:data:: MU0
+   :value: 1.2566370614359173e-06
+
+
+.. py:data:: EPSILON0
+
+.. py:data:: KB
+   :value: 1.38064852e-23
+
+
+.. py:data:: RE
+   :value: 6371000.0
+
+
+.. py:data:: RMERCURY
+   :value: 2439700.0
+
+
+.. py:data:: speciesdict
+
+.. py:data:: speciesamu
+
+.. py:data:: speciescharge
+
+.. py:data:: units_predefined
+
+.. py:function:: pass_op(variable)
+
+.. py:function:: magnitude(variable)
+
+.. py:function:: sumv(variable)
+
+.. py:data:: data_operators
+

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyvlasiator.plot.plot &mdash; pyvlasiator  documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="pyvlasiator.pyvlasiator" href="../../pyvlasiator/index.html" />
+    <link rel="prev" title="pyvlasiator.plot" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyvlasiator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">pyvlasiator</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html">pyvlasiator.plot</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../pyvlasiator/index.html">pyvlasiator.pyvlasiator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../vlsv/index.html">pyvlasiator.vlsv</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyvlasiator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">pyvlasiator</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">pyvlasiator.plot</a></li>
+      <li class="breadcrumb-item active">pyvlasiator.plot.plot</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/pyvlasiator/plot/plot/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pyvlasiator.plot.plot">
+<span id="pyvlasiator-plot-plot"></span><h1>pyvlasiator.plot.plot<a class="headerlink" href="#module-pyvlasiator.plot.plot" title="Link to this heading"></a></h1>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.ColorScale" title="pyvlasiator.plot.plot.ColorScale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ColorScale</span></code></a></p></td>
+<td><p>Represents the available color scales for data visualization.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AxisUnit</span></code></a></p></td>
+<td><p>Specifies the units for representing values on an axis.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.PlotArgs" title="pyvlasiator.plot.plot.PlotArgs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PlotArgs</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.plot" title="pyvlasiator.plot.plot.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(→ list[matplotlib.lines.Line2D])</p></td>
+<td><p>Plots 1D data from a VLSV file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.scatter" title="pyvlasiator.plot.plot.scatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scatter</span></code></a>(→ matplotlib.collections.PathCollection)</p></td>
+<td><p>Plots 1D VLSV data as scattered points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot._plot1d" title="pyvlasiator.plot.plot._plot1d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_plot1d</span></code></a>(meta, plot_func[, var])</p></td>
+<td><p>Plot 1d data with <cite>plot_func</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.pcolormesh" title="pyvlasiator.plot.plot.pcolormesh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pcolormesh</span></code></a>(self[, var, axisunit, colorscale, ...])</p></td>
+<td><p>Plots 2D VLSV data using pcolormesh.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.contourf" title="pyvlasiator.plot.plot.contourf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contourf</span></code></a>(self[, var, axisunit, colorscale, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.contour" title="pyvlasiator.plot.plot.contour"><code class="xref py py-obj docutils literal notranslate"><span class="pre">contour</span></code></a>(self[, var, axisunit, colorscale, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot._plot2d" title="pyvlasiator.plot.plot._plot2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_plot2d</span></code></a>(meta, plot_func[, var, axisunit, colorscale, ...])</p></td>
+<td><p>Plot 2d data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.streamplot" title="pyvlasiator.plot.plot.streamplot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">streamplot</span></code></a>(→ matplotlib.streamplot.StreamplotSet)</p></td>
+<td><p>Creates a streamplot visualization of a vector field from a VLSV dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.set_vector" title="pyvlasiator.plot.plot.set_vector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_vector</span></code></a>(meta, var, comp, axisunit[, origin])</p></td>
+<td><p>Extracts and prepares vector data for plotting from a VLSV dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.set_figure" title="pyvlasiator.plot.plot.set_figure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_figure</span></code></a>(, **kwargs) → tuple)</p></td>
+<td><p>Sets up a Matplotlib figure and axes for plotting.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.set_args" title="pyvlasiator.plot.plot.set_args"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_args</span></code></a>(→ PlotArgs)</p></td>
+<td><p>Set plot-related arguments of <cite>var</cite> in <cite>axisunit</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.prep2d" title="pyvlasiator.plot.plot.prep2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prep2d</span></code></a>(meta, var[, comp])</p></td>
+<td><p>Obtain data of <cite>var</cite> for 2D plotting. Use <cite>comp</cite> to select vector components.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.prep2dslice" title="pyvlasiator.plot.plot.prep2dslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prep2dslice</span></code></a>(meta, var, dir, comp, pArgs)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot._getdata2d" title="pyvlasiator.plot.plot._getdata2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_getdata2d</span></code></a>(→ numpy.ndarray)</p></td>
+<td><p>Retrieves and reshapes 2D data from a VLSV dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.get_axis" title="pyvlasiator.plot.plot.get_axis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_axis</span></code></a>(→ tuple)</p></td>
+<td><p>Generates the 2D domain axis coordinates, potentially applying Earth radius scaling.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot._fillinnerBC" title="pyvlasiator.plot.plot._fillinnerBC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_fillinnerBC</span></code></a>(data)</p></td>
+<td><p>Fill sparsity/inner boundary cells with NaN.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.set_colorbar" title="pyvlasiator.plot.plot.set_colorbar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_colorbar</span></code></a>([colorscale, v1, v2, data, linthresh, ...])</p></td>
+<td><p>Creates a color normalization object and tick values for a colorbar.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.set_plot_limits" title="pyvlasiator.plot.plot.set_plot_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_plot_limits</span></code></a>(→ tuple)</p></td>
+<td><p>Calculates appropriate plot limits based on data and colorscale.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.configure_plot" title="pyvlasiator.plot.plot.configure_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">configure_plot</span></code></a>(c, ax, plot_args, ticks[, add_colorbar])</p></td>
+<td><p>Configures plot elements based on provided arguments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.vdfslice" title="pyvlasiator.plot.plot.vdfslice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vdfslice</span></code></a>(meta, location[, ax, verbose, species, unit, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pyvlasiator.plot.plot.prep_vdf" title="pyvlasiator.plot.plot.prep_vdf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prep_vdf</span></code></a>(meta, location[, species, unit, unitv, ...])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.ColorScale">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">ColorScale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#ColorScale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.ColorScale" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Represents the available color scales for data visualization.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">Linear</span></span></dt>
+<dd><p>A linear color scale, where colors are evenly distributed across the data range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">Log</span></span></dt>
+<dd><p>A logarithmic color scale, suitable for data with a wide range of values, where smaller values are more emphasized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">SymLog</span></span></dt>
+<dd><p>A symmetric logarithmic color scale, similar to Log but with symmetry around zero, useful for data with both positive and negative values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>3</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.ColorScale.Linear">
+<span class="sig-name descname"><span class="pre">Linear</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pyvlasiator.plot.plot.ColorScale.Linear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.ColorScale.Log">
+<span class="sig-name descname"><span class="pre">Log</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pyvlasiator.plot.plot.ColorScale.Log" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.ColorScale.SymLog">
+<span class="sig-name descname"><span class="pre">SymLog</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#pyvlasiator.plot.plot.ColorScale.SymLog" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.AxisUnit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">AxisUnit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#AxisUnit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.AxisUnit" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Specifies the units for representing values on an axis.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">EARTH</span></span></dt>
+<dd><p>Units based on Earth’s physical properties, such as Earth’s radius for distance and km/s for velocity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">-</span> <span class="pre">SI</span></span></dt>
+<dd><p>Units from the International System of Units (SI), such as meters, seconds, kilograms, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.AxisUnit.SI">
+<span class="sig-name descname"><span class="pre">SI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#pyvlasiator.plot.plot.AxisUnit.SI" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.AxisUnit.KSI">
+<span class="sig-name descname"><span class="pre">KSI</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#pyvlasiator.plot.plot.AxisUnit.KSI" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.AxisUnit.EARTH">
+<span class="sig-name descname"><span class="pre">EARTH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#pyvlasiator.plot.plot.AxisUnit.EARTH" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.AxisUnit.MERCURY">
+<span class="sig-name descname"><span class="pre">MERCURY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#pyvlasiator.plot.plot.AxisUnit.MERCURY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">PlotArgs</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.axisunit">
+<span class="sig-name descname"><span class="pre">axisunit</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.axisunit" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.sizes">
+<span class="sig-name descname"><span class="pre">sizes</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.sizes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.plotrange">
+<span class="sig-name descname"><span class="pre">plotrange</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.plotrange" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.origin">
+<span class="sig-name descname"><span class="pre">origin</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.origin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.idlist">
+<span class="sig-name descname"><span class="pre">idlist</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.idlist" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.indexlist">
+<span class="sig-name descname"><span class="pre">indexlist</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.indexlist" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.str_title">
+<span class="sig-name descname"><span class="pre">str_title</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.str_title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.strx">
+<span class="sig-name descname"><span class="pre">strx</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.strx" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.stry">
+<span class="sig-name descname"><span class="pre">stry</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.stry" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.PlotArgs.cb_title">
+<span class="sig-name descname"><span class="pre">cb_title</span></span><a class="headerlink" href="#pyvlasiator.plot.plot.PlotArgs.cb_title" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.plot">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">matplotlib.lines.Line2D</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.plot" title="Link to this definition"></a></dt>
+<dd><p>Plots 1D data from a VLSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> (<em>str</em>) – Name of the variable to plot from the VLSV file.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axes._axes.Axes</em><em>, </em><em>optional</em>) – Axes object to plot on. If not provided, a new figure and axes will be created.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>, </em><em>optional</em>) – Size of the figure in inches (width, height). Only used if a new
+figure is created.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments passed to Matplotlib’s <cite>plot</cite> function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A list of created Line2D objects.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[matplotlib.lines.Line2D]</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the specified variable is not found in the VLSV file.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vlsv_file</span> <span class="o">=</span> <span class="n">Vlsv</span><span class="p">(</span><span class="s2">&quot;my_vlsv_file.vlsv&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span> <span class="o">=</span> <span class="n">vlsv_file</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;proton/vg_rho&quot;</span><span class="p">)</span>  <span class="c1"># Plot density on a new figure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span> <span class="o">=</span> <span class="n">vlsv_file</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;helium/vg_v&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">my_axes</span><span class="p">)</span>  <span class="c1"># Plot velocity on an existing axes</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.scatter">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">scatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.collections.PathCollection</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#scatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.scatter" title="Link to this definition"></a></dt>
+<dd><p>Plots 1D VLSV data as scattered points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> (<em>str</em>) – Name of the variable to plot from the VLSV file.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axes._axes.Axes</em><em>, </em><em>optional</em>) – Axes object to plot on. If not provided, a new figure and axes will be created.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>, </em><em>optional</em>) – Size of the figure in inches (width, height). Only used if a new
+figure is created.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments passed to Matplotlib’s <cite>plot</cite> function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>matplotlib.collections.PathCollection</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the specified variable is not found in the VLSV file.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vlsv_file</span> <span class="o">=</span> <span class="n">Vlsv</span><span class="p">(</span><span class="s2">&quot;my_vlsv_file.vlsv&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">axes</span> <span class="o">=</span> <span class="n">vlsv_file</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;proton/vg_rho&quot;</span><span class="p">)</span>  <span class="c1"># Plot density on a new figure</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot._plot1d">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">_plot1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#_plot1d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot._plot1d" title="Link to this definition"></a></dt>
+<dd><p>Plot 1d data with <cite>plot_func</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> (<em>str</em>) – Variable name from the VLSV file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.pcolormesh">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">pcolormesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisunit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AxisUnit.EARTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.ColorScale" title="pyvlasiator.plot.plot.ColorScale"><span class="pre">ColorScale</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ColorScale.Linear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addcolorbar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('-inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#pcolormesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.pcolormesh" title="Link to this definition"></a></dt>
+<dd><p>Plots 2D VLSV data using pcolormesh.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> (<em>str</em>) – Name of the variable to plot from the VLSV file.</p></li>
+<li><p><strong>axisunit</strong> (<a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><em>AxisUnit</em></a>) – Unit of the axis, <cite>AxisUnit.EARTH</cite> or <cite>AxisUnit.SI</cite>.</p></li>
+<li><p><strong>addcolorbar</strong> (<em>bool</em>) – Add colorbar to the right.</p></li>
+<li><p><strong>colorscale</strong> (<a class="reference internal" href="#pyvlasiator.plot.plot.ColorScale" title="pyvlasiator.plot.plot.ColorScale"><em>ColorScale</em></a>) – Color scale of the data, <cite>ColorScale.Linear</cite>, <cite>ColorScale.Log</cite>, or <cite>ColorScale.SymLog</cite>.</p></li>
+<li><p><strong>extent</strong> (<em>list</em>) – Extent of the domain (WIP).</p></li>
+<li><p><strong>comp</strong> (<em>int</em>) – Vector composition of data, -1 is magnitude, 0 is x, 1 is y, and 2 is z.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axes._axes.Axes</em><em>, </em><em>optional</em>) – Axes object to plot on. If not provided, a new figure and axes
+will be created using <cite>set_figure</cite>.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>, </em><em>optional</em>) – Size of the figure in inches. Only used if a new figure is created.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments passed to <cite>ax.pcolormesh</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The created or existing figure object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.figure.Figure</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the specified variable is not found in the VLSV file.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">vlsv_file</span> <span class="o">=</span> <span class="n">Vlsv</span><span class="p">(</span><span class="s2">&quot;my_vlsv_file.vlsv&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot density on a new figure</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">vlsv_file</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="s2">&quot;proton/vg_rho&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Plot velocity on an existing axes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ax</span> <span class="o">=</span> <span class="o">...</span>  <span class="c1"># Existing axes object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fig</span> <span class="o">=</span> <span class="n">vlsv_file</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="s2">&quot;proton/vg_v&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.contourf">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">contourf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisunit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AxisUnit.EARTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.ColorScale" title="pyvlasiator.plot.plot.ColorScale"><span class="pre">ColorScale</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ColorScale.Linear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addcolorbar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('-inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#contourf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.contourf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.contour">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">contour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisunit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AxisUnit.EARTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.ColorScale" title="pyvlasiator.plot.plot.ColorScale"><span class="pre">ColorScale</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ColorScale.Linear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addcolorbar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('-inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#contour"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.contour" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot._plot2d">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">_plot2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisunit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AxisUnit.EARTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.ColorScale" title="pyvlasiator.plot.plot.ColorScale"><span class="pre">ColorScale</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ColorScale.Linear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addcolorbar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('-inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#_plot2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot._plot2d" title="Link to this definition"></a></dt>
+<dd><p>Plot 2d data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var</strong> (<em>str</em>) – Variable name from the VLSV file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.streamplot">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">streamplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'xy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisunit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AxisUnit.EARTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">matplotlib.streamplot.StreamplotSet</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#streamplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.streamplot" title="Link to this definition"></a></dt>
+<dd><p>Creates a streamplot visualization of a vector field from a VLSV dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>meta</strong> (<a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><em>Vlsv</em></a>) – A VLSV metadata object containing the dataset information.</p></li>
+<li><p><strong>var</strong> (<em>str</em>) – The name of the vector variable to visualize.</p></li>
+<li><p><strong>ax</strong> (<em>matplotlib.axes.Axes</em><em>, </em><em>optional</em>) – The axes object to plot on. If not provided, a new figure and axes
+will be created.</p></li>
+<li><p><strong>comp</strong> (<em>str</em><em>, </em><em>optional</em>) – The components of the vector to plot, specified as a string containing
+“x”, “y”, or “z” (e.g., “xy” for x-y components). Defaults to “xy”.</p></li>
+<li><p><strong>axisunit</strong> (<a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><em>AxisUnit</em></a><em>, </em><em>optional</em>) – The unit system for the plot axes. Defaults to AxisUnit.EARTH.</p></li>
+<li><p><strong>origin</strong> (<em>float</em><em>, </em><em>optional</em>) – The origin point for slice plots. Defaults to 0.0.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments passed to Matplotlib’s streamplot function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The streamplot object created by Matplotlib.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>matplotlib.streamplot.StreamplotSet</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.set_vector">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">set_vector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisunit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#set_vector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.set_vector" title="Link to this definition"></a></dt>
+<dd><p>Extracts and prepares vector data for plotting from a VLSV dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>meta</strong> (<a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><em>Vlsv</em></a>) – A VLSV metadata object containing the dataset information.</p></li>
+<li><p><strong>var</strong> (<em>str</em>) – The name of the vector variable to extract.</p></li>
+<li><p><strong>comp</strong> (<em>str</em>) – The components of the vector to extract, specified as a string
+containing “x”, “y”, or “z” (e.g., “xy” for x-y components).</p></li>
+<li><p><strong>axisunit</strong> (<a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><em>AxisUnit</em></a>) – The unit system for the plot axes.</p></li>
+<li><p><strong>origin</strong> (<em>float</em><em>, </em><em>optional</em>) – The origin point for slice plots. Defaults to 0.0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A tuple containing:</dt><dd><ul class="simple">
+<li><p>x: The x-axis coordinates for plotting.</p></li>
+<li><p>y: The y-axis coordinates for plotting.</p></li>
+<li><p>v1: The values of the first vector component.</p></li>
+<li><p>v2: The values of the second vector component.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the specified variable is not a vector variable.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.set_figure">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">set_figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(10,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#set_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.set_figure" title="Link to this definition"></a></dt>
+<dd><p>Sets up a Matplotlib figure and axes for plotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ax</strong> (<em>matplotlib.axes.Axes</em><em>, </em><em>optional</em>) – An existing axes object to use for plotting. If not provided, a new
+figure and axes will be created.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em><em>, </em><em>optional</em>) – The desired figure size in inches, as a tuple (width, height).
+Defaults to (10, 6).</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments passed to Matplotlib’s figure() function
+if a new figure is created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A tuple containing:</dt><dd><ul class="simple">
+<li><p>fig: The Matplotlib figure object.</p></li>
+<li><p>ax: The Matplotlib axes object.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.set_args">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">set_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axisunit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AxisUnit.EARTH</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pyvlasiator.plot.plot.PlotArgs" title="pyvlasiator.plot.plot.PlotArgs"><span class="pre">PlotArgs</span></a></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#set_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.set_args" title="Link to this definition"></a></dt>
+<dd><p>Set plot-related arguments of <cite>var</cite> in <cite>axisunit</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var</strong> (<em>str</em>) – Variable name from the VLSV file.</p></li>
+<li><p><strong>axisunit</strong> (<a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><em>AxisUnit</em></a>) – Unit of the axis.</p></li>
+<li><p><strong>dir</strong> (<em>int</em>) – Normal direction of the 2D slice, 0 for x, 1 for y, and 2 for z.</p></li>
+<li><p><strong>origin</strong> (<em>float</em>) – Origin of the 2D slice.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pyvlasiator.plot.plot.PlotArgs" title="pyvlasiator.plot.plot.PlotArgs">PlotArgs</a></p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#pyvlasiator.plot.plot.pcolormesh" title="pyvlasiator.plot.plot.pcolormesh"><code class="xref py py-func docutils literal notranslate"><span class="pre">pcolormesh()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.prep2d">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">prep2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#prep2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.prep2d" title="Link to this definition"></a></dt>
+<dd><p>Obtain data of <cite>var</cite> for 2D plotting. Use <cite>comp</cite> to select vector components.</p>
+<dl>
+<dt>Parameters</dt><dd><dl class="simple">
+<dt>meta<span class="classifier">Vlsv</span></dt><dd><p>Metadata corresponding to the file.</p>
+</dd>
+<dt>var<span class="classifier">str</span></dt><dd><p>Name of the variable.</p>
+</dd>
+<dt>comp<span class="classifier">int</span></dt><dd><p>Vector component. -1 refers to the magnitude of the vector.</p>
+</dd>
+</dl>
+<p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.prep2dslice">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">prep2dslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pArgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.PlotArgs" title="pyvlasiator.plot.plot.PlotArgs"><span class="pre">PlotArgs</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#prep2dslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.prep2dslice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot._getdata2d">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">_getdata2d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#_getdata2d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot._getdata2d" title="Link to this definition"></a></dt>
+<dd><p>Retrieves and reshapes 2D data from a VLSV dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the dataset is not 2D.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.get_axis">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">get_axis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axisunit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">plotrange</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#get_axis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.get_axis" title="Link to this definition"></a></dt>
+<dd><p>Generates the 2D domain axis coordinates, potentially applying Earth radius scaling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>axisunit</strong> (<a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><em>AxisUnit</em></a>) – The unit system for the plot axes.</p></li>
+<li><p><strong>plotrange</strong> (<em>tuple</em>) – A tuple containing the minimum and maximum values for both axes (xmin, xmax, ymin, ymax).</p></li>
+<li><p><strong>sizes</strong> (<em>tuple</em>) – A tuple containing the number of points for each axis (nx, ny).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A tuple containing the x and y axis coordinates.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot._fillinnerBC">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">_fillinnerBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#_fillinnerBC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot._fillinnerBC" title="Link to this definition"></a></dt>
+<dd><p>Fill sparsity/inner boundary cells with NaN.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.set_colorbar">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">set_colorbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colorscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.ColorScale" title="pyvlasiator.plot.plot.ColorScale"><span class="pre">ColorScale</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ColorScale.Linear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">np.nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">np.nan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">np.array([1.0])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linthresh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.03</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#set_colorbar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.set_colorbar" title="Link to this definition"></a></dt>
+<dd><p>Creates a color normalization object and tick values for a colorbar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>colorscale</strong> (<a class="reference internal" href="#pyvlasiator.plot.plot.ColorScale" title="pyvlasiator.plot.plot.ColorScale"><em>ColorScale</em></a><em>, </em><em>optional</em>) – The type of color scale to use. Can be ‘Linear’, ‘Log’, or ‘SymLog’.
+Defaults to ‘Linear’.</p></li>
+<li><p><strong>v1</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum value for the colorbar. Defaults to np.nan, which means
+it will be inferred from the data.</p></li>
+<li><p><strong>v2</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum value for the colorbar. Defaults to np.nan, which means
+it will be inferred from the data.</p></li>
+<li><p><strong>data</strong> (<em>np.ndarray</em><em>, </em><em>optional</em>) – The data to use for inferring the colorbar limits if v1 and v2 are
+not provided. Defaults to np.array([1.0]).</p></li>
+<li><p><strong>linthresh</strong> (<em>float</em><em>, </em><em>optional</em>) – The threshold value for symmetric log color scales. Defaults to 1.0.</p></li>
+<li><p><strong>linscale</strong> (<em>float</em><em>, </em><em>optional</em>) – A scaling factor for linear regions in symmetric log color scales.
+Defaults to 0.03.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>A tuple containing:</dt><dd><ul class="simple">
+<li><p>norm: A Matplotlib color normalization object for the colorbar.</p></li>
+<li><p>ticks: A list of tick values for the colorbar.</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If an invalid colorscale type is provided.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.set_plot_limits">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">set_plot_limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorscale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.ColorScale" title="pyvlasiator.plot.plot.ColorScale"><span class="pre">ColorScale</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">ColorScale.Linear</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#set_plot_limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.set_plot_limits" title="Link to this definition"></a></dt>
+<dd><p>Calculates appropriate plot limits based on data and colorscale.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.configure_plot">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">configure_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">matplotlib.cm.ScalarMappable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">matplotlib.pyplot.Axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.PlotArgs" title="pyvlasiator.plot.plot.PlotArgs"><span class="pre">PlotArgs</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_colorbar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#configure_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.configure_plot" title="Link to this definition"></a></dt>
+<dd><p>Configures plot elements based on provided arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.vdfslice">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">vdfslice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'proton'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AxisUnit.SI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'km/s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('-inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">float('inf')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slicetype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vslicethick</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'particle'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flimit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addcolorbar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#vdfslice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.vdfslice" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyvlasiator.plot.plot.prep_vdf">
+<span class="sig-prename descclassname"><span class="pre">pyvlasiator.plot.plot.</span></span><span class="sig-name descname"><span class="pre">prep_vdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../vlsv/index.html#pyvlasiator.vlsv.Vlsv" title="pyvlasiator.vlsv.Vlsv"><span class="pre">pyvlasiator.vlsv.Vlsv</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'proton'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pyvlasiator.plot.plot.AxisUnit" title="pyvlasiator.plot.plot.AxisUnit"><span class="pre">AxisUnit</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">AxisUnit.SI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'km/s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slicetype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vslicethick</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'particle'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flimit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pyvlasiator/plot/plot.html#prep_vdf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyvlasiator.plot.plot.prep_vdf" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="pyvlasiator.plot" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../pyvlasiator/index.html" class="btn btn-neutral float-right" title="pyvlasiator.pyvlasiator" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

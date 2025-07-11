@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyvlasiator.plot.plot &mdash; pyvlasiator  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyvlasiator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyvlasiator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyvlasiator.plot.plot</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyvlasiator.plot.plot</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">numpy.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArrayLike</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyvlasiator.vlsv</span><span class="w"> </span><span class="kn">import</span> <span class="n">Vlsv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyvlasiator.vlsv.reader</span><span class="w"> </span><span class="kn">import</span> <span class="n">_getdim2d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyvlasiator.vlsv.variables</span><span class="w"> </span><span class="kn">import</span> <span class="n">RE</span><span class="p">,</span> <span class="n">RMERCURY</span>
+
+
+<div class="viewcode-block" id="ColorScale">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.ColorScale">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ColorScale</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the available color scales for data visualization.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        - Linear (1): A linear color scale, where colors are evenly distributed across the data range.</span>
+<span class="sd">        - Log (2): A logarithmic color scale, suitable for data with a wide range of values, where smaller values are more emphasized.</span>
+<span class="sd">        - SymLog (3): A symmetric logarithmic color scale, similar to Log but with symmetry around zero, useful for data with both positive and negative values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">Linear</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">Log</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">SymLog</span> <span class="o">=</span> <span class="mi">3</span></div>
+
+
+
+<div class="viewcode-block" id="AxisUnit">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.AxisUnit">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AxisUnit</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Specifies the units for representing values on an axis.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        - EARTH (1): Units based on Earth&#39;s physical properties, such as Earth&#39;s radius for distance and km/s for velocity.</span>
+<span class="sd">        - SI (2): Units from the International System of Units (SI), such as meters, seconds, kilograms, etc.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SI</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">KSI</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">EARTH</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">MERCURY</span> <span class="o">=</span> <span class="mi">4</span></div>
+
+
+
+<span class="c1"># Plotting arguments</span>
+<span class="n">PlotArgs</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s2">&quot;PlotArgs&quot;</span><span class="p">,</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;axisunit&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sizes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;plotrange&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;origin&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;idlist&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;indexlist&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;str_title&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;strx&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stry&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cb_title&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="plot">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.plot">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">Line2D</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots 1D data from a VLSV file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : str</span>
+<span class="sd">        Name of the variable to plot from the VLSV file.</span>
+<span class="sd">    ax : matplotlib.axes._axes.Axes, optional</span>
+<span class="sd">        Axes object to plot on. If not provided, a new figure and axes will be created.</span>
+<span class="sd">    figsize : tuple[float, float], optional</span>
+<span class="sd">        Size of the figure in inches (width, height). Only used if a new</span>
+<span class="sd">        figure is created.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments passed to Matplotlib&#39;s `plot` function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list[matplotlib.lines.Line2D]</span>
+<span class="sd">        A list of created Line2D objects.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the specified variable is not found in the VLSV file.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; vlsv_file = Vlsv(&quot;my_vlsv_file.vlsv&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; axes = vlsv_file.plot(&quot;proton/vg_rho&quot;)  # Plot density on a new figure</span>
+<span class="sd">    &gt;&gt;&gt; axes = vlsv_file.plot(&quot;helium/vg_v&quot;, ax=my_axes)  # Plot velocity on an existing axes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">set_figure</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">figsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_plot1d</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">,</span>
+        <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="scatter">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.scatter">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">scatter</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots 1D VLSV data as scattered points.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : str</span>
+<span class="sd">        Name of the variable to plot from the VLSV file.</span>
+<span class="sd">    ax : matplotlib.axes._axes.Axes, optional</span>
+<span class="sd">        Axes object to plot on. If not provided, a new figure and axes will be created.</span>
+<span class="sd">    figsize : tuple[float, float], optional</span>
+<span class="sd">        Size of the figure in inches (width, height). Only used if a new</span>
+<span class="sd">        figure is created.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments passed to Matplotlib&#39;s `plot` function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.collections.PathCollection</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the specified variable is not found in the VLSV file.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; vlsv_file = Vlsv(&quot;my_vlsv_file.vlsv&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; axes = vlsv_file.scatter(&quot;proton/vg_rho&quot;)  # Plot density on a new figure</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">set_figure</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">figsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_plot1d</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">,</span>
+        <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="_plot1d">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot._plot1d">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_plot1d</span><span class="p">(</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">plot_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot 1d data with `plot_func`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : str</span>
+<span class="sd">        Variable name from the VLSV file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="o">.</span><span class="n">has_variable</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variable </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> not found in the file&quot;</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">coordmin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meta</span><span class="o">.</span><span class="n">coordmax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">meta</span><span class="o">.</span><span class="n">ncells</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">plot_func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">c</span></div>
+
+
+
+<div class="viewcode-block" id="pcolormesh">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.pcolormesh">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pcolormesh</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">axisunit</span><span class="p">:</span> <span class="n">AxisUnit</span> <span class="o">=</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">EARTH</span><span class="p">,</span>
+    <span class="n">colorscale</span><span class="p">:</span> <span class="n">ColorScale</span> <span class="o">=</span> <span class="n">ColorScale</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span>
+    <span class="n">addcolorbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">),</span>
+    <span class="n">vmax</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
+    <span class="n">extent</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">comp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots 2D VLSV data using pcolormesh.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : str</span>
+<span class="sd">        Name of the variable to plot from the VLSV file.</span>
+<span class="sd">    axisunit : AxisUnit</span>
+<span class="sd">        Unit of the axis, `AxisUnit.EARTH` or `AxisUnit.SI`.</span>
+<span class="sd">    addcolorbar : bool</span>
+<span class="sd">        Add colorbar to the right.</span>
+<span class="sd">    colorscale: ColorScale</span>
+<span class="sd">        Color scale of the data, `ColorScale.Linear`, `ColorScale.Log`, or `ColorScale.SymLog`.</span>
+<span class="sd">    extent : list</span>
+<span class="sd">        Extent of the domain (WIP).</span>
+<span class="sd">    comp : int</span>
+<span class="sd">        Vector composition of data, -1 is magnitude, 0 is x, 1 is y, and 2 is z.</span>
+<span class="sd">    ax : matplotlib.axes._axes.Axes, optional</span>
+<span class="sd">        Axes object to plot on. If not provided, a new figure and axes</span>
+<span class="sd">        will be created using `set_figure`.</span>
+<span class="sd">    figsize : tuple[float, float], optional</span>
+<span class="sd">        Size of the figure in inches. Only used if a new figure is created.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments passed to `ax.pcolormesh`.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.figure.Figure</span>
+<span class="sd">        The created or existing figure object.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the specified variable is not found in the VLSV file.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; vlsv_file = Vlsv(&quot;my_vlsv_file.vlsv&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; # Plot density on a new figure</span>
+<span class="sd">    &gt;&gt;&gt; fig = vlsv_file.pcolormesh(&quot;proton/vg_rho&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; # Plot velocity on an existing axes</span>
+<span class="sd">    &gt;&gt;&gt; ax = ...  # Existing axes object</span>
+<span class="sd">    &gt;&gt;&gt; fig = vlsv_file.pcolormesh(&quot;proton/vg_v&quot;, ax=ax)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">set_figure</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">figsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_plot2d</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">,</span>
+        <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">comp</span><span class="o">=</span><span class="n">comp</span><span class="p">,</span>
+        <span class="n">axisunit</span><span class="o">=</span><span class="n">axisunit</span><span class="p">,</span>
+        <span class="n">colorscale</span><span class="o">=</span><span class="n">colorscale</span><span class="p">,</span>
+        <span class="n">addcolorbar</span><span class="o">=</span><span class="n">addcolorbar</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="contourf">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.contourf">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">contourf</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">axisunit</span><span class="p">:</span> <span class="n">AxisUnit</span> <span class="o">=</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">EARTH</span><span class="p">,</span>
+    <span class="n">colorscale</span><span class="p">:</span> <span class="n">ColorScale</span> <span class="o">=</span> <span class="n">ColorScale</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span>
+    <span class="n">addcolorbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">),</span>
+    <span class="n">vmax</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
+    <span class="n">extent</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">comp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">set_figure</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">figsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_plot2d</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">,</span>
+        <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">comp</span><span class="o">=</span><span class="n">comp</span><span class="p">,</span>
+        <span class="n">axisunit</span><span class="o">=</span><span class="n">axisunit</span><span class="p">,</span>
+        <span class="n">colorscale</span><span class="o">=</span><span class="n">colorscale</span><span class="p">,</span>
+        <span class="n">addcolorbar</span><span class="o">=</span><span class="n">addcolorbar</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="contour">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.contour">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">contour</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">axisunit</span><span class="p">:</span> <span class="n">AxisUnit</span> <span class="o">=</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">EARTH</span><span class="p">,</span>
+    <span class="n">colorscale</span><span class="p">:</span> <span class="n">ColorScale</span> <span class="o">=</span> <span class="n">ColorScale</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span>
+    <span class="n">addcolorbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">),</span>
+    <span class="n">vmax</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
+    <span class="n">extent</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">comp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">set_figure</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">figsize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">_plot2d</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">,</span>
+        <span class="n">var</span><span class="o">=</span><span class="n">var</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">comp</span><span class="o">=</span><span class="n">comp</span><span class="p">,</span>
+        <span class="n">axisunit</span><span class="o">=</span><span class="n">axisunit</span><span class="p">,</span>
+        <span class="n">colorscale</span><span class="o">=</span><span class="n">colorscale</span><span class="p">,</span>
+        <span class="n">addcolorbar</span><span class="o">=</span><span class="n">addcolorbar</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="_plot2d">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot._plot2d">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_plot2d</span><span class="p">(</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">plot_func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">axisunit</span><span class="p">:</span> <span class="n">AxisUnit</span> <span class="o">=</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">EARTH</span><span class="p">,</span>
+    <span class="n">colorscale</span><span class="p">:</span> <span class="n">ColorScale</span> <span class="o">=</span> <span class="n">ColorScale</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span>
+    <span class="n">addcolorbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">),</span>
+    <span class="n">vmax</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
+    <span class="n">extent</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+    <span class="n">comp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot 2d data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : str</span>
+<span class="sd">        Variable name from the VLSV file.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="o">.</span><span class="n">has_variable</span><span class="p">(</span><span class="n">var</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Variable </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> not found in the file&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">ndims</span><span class="p">()</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">or</span> <span class="n">meta</span><span class="o">.</span><span class="n">maxamr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># check if origin and normal exist in kwargs</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;normal&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;normal&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;origin&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="mf">0.0</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">pArgs</span> <span class="o">=</span> <span class="n">set_args</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">axisunit</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">prep2dslice</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">normal</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">pArgs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pArgs</span> <span class="o">=</span> <span class="n">set_args</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">axisunit</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">prep2d</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">comp</span><span class="p">)</span>
+
+    <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="n">get_axis</span><span class="p">(</span><span class="n">pArgs</span><span class="o">.</span><span class="n">axisunit</span><span class="p">,</span> <span class="n">pArgs</span><span class="o">.</span><span class="n">plotrange</span><span class="p">,</span> <span class="n">pArgs</span><span class="o">.</span><span class="n">sizes</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;fg_b&quot;</span><span class="p">,</span> <span class="s2">&quot;fg_e&quot;</span><span class="p">,</span> <span class="s2">&quot;vg_b_vol&quot;</span><span class="p">,</span> <span class="s2">&quot;vg_e_vol&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">var</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;vg_v&quot;</span><span class="p">):</span>
+        <span class="n">_fillinnerBC</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span> <span class="o">=</span> <span class="n">set_colorbar</span><span class="p">(</span><span class="n">colorscale</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="n">range1</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">range2</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">side</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">plot_func</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">configure_plot</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">pArgs</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">addcolorbar</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">c</span></div>
+
+
+
+<div class="viewcode-block" id="streamplot">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.streamplot">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">streamplot</span><span class="p">(</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">comp</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;xy&quot;</span><span class="p">,</span>
+    <span class="n">axisunit</span><span class="p">:</span> <span class="n">AxisUnit</span> <span class="o">=</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">EARTH</span><span class="p">,</span>
+    <span class="n">origin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">streamplot</span><span class="o">.</span><span class="n">StreamplotSet</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a streamplot visualization of a vector field from a VLSV dataset.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    meta: Vlsv</span>
+<span class="sd">        A VLSV metadata object containing the dataset information.</span>
+<span class="sd">    var: str</span>
+<span class="sd">        The name of the vector variable to visualize.</span>
+<span class="sd">    ax: matplotlib.axes.Axes, optional</span>
+<span class="sd">        The axes object to plot on. If not provided, a new figure and axes</span>
+<span class="sd">        will be created.</span>
+<span class="sd">    comp: str, optional</span>
+<span class="sd">        The components of the vector to plot, specified as a string containing</span>
+<span class="sd">        &quot;x&quot;, &quot;y&quot;, or &quot;z&quot; (e.g., &quot;xy&quot; for x-y components). Defaults to &quot;xy&quot;.</span>
+<span class="sd">    axisunit: AxisUnit, optional</span>
+<span class="sd">        The unit system for the plot axes. Defaults to AxisUnit.EARTH.</span>
+<span class="sd">    origin: float, optional</span>
+<span class="sd">        The origin point for slice plots. Defaults to 0.0.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments passed to Matplotlib&#39;s streamplot function.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    matplotlib.streamplot.StreamplotSet</span>
+<span class="sd">        The streamplot object created by Matplotlib.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">set_vector</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">comp</span><span class="p">,</span> <span class="n">axisunit</span><span class="p">,</span> <span class="n">origin</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">set_figure</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">streamplot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">s</span></div>
+
+
+
+<div class="viewcode-block" id="set_vector">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.set_vector">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_vector</span><span class="p">(</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">comp</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">axisunit</span><span class="p">:</span> <span class="n">AxisUnit</span><span class="p">,</span> <span class="n">origin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extracts and prepares vector data for plotting from a VLSV dataset.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    meta: Vlsv</span>
+<span class="sd">        A VLSV metadata object containing the dataset information.</span>
+<span class="sd">    var: str</span>
+<span class="sd">        The name of the vector variable to extract.</span>
+<span class="sd">    comp: str</span>
+<span class="sd">        The components of the vector to extract, specified as a string</span>
+<span class="sd">        containing &quot;x&quot;, &quot;y&quot;, or &quot;z&quot; (e.g., &quot;xy&quot; for x-y components).</span>
+<span class="sd">    axisunit: AxisUnit</span>
+<span class="sd">        The unit system for the plot axes.</span>
+<span class="sd">    origin: float, optional</span>
+<span class="sd">        The origin point for slice plots. Defaults to 0.0.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        A tuple containing:</span>
+<span class="sd">            - x: The x-axis coordinates for plotting.</span>
+<span class="sd">            - y: The y-axis coordinates for plotting.</span>
+<span class="sd">            - v1: The values of the first vector component.</span>
+<span class="sd">            - v2: The values of the second vector component.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the specified variable is not a vector variable.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ncells</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">ncells</span>
+    <span class="n">maxamr</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">maxamr</span>
+    <span class="n">coordmin</span><span class="p">,</span> <span class="n">coordmax</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">coordmin</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">coordmax</span>
+
+    <span class="k">if</span> <span class="s2">&quot;x&quot;</span> <span class="ow">in</span> <span class="n">comp</span><span class="p">:</span>
+        <span class="n">v1_</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="s2">&quot;y&quot;</span> <span class="ow">in</span> <span class="n">comp</span><span class="p">:</span>
+            <span class="nb">dir</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">v2_</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">sizes</span> <span class="o">=</span> <span class="n">_getdim2d</span><span class="p">(</span><span class="n">ncells</span><span class="p">,</span> <span class="n">maxamr</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">plotrange</span> <span class="o">=</span> <span class="p">(</span><span class="n">coordmin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordmax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordmin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordmax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">dir</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">v2_</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">sizes</span> <span class="o">=</span> <span class="n">_getdim2d</span><span class="p">(</span><span class="n">ncells</span><span class="p">,</span> <span class="n">maxamr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">plotrange</span> <span class="o">=</span> <span class="p">(</span><span class="n">coordmin</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordmax</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordmin</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">coordmax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">dir</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">v1_</span><span class="p">,</span> <span class="n">v2_</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+        <span class="n">sizes</span> <span class="o">=</span> <span class="n">_getdim2d</span><span class="p">(</span><span class="n">ncells</span><span class="p">,</span> <span class="n">maxamr</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">plotrange</span> <span class="o">=</span> <span class="p">(</span><span class="n">coordmin</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordmax</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">coordmin</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">coordmax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">var</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;fg_&quot;</span><span class="p">):</span>  <span class="c1"># vlasov grid</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Vector variable required!&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">maxamr</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">v1_</span><span class="p">]</span>
+            <span class="n">v2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">v2_</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sliceoffset</span> <span class="o">=</span> <span class="n">origin</span> <span class="o">-</span> <span class="n">coordmin</span><span class="p">[</span><span class="nb">dir</span><span class="p">]</span>
+            <span class="n">idlist</span><span class="p">,</span> <span class="n">indexlist</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">getslicecell</span><span class="p">(</span>
+                <span class="n">sliceoffset</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">coordmin</span><span class="p">[</span><span class="nb">dir</span><span class="p">],</span> <span class="n">coordmax</span><span class="p">[</span><span class="nb">dir</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">v2D</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">indexlist</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">refineslice</span><span class="p">(</span><span class="n">idlist</span><span class="p">,</span> <span class="n">v2D</span><span class="p">[:,</span> <span class="n">v1_</span><span class="p">],</span> <span class="nb">dir</span><span class="p">)</span>
+            <span class="n">v2</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">refineslice</span><span class="p">(</span><span class="n">idlist</span><span class="p">,</span> <span class="n">v2D</span><span class="p">[:,</span> <span class="n">v2_</span><span class="p">],</span> <span class="nb">dir</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># FS grid</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">v1_</span><span class="p">])</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">v2_</span><span class="p">])</span>
+
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">get_axis</span><span class="p">(</span><span class="n">axisunit</span><span class="p">,</span> <span class="n">plotrange</span><span class="p">,</span> <span class="n">sizes</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span></div>
+
+
+
+<div class="viewcode-block" id="set_figure">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.set_figure">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_figure</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">figsize</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets up a Matplotlib figure and axes for plotting.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ax: matplotlib.axes.Axes, optional</span>
+<span class="sd">        An existing axes object to use for plotting. If not provided, a new</span>
+<span class="sd">        figure and axes will be created.</span>
+<span class="sd">    figsize: tuple, optional</span>
+<span class="sd">        The desired figure size in inches, as a tuple (width, height).</span>
+<span class="sd">        Defaults to (10, 6).</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments passed to Matplotlib&#39;s figure() function</span>
+<span class="sd">        if a new figure is created.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        A tuple containing:</span>
+<span class="sd">            - fig: The Matplotlib figure object.</span>
+<span class="sd">            - ax: The Matplotlib axes object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span>
+        <span class="s2">&quot;figure&quot;</span><span class="p">,</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span> <span class="k">if</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_fignums</span><span class="p">()</span> <span class="k">else</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
+
+
+
+<div class="viewcode-block" id="set_args">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.set_args">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_args</span><span class="p">(</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">axisunit</span><span class="p">:</span> <span class="n">AxisUnit</span> <span class="o">=</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">EARTH</span><span class="p">,</span>
+    <span class="nb">dir</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">origin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlotArgs</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set plot-related arguments of `var` in `axisunit`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    var : str</span>
+<span class="sd">        Variable name from the VLSV file.</span>
+<span class="sd">    axisunit : AxisUnit</span>
+<span class="sd">        Unit of the axis.</span>
+<span class="sd">    dir : int</span>
+<span class="sd">        Normal direction of the 2D slice, 0 for x, 1 for y, and 2 for z.</span>
+<span class="sd">    origin : float</span>
+<span class="sd">        Origin of the 2D slice.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PlotArgs</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    :func:`pcolormesh`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ncells</span><span class="p">,</span> <span class="n">coordmin</span><span class="p">,</span> <span class="n">coordmax</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">ncells</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">coordmin</span><span class="p">,</span> <span class="n">meta</span><span class="o">.</span><span class="n">coordmax</span>
+
+    <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">dir</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="p">(</span><span class="n">ncells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ncells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">):</span>  <span class="c1"># polar</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="nb">dir</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="nb">dir</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="p">(</span><span class="n">ncells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ncells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">):</span>  <span class="c1"># ecliptic</span>
+        <span class="n">seq</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="nb">dir</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;1D data detected. Please use 1D plot functions.&quot;</span><span class="p">)</span>
+
+    <span class="n">plotrange</span> <span class="o">=</span> <span class="p">(</span><span class="n">coordmin</span><span class="p">[</span><span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">coordmax</span><span class="p">[</span><span class="n">seq</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">coordmin</span><span class="p">[</span><span class="n">seq</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">coordmax</span><span class="p">[</span><span class="n">seq</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="n">axislabels</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">((</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">)</span>
+    <span class="c1"># Scale the sizes to the highest refinement level for data to be refined later</span>
+    <span class="n">sizes</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">ncells</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="n">meta</span><span class="o">.</span><span class="n">maxamr</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">idlist</span><span class="p">,</span> <span class="n">indexlist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sliceoffset</span> <span class="o">=</span> <span class="n">origin</span> <span class="o">-</span> <span class="n">coordmin</span><span class="p">[</span><span class="nb">dir</span><span class="p">]</span>
+        <span class="n">idlist</span><span class="p">,</span> <span class="n">indexlist</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">getslicecell</span><span class="p">(</span>
+            <span class="n">sliceoffset</span><span class="p">,</span> <span class="nb">dir</span><span class="p">,</span> <span class="n">coordmin</span><span class="p">[</span><span class="nb">dir</span><span class="p">],</span> <span class="n">coordmax</span><span class="p">[</span><span class="nb">dir</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">axisunit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">EARTH</span><span class="p">:</span>
+        <span class="n">unitstr</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$R_E$&quot;</span>
+    <span class="k">elif</span> <span class="n">axisunit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">SI</span><span class="p">:</span>
+        <span class="n">unitstr</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span>
+    <span class="k">elif</span> <span class="n">axisunit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">MERCURY</span><span class="p">:</span>
+        <span class="n">unitstr</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;$R_M$&quot;</span>
+    <span class="k">elif</span> <span class="n">axisunit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">KSI</span><span class="p">:</span>
+        <span class="n">unitstr</span> <span class="o">=</span> <span class="s2">&quot;km&quot;</span>
+    <span class="n">strx</span> <span class="o">=</span> <span class="n">axislabels</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">unitstr</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+    <span class="n">stry</span> <span class="o">=</span> <span class="n">axislabels</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">unitstr</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+
+    <span class="n">str_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;t=</span><span class="si">{</span><span class="n">meta</span><span class="o">.</span><span class="n">time</span><span class="si">:</span><span class="s2">4.1f</span><span class="si">}</span><span class="s2">s&quot;</span>
+
+    <span class="n">datainfo</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable_meta</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">datainfo</span><span class="o">.</span><span class="n">variableLaTeX</span><span class="p">:</span>
+        <span class="n">cb_title</span> <span class="o">=</span> <span class="n">datainfo</span><span class="o">.</span><span class="n">variableLaTeX</span> <span class="o">+</span> <span class="s2">&quot; [&quot;</span> <span class="o">+</span> <span class="n">datainfo</span><span class="o">.</span><span class="n">unitLaTeX</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cb_title</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">PlotArgs</span><span class="p">(</span>
+        <span class="n">axisunit</span><span class="p">,</span>
+        <span class="n">sizes</span><span class="p">,</span>
+        <span class="n">plotrange</span><span class="p">,</span>
+        <span class="n">origin</span><span class="p">,</span>
+        <span class="n">idlist</span><span class="p">,</span>
+        <span class="n">indexlist</span><span class="p">,</span>
+        <span class="n">str_title</span><span class="p">,</span>
+        <span class="n">strx</span><span class="p">,</span>
+        <span class="n">stry</span><span class="p">,</span>
+        <span class="n">cb_title</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="prep2d">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.prep2d">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">prep2d</span><span class="p">(</span><span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">comp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Obtain data of `var` for 2D plotting. Use `comp` to select vector components.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        meta : Vlsv</span>
+<span class="sd">            Metadata corresponding to the file.</span>
+<span class="sd">        var : str</span>
+<span class="sd">            Name of the variable.</span>
+<span class="sd">        comp : int</span>
+<span class="sd">            Vector component. -1 refers to the magnitude of the vector.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">dataRaw</span> <span class="o">=</span> <span class="n">_getdata2d</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dataRaw</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">comp</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dataRaw</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">comp</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">dataRaw</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;fg_&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">dataRaw</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<div class="viewcode-block" id="prep2dslice">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.prep2dslice">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">prep2dslice</span><span class="p">(</span><span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dir</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">comp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">pArgs</span><span class="p">:</span> <span class="n">PlotArgs</span><span class="p">):</span>
+    <span class="n">origin</span> <span class="o">=</span> <span class="n">pArgs</span><span class="o">.</span><span class="n">origin</span>
+    <span class="n">idlist</span> <span class="o">=</span> <span class="n">pArgs</span><span class="o">.</span><span class="n">idlist</span>
+    <span class="n">indexlist</span> <span class="o">=</span> <span class="n">pArgs</span><span class="o">.</span><span class="n">indexlist</span>
+
+    <span class="n">data3D</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">var</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;fg_&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">data3D</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># field or derived quantities, fsgrid</span>
+        <span class="n">ncells</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">ncells</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="n">meta</span><span class="o">.</span><span class="n">maxamr</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">dir</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown normal direction </span><span class="si">{</span><span class="nb">dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">sliceratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">origin</span> <span class="o">-</span> <span class="n">meta</span><span class="o">.</span><span class="n">coordmin</span><span class="p">[</span><span class="nb">dir</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span>
+            <span class="n">meta</span><span class="o">.</span><span class="n">coordmax</span><span class="p">[</span><span class="nb">dir</span><span class="p">]</span> <span class="o">-</span> <span class="n">meta</span><span class="o">.</span><span class="n">coordmin</span><span class="p">[</span><span class="nb">dir</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">&lt;=</span> <span class="n">sliceratio</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;slice plane index out of bound!&quot;</span><span class="p">)</span>
+        <span class="c1"># Find the cut plane index for each refinement level</span>
+        <span class="n">icut</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">sliceratio</span> <span class="o">*</span> <span class="n">ncells</span><span class="p">[</span><span class="nb">dir</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="nb">dir</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">comp</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">data3D</span><span class="p">[</span><span class="n">icut</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">comp</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">data3D</span><span class="p">[</span><span class="n">icut</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">dir</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">comp</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">data3D</span><span class="p">[:,</span> <span class="n">icut</span><span class="p">,</span> <span class="p">:,</span> <span class="n">comp</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">data3D</span><span class="p">[:,</span> <span class="n">icut</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">dir</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">comp</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">data3D</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">icut</span><span class="p">,</span> <span class="n">comp</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">data3D</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">icut</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># moments, dccrg grid</span>
+        <span class="c1"># vlasov grid, AMR</span>
+        <span class="k">if</span> <span class="n">data3D</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">data2D</span> <span class="o">=</span> <span class="n">data3D</span><span class="p">[</span><span class="n">indexlist</span><span class="p">]</span>
+
+            <span class="n">data</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">refineslice</span><span class="p">(</span><span class="n">idlist</span><span class="p">,</span> <span class="n">data2D</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">data3D</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">data2D</span> <span class="o">=</span> <span class="n">data3D</span><span class="p">[</span><span class="n">indexlist</span><span class="p">,</span> <span class="p">:]</span>
+
+            <span class="k">if</span> <span class="n">comp</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="nb">slice</span> <span class="o">=</span> <span class="n">data2D</span><span class="p">[:,</span> <span class="n">comp</span><span class="p">]</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">refineslice</span><span class="p">(</span><span class="n">idlist</span><span class="p">,</span> <span class="nb">slice</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">comp</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">datax</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">refineslice</span><span class="p">(</span><span class="n">idlist</span><span class="p">,</span> <span class="n">data2D</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="nb">dir</span><span class="p">)</span>
+                <span class="n">datay</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">refineslice</span><span class="p">(</span><span class="n">idlist</span><span class="p">,</span> <span class="n">data2D</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="nb">dir</span><span class="p">)</span>
+                <span class="n">dataz</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">refineslice</span><span class="p">(</span><span class="n">idlist</span><span class="p">,</span> <span class="n">data2D</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="nb">dir</span><span class="p">)</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datax</span><span class="p">,</span> <span class="n">datay</span><span class="p">,</span> <span class="n">dataz</span><span class="p">)),</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">slice</span> <span class="o">=</span> <span class="n">data2D</span><span class="p">[:,</span> <span class="n">comp</span><span class="p">]</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">refineslice</span><span class="p">(</span><span class="n">idlist</span><span class="p">,</span> <span class="nb">slice</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<div class="viewcode-block" id="_getdata2d">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot._getdata2d">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_getdata2d</span><span class="p">(</span><span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves and reshapes 2D data from a VLSV dataset.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the dataset is not 2D.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">ndims</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;2D outputs required&quot;</span><span class="p">)</span>
+    <span class="n">sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">ncells</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">ndim</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">or</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="k">elif</span> <span class="n">var</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;fg_&quot;</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<div class="viewcode-block" id="get_axis">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.get_axis">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_axis</span><span class="p">(</span><span class="n">axisunit</span><span class="p">:</span> <span class="n">AxisUnit</span><span class="p">,</span> <span class="n">plotrange</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">sizes</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generates the 2D domain axis coordinates, potentially applying Earth radius scaling.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    axisunit: AxisUnit</span>
+<span class="sd">        The unit system for the plot axes.</span>
+<span class="sd">    plotrange: tuple</span>
+<span class="sd">        A tuple containing the minimum and maximum values for both axes (xmin, xmax, ymin, ymax).</span>
+<span class="sd">    sizes: tuple</span>
+<span class="sd">        A tuple containing the number of points for each axis (nx, ny).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        A tuple containing the x and y axis coordinates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">axisunit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">EARTH</span><span class="p">:</span>
+        <span class="n">scale_factor</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">RE</span>
+    <span class="k">elif</span> <span class="n">axisunit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">MERCURY</span><span class="p">:</span>
+        <span class="n">scale_factor</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">RMERCURY</span>
+    <span class="k">elif</span> <span class="n">axisunit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">KSI</span><span class="p">:</span>
+        <span class="n">scale_factor</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mf">1e3</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># SI</span>
+        <span class="n">scale_factor</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="n">scale_factor</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">plotrange</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">s</span> <span class="o">*</span> <span class="n">scale_factor</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">plotrange</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
+
+    <span class="c1"># Vectorized generation of coordinates for efficiency</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">start</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">sizes</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">stop</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">sizes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
+
+
+
+<div class="viewcode-block" id="_fillinnerBC">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot._fillinnerBC">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">_fillinnerBC</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fill sparsity/inner boundary cells with NaN.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span></div>
+
+
+
+<div class="viewcode-block" id="set_colorbar">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.set_colorbar">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_colorbar</span><span class="p">(</span>
+    <span class="n">colorscale</span><span class="p">:</span> <span class="n">ColorScale</span> <span class="o">=</span> <span class="n">ColorScale</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span>
+    <span class="n">v1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+    <span class="n">v2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]),</span>
+    <span class="n">linthresh</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">linscale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.03</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a color normalization object and tick values for a colorbar.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    colorscale: ColorScale, optional</span>
+<span class="sd">        The type of color scale to use. Can be &#39;Linear&#39;, &#39;Log&#39;, or &#39;SymLog&#39;.</span>
+<span class="sd">        Defaults to &#39;Linear&#39;.</span>
+<span class="sd">    v1: float, optional</span>
+<span class="sd">        The minimum value for the colorbar. Defaults to np.nan, which means</span>
+<span class="sd">        it will be inferred from the data.</span>
+<span class="sd">    v2: float, optional</span>
+<span class="sd">        The maximum value for the colorbar. Defaults to np.nan, which means</span>
+<span class="sd">        it will be inferred from the data.</span>
+<span class="sd">    data: np.ndarray, optional</span>
+<span class="sd">        The data to use for inferring the colorbar limits if v1 and v2 are</span>
+<span class="sd">        not provided. Defaults to np.array([1.0]).</span>
+<span class="sd">    linthresh: float, optional</span>
+<span class="sd">        The threshold value for symmetric log color scales. Defaults to 1.0.</span>
+<span class="sd">    linscale: float, optional</span>
+<span class="sd">        A scaling factor for linear regions in symmetric log color scales.</span>
+<span class="sd">        Defaults to 0.03.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        A tuple containing:</span>
+<span class="sd">            - norm: A Matplotlib color normalization object for the colorbar.</span>
+<span class="sd">            - ticks: A list of tick values for the colorbar.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If an invalid colorscale type is provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+
+    <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">set_plot_limits</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">colorscale</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">colorscale</span> <span class="o">==</span> <span class="n">ColorScale</span><span class="o">.</span><span class="n">Linear</span><span class="p">:</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">MaxNLocator</span><span class="p">(</span><span class="n">nbins</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">tick_values</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">)</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">BoundaryNorm</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">clip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">ticks</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">LinearLocator</span><span class="p">(</span><span class="n">numticks</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">colorscale</span> <span class="o">==</span> <span class="n">ColorScale</span><span class="o">.</span><span class="n">Log</span><span class="p">:</span>  <span class="c1"># logarithmic</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">)</span>
+        <span class="n">ticks</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">LogLocator</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">subs</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># symmetric log</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">SymLogNorm</span><span class="p">(</span>
+            <span class="n">linthresh</span><span class="o">=</span><span class="n">linthresh</span><span class="p">,</span> <span class="n">linscale</span><span class="o">=</span><span class="n">linscale</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span>
+        <span class="p">)</span>
+        <span class="n">ticks</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">SymmetricalLogLocator</span><span class="p">(</span><span class="n">linthresh</span><span class="o">=</span><span class="n">linthresh</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">norm</span><span class="p">,</span> <span class="n">ticks</span></div>
+
+
+
+<div class="viewcode-block" id="set_plot_limits">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.set_plot_limits">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_plot_limits</span><span class="p">(</span>
+    <span class="n">vmin</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">colorscale</span><span class="p">:</span> <span class="n">ColorScale</span> <span class="o">=</span> <span class="n">ColorScale</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates appropriate plot limits based on data and colorscale.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">colorscale</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ColorScale</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span> <span class="n">ColorScale</span><span class="o">.</span><span class="n">SymLog</span><span class="p">):</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># Logarithmic colorscale</span>
+        <span class="n">positive_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">]</span>  <span class="c1"># Exclude non-positive values</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">positive_data</span><span class="p">)</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">positive_data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span></div>
+
+
+
+<div class="viewcode-block" id="configure_plot">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.configure_plot">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">configure_plot</span><span class="p">(</span>
+    <span class="n">c</span><span class="p">:</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">ScalarMappable</span><span class="p">,</span>  <span class="c1"># Assuming c is a colormap or similar</span>
+    <span class="n">ax</span><span class="p">:</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">Axes</span><span class="p">,</span>
+    <span class="n">plot_args</span><span class="p">:</span> <span class="n">PlotArgs</span><span class="p">,</span>
+    <span class="n">ticks</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">add_colorbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Configures plot elements based on provided arguments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+    <span class="n">title</span> <span class="o">=</span> <span class="n">plot_args</span><span class="o">.</span><span class="n">str_title</span>
+    <span class="n">x_label</span> <span class="o">=</span> <span class="n">plot_args</span><span class="o">.</span><span class="n">strx</span>
+    <span class="n">y_label</span> <span class="o">=</span> <span class="n">plot_args</span><span class="o">.</span><span class="n">stry</span>
+    <span class="n">colorbar_title</span> <span class="o">=</span> <span class="n">plot_args</span><span class="o">.</span><span class="n">cb_title</span>
+
+    <span class="c1"># Add colorbar if requested</span>
+    <span class="k">if</span> <span class="n">add_colorbar</span><span class="p">:</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">colorbar_title</span><span class="p">:</span>
+            <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">colorbar_title</span><span class="p">)</span>
+        <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set title and labels</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Style borders and ticks</span>
+    <span class="k">for</span> <span class="n">spine</span> <span class="ow">in</span> <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="n">spine</span><span class="o">.</span><span class="n">set_linewidth</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;major&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="vdfslice">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.vdfslice">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">vdfslice</span><span class="p">(</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">location</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">species</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;proton&quot;</span><span class="p">,</span>
+    <span class="n">unit</span><span class="p">:</span> <span class="n">AxisUnit</span> <span class="o">=</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">SI</span><span class="p">,</span>
+    <span class="n">unitv</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;km/s&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;-inf&quot;</span><span class="p">),</span>
+    <span class="n">vmax</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span>
+    <span class="n">slicetype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">vslicethick</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">center</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;particle&quot;</span><span class="p">,</span>
+    <span class="n">flimit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">addcolorbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">strx</span><span class="p">,</span> <span class="n">stry</span><span class="p">,</span> <span class="n">str_title</span> <span class="o">=</span> <span class="n">prep_vdf</span><span class="p">(</span>
+        <span class="n">meta</span><span class="p">,</span>
+        <span class="n">location</span><span class="p">,</span>
+        <span class="n">species</span><span class="p">,</span>
+        <span class="n">unit</span><span class="p">,</span>
+        <span class="n">unitv</span><span class="p">,</span>
+        <span class="n">slicetype</span><span class="p">,</span>
+        <span class="n">vslicethick</span><span class="p">,</span>
+        <span class="n">center</span><span class="p">,</span>
+        <span class="n">weight</span><span class="p">,</span>
+        <span class="n">flimit</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+    <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">vmin</span><span class="p">):</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">vmax</span><span class="p">):</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Active f range is </span><span class="si">{</span><span class="n">vmin</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">vmax</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">)</span>
+
+    <span class="n">h</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span>
+        <span class="n">v1</span><span class="p">,</span>
+        <span class="n">v2</span><span class="p">,</span>
+        <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">),</span>
+        <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+        <span class="n">shading</span><span class="o">=</span><span class="s2">&quot;flat&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">str_title</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">strx</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">stry</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">addcolorbar</span><span class="p">:</span>
+        <span class="n">cb</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.04</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+        <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s2">&quot;both&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">)</span>
+        <span class="n">cb_title</span> <span class="o">=</span> <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;f(v)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># TODO: Draw vector of magnetic field direction</span>
+    <span class="c1"># if slicetype in (&quot;xy&quot;, &quot;xz&quot;, &quot;yz&quot;):</span>
+
+    <span class="k">return</span> <span class="n">h</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># h[0] is 2D data, h[1] is x axis, h[2] is y axis</span></div>
+
+
+
+<div class="viewcode-block" id="prep_vdf">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/plot/plot/index.html#pyvlasiator.plot.prep_vdf">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">prep_vdf</span><span class="p">(</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Vlsv</span><span class="p">,</span>
+    <span class="n">location</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="nb">list</span><span class="p">,</span>
+    <span class="n">species</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;proton&quot;</span><span class="p">,</span>
+    <span class="n">unit</span><span class="p">:</span> <span class="n">AxisUnit</span> <span class="o">=</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">SI</span><span class="p">,</span>
+    <span class="n">unitv</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;km/s&quot;</span><span class="p">,</span>
+    <span class="n">slicetype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">vslicethick</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">center</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;particle&quot;</span><span class="p">,</span>
+    <span class="n">flimit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">ncells</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">ncells</span>
+
+    <span class="k">if</span> <span class="n">species</span> <span class="ow">in</span> <span class="n">meta</span><span class="o">.</span><span class="n">meshes</span><span class="p">:</span>
+        <span class="n">vmesh</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">meshes</span><span class="p">[</span><span class="n">species</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unable to detect population </span><span class="si">{</span><span class="n">species</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">slicetype</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;xy&quot;</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">,</span> <span class="s2">&quot;yz&quot;</span><span class="p">,</span> <span class="s2">&quot;bperp&quot;</span><span class="p">,</span> <span class="s2">&quot;bpar1&quot;</span><span class="p">,</span> <span class="s2">&quot;bpar2&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown type </span><span class="si">{</span><span class="n">slicetype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">EARTH</span><span class="p">:</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">loc</span> <span class="o">*</span> <span class="n">RE</span> <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="n">location</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">MERCURY</span><span class="p">:</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">loc</span> <span class="o">*</span> <span class="n">RMERCURY</span> <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="n">location</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="n">AxisUnit</span><span class="o">.</span><span class="n">KSI</span><span class="p">:</span>
+        <span class="n">location</span> <span class="o">=</span> <span class="p">[</span><span class="n">loc</span> <span class="o">*</span> <span class="mf">1e3</span> <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="n">location</span><span class="p">]</span>
+
+    <span class="c1"># Set unit conversion factor</span>
+    <span class="n">unitvfactor</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="k">if</span> <span class="n">unitv</span> <span class="o">==</span> <span class="s2">&quot;km/s&quot;</span> <span class="k">else</span> <span class="mf">1.0</span>
+
+    <span class="c1"># Get closest cell ID from input coordinates</span>
+    <span class="n">cidReq</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">getcell</span><span class="p">(</span><span class="n">location</span><span class="p">)</span>
+    <span class="n">cidNearest</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">getnearestcellwithvdf</span><span class="p">(</span><span class="n">cidReq</span><span class="p">)</span>
+
+    <span class="c1"># Set normal direction</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">slicetype</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ncells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">ncells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># 1D, select xz</span>
+            <span class="n">slicetype</span> <span class="o">=</span> <span class="s2">&quot;xz&quot;</span>
+        <span class="k">elif</span> <span class="n">ncells</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># polar</span>
+            <span class="n">slicetype</span> <span class="o">=</span> <span class="s2">&quot;xz&quot;</span>
+        <span class="k">elif</span> <span class="n">ncells</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># ecliptic</span>
+            <span class="n">slicetype</span> <span class="o">=</span> <span class="s2">&quot;xy&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">slicetype</span> <span class="o">=</span> <span class="s2">&quot;xy&quot;</span>
+
+    <span class="k">if</span> <span class="n">slicetype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;xy&quot;</span><span class="p">,</span> <span class="s2">&quot;yz&quot;</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">slicetype</span> <span class="o">==</span> <span class="s2">&quot;xy&quot;</span><span class="p">:</span>
+            <span class="n">dir1</span><span class="p">,</span> <span class="n">dir2</span><span class="p">,</span> <span class="n">dir3</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+            <span class="n">ŝ</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">slicetype</span> <span class="o">==</span> <span class="s2">&quot;xz&quot;</span><span class="p">:</span>
+            <span class="n">dir1</span><span class="p">,</span> <span class="n">dir2</span><span class="p">,</span> <span class="n">dir3</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span>
+            <span class="n">ŝ</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">slicetype</span> <span class="o">==</span> <span class="s2">&quot;yz&quot;</span><span class="p">:</span>
+            <span class="n">dir1</span><span class="p">,</span> <span class="n">dir2</span><span class="p">,</span> <span class="n">dir3</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span>
+            <span class="n">ŝ</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+        <span class="n">v1size</span> <span class="o">=</span> <span class="n">vmesh</span><span class="o">.</span><span class="n">vblocks</span><span class="p">[</span><span class="n">dir1</span><span class="p">]</span> <span class="o">*</span> <span class="n">vmesh</span><span class="o">.</span><span class="n">vblock_size</span><span class="p">[</span><span class="n">dir1</span><span class="p">]</span>
+        <span class="n">v2size</span> <span class="o">=</span> <span class="n">vmesh</span><span class="o">.</span><span class="n">vblocks</span><span class="p">[</span><span class="n">dir2</span><span class="p">]</span> <span class="o">*</span> <span class="n">vmesh</span><span class="o">.</span><span class="n">vblock_size</span><span class="p">[</span><span class="n">dir2</span><span class="p">]</span>
+
+        <span class="n">v1min</span><span class="p">,</span> <span class="n">v1max</span> <span class="o">=</span> <span class="n">vmesh</span><span class="o">.</span><span class="n">vmin</span><span class="p">[</span><span class="n">dir1</span><span class="p">],</span> <span class="n">vmesh</span><span class="o">.</span><span class="n">vmax</span><span class="p">[</span><span class="n">dir1</span><span class="p">]</span>
+        <span class="n">v2min</span><span class="p">,</span> <span class="n">v2max</span> <span class="o">=</span> <span class="n">vmesh</span><span class="o">.</span><span class="n">vmin</span><span class="p">[</span><span class="n">dir2</span><span class="p">],</span> <span class="n">vmesh</span><span class="o">.</span><span class="n">vmax</span><span class="p">[</span><span class="n">dir2</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">slicetype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bperp&quot;</span><span class="p">,</span> <span class="s2">&quot;bpar1&quot;</span><span class="p">,</span> <span class="s2">&quot;bpar2&quot;</span><span class="p">):</span>
+        <span class="c1"># TODO: WIP</span>
+        <span class="k">pass</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">((</span><span class="n">v1max</span> <span class="o">-</span> <span class="n">v1min</span><span class="p">)</span> <span class="o">/</span> <span class="n">v1size</span><span class="p">,</span> <span class="p">(</span><span class="n">v2max</span> <span class="o">-</span> <span class="n">v2min</span><span class="p">)</span> <span class="o">/</span> <span class="n">v2size</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Noncubic vgrid applied!&quot;</span><span class="p">)</span>
+
+    <span class="n">cellsize</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1max</span> <span class="o">-</span> <span class="n">v1min</span><span class="p">)</span> <span class="o">/</span> <span class="n">v1size</span>
+
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">v1min</span> <span class="o">/</span> <span class="n">unitvfactor</span><span class="p">,</span> <span class="n">v1max</span> <span class="o">/</span> <span class="n">unitvfactor</span><span class="p">,</span> <span class="n">v1size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">v2min</span> <span class="o">/</span> <span class="n">unitvfactor</span><span class="p">,</span> <span class="n">v2max</span> <span class="o">/</span> <span class="n">unitvfactor</span><span class="p">,</span> <span class="n">v2size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">vcellids</span><span class="p">,</span> <span class="n">vcellf</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_vcells</span><span class="p">(</span><span class="n">cidNearest</span><span class="p">,</span> <span class="n">species</span><span class="p">)</span>
+
+    <span class="n">V</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">getvcellcoordinates</span><span class="p">(</span><span class="n">vcellids</span><span class="p">,</span> <span class="n">species</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">center</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">center</span> <span class="o">==</span> <span class="s2">&quot;bulk&quot;</span><span class="p">:</span>  <span class="c1"># centered with bulk velocity</span>
+            <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">has_variable</span><span class="p">(</span><span class="s2">&quot;moments&quot;</span><span class="p">):</span>  <span class="c1"># From a restart file</span>
+                <span class="n">Vcenter</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span><span class="s2">&quot;restart_V&quot;</span><span class="p">,</span> <span class="n">cidNearest</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">meta</span><span class="o">.</span><span class="n">has_variable</span><span class="p">(</span><span class="n">species</span> <span class="o">*</span> <span class="s2">&quot;/vg_v&quot;</span><span class="p">):</span>  <span class="c1"># Vlasiator 5</span>
+                <span class="n">Vcenter</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span><span class="n">species</span> <span class="o">*</span> <span class="s2">&quot;/vg_v&quot;</span><span class="p">,</span> <span class="n">cidNearest</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">meta</span><span class="o">.</span><span class="n">has_variable</span><span class="p">(</span><span class="n">species</span> <span class="o">*</span> <span class="s2">&quot;/V&quot;</span><span class="p">):</span>
+                <span class="n">Vcenter</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span><span class="n">species</span> <span class="o">*</span> <span class="s2">&quot;/V&quot;</span><span class="p">,</span> <span class="n">cidNearest</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Vcenter</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span><span class="s2">&quot;V&quot;</span><span class="p">,</span> <span class="n">cidNearest</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">center</span> <span class="o">==</span> <span class="s2">&quot;peak&quot;</span><span class="p">:</span>  <span class="c1"># centered on highest VDF-value</span>
+            <span class="n">Vcenter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">vcellf</span><span class="p">)</span>
+
+        <span class="n">V</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">fromiter</span><span class="p">((</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">Vcenter</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">V</span><span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Set sparsity threshold</span>
+    <span class="k">if</span> <span class="n">flimit</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">meta</span><span class="o">.</span><span class="n">has_variable</span><span class="p">(</span><span class="n">species</span> <span class="o">+</span> <span class="s2">&quot;/vg_effectivesparsitythreshold&quot;</span><span class="p">):</span>
+            <span class="n">flimit</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">readvariable</span><span class="p">(</span>
+                <span class="n">species</span> <span class="o">+</span> <span class="s2">&quot;/vg_effectivesparsitythreshold&quot;</span><span class="p">,</span> <span class="n">cidNearest</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">meta</span><span class="o">.</span><span class="n">has_variable</span><span class="p">(</span><span class="n">species</span> <span class="o">+</span> <span class="s2">&quot;/EffectiveSparsityThreshold&quot;</span><span class="p">):</span>
+            <span class="n">flimit</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span>
+                <span class="n">species</span> <span class="o">+</span> <span class="s2">&quot;/EffectiveSparsityThreshold&quot;</span><span class="p">,</span> <span class="n">cidNearest</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">flimit</span> <span class="o">=</span> <span class="mf">1e-16</span>
+
+    <span class="c1"># Drop velocity cells which are below the sparsity threshold</span>
+    <span class="n">findex_</span> <span class="o">=</span> <span class="n">vcellf</span> <span class="o">&gt;=</span> <span class="n">flimit</span>
+    <span class="n">fselect</span> <span class="o">=</span> <span class="n">vcellf</span><span class="p">[</span><span class="n">findex_</span><span class="p">]</span>
+    <span class="n">Vselect</span> <span class="o">=</span> <span class="n">V</span><span class="p">[</span><span class="n">findex_</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">slicetype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;xy&quot;</span><span class="p">,</span> <span class="s2">&quot;yz&quot;</span><span class="p">,</span> <span class="s2">&quot;xz&quot;</span><span class="p">):</span>
+        <span class="n">v1select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="n">dir1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">Vselect</span><span class="p">])</span>
+        <span class="n">v2select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="n">dir2</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">Vselect</span><span class="p">])</span>
+        <span class="n">vnormal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="n">dir3</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">Vselect</span><span class="p">])</span>
+
+        <span class="n">vec</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;vx&quot;</span><span class="p">,</span> <span class="s2">&quot;vy&quot;</span><span class="p">,</span> <span class="s2">&quot;vz&quot;</span><span class="p">)</span>
+        <span class="n">strx</span> <span class="o">=</span> <span class="n">vec</span><span class="p">[</span><span class="n">dir1</span><span class="p">]</span>
+        <span class="n">stry</span> <span class="o">=</span> <span class="n">vec</span><span class="p">[</span><span class="n">dir2</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">slicetype</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;bperp&quot;</span><span class="p">,</span> <span class="s2">&quot;bpar1&quot;</span><span class="p">,</span> <span class="s2">&quot;bpar2&quot;</span><span class="p">):</span>
+        <span class="n">v1select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Vselect</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">Vselect</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">v2select</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Vselect</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">Vselect</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">vnormal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">Vselect</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">Vselect</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="c1"># TODO: WIP</span>
+        <span class="c1"># for v1s, v2s, vn, vs in zip(v1select, v2select, vnormal, Vselect):</span>
+        <span class="c1">#    v1s, v2s, vn = Rinv * Vselect</span>
+
+        <span class="c1"># if slicetype == &quot;bperp&quot;:</span>
+        <span class="c1">#    strx = r&quot;$v_{B \times V}$&quot;</span>
+        <span class="c1">#    stry = r&quot;$v_{B \times (B \times V)}$&quot;</span>
+        <span class="c1"># elif slicetype == &quot;bpar2&quot;:</span>
+        <span class="c1">#    strx = r&quot;$v_{B}$&quot;</span>
+        <span class="c1">#    stry = r&quot;$v_{B \times V}$&quot;</span>
+        <span class="c1"># elif slicetype == &quot;bpar1&quot;:</span>
+        <span class="c1">#    strx = r&quot;$v_{B \times (B \times V)}$&quot;</span>
+        <span class="c1">#    stry = r&quot;$v_{B}$&quot;</span>
+
+    <span class="n">unitstr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; [</span><span class="si">{</span><span class="n">unitv</span><span class="si">}</span><span class="s2">]&quot;</span>
+    <span class="n">strx</span> <span class="o">+=</span> <span class="n">unitstr</span>
+    <span class="n">stry</span> <span class="o">+=</span> <span class="n">unitstr</span>
+
+    <span class="k">if</span> <span class="n">vslicethick</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># Set a proper thickness</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="n">i</span> <span class="o">==</span> <span class="mf">1.0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ŝ</span>
+        <span class="p">):</span>  <span class="c1"># Assure that the slice cut through at least 1 vcell</span>
+            <span class="n">vslicethick</span> <span class="o">=</span> <span class="n">cellsize</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># Assume cubic vspace grid, add extra space</span>
+            <span class="n">vslicethick</span> <span class="o">=</span> <span class="n">cellsize</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">)</span>
+
+    <span class="c1"># Weights using particle flux or phase-space density</span>
+    <span class="n">fweight</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">fselect</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">([</span><span class="n">v1select</span><span class="p">,</span> <span class="n">v2select</span><span class="p">,</span> <span class="n">vnormal</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">weight</span> <span class="o">==</span> <span class="s2">&quot;flux&quot;</span>
+        <span class="k">else</span> <span class="n">fselect</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Select cells within the slice area</span>
+    <span class="k">if</span> <span class="n">vslicethick</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">ind_</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">vnormal</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">vslicethick</span>
+        <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">fweight</span> <span class="o">=</span> <span class="n">v1select</span><span class="p">[</span><span class="n">ind_</span><span class="p">],</span> <span class="n">v2select</span><span class="p">[</span><span class="n">ind_</span><span class="p">],</span> <span class="n">fweight</span><span class="p">[</span><span class="n">ind_</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="o">=</span> <span class="n">v1select</span><span class="p">,</span> <span class="n">v2select</span>
+
+    <span class="n">v1</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="o">/</span> <span class="n">unitvfactor</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">v1</span><span class="p">]</span>
+    <span class="n">v2</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="o">/</span> <span class="n">unitvfactor</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">v2</span><span class="p">]</span>
+
+    <span class="n">str_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;t = </span><span class="si">{</span><span class="n">meta</span><span class="o">.</span><span class="n">time</span><span class="si">:</span><span class="s2">4.1f</span><span class="si">}</span><span class="s2">s&quot;</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original coordinates : </span><span class="si">{</span><span class="n">location</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Original cell        : </span><span class="si">{</span><span class="n">meta</span><span class="o">.</span><span class="n">getcellcoordinates</span><span class="p">(</span><span class="n">cidReq</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nearest cell with VDF: </span><span class="si">{</span><span class="n">meta</span><span class="o">.</span><span class="n">getcellcoordinates</span><span class="p">(</span><span class="n">cidNearest</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CellID: </span><span class="si">{</span><span class="n">cidNearest</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">center</span> <span class="o">==</span> <span class="s2">&quot;bulk&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transforming to plasma frame, travelling at speed </span><span class="si">{</span><span class="n">Vcenter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">center</span> <span class="o">==</span> <span class="s2">&quot;peak&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transforming to peak f-value frame, travelling at speed </span><span class="si">{</span><span class="n">Vcenter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using VDF threshold value of </span><span class="si">{</span><span class="n">flimit</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">vslicethick</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Performing slice with a counting thickness of $vslicethick&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Projecting total VDF to a single plane&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">fweight</span><span class="p">,</span> <span class="n">strx</span><span class="p">,</span> <span class="n">stry</span><span class="p">,</span> <span class="n">str_title</span></div>
+
+
+
+<span class="c1"># Append plotting functions</span>
+<span class="n">Vlsv</span><span class="o">.</span><span class="n">plot</span> <span class="o">=</span> <span class="n">plot</span>
+<span class="n">Vlsv</span><span class="o">.</span><span class="n">scatter</span> <span class="o">=</span> <span class="n">scatter</span>
+<span class="n">Vlsv</span><span class="o">.</span><span class="n">pcolormesh</span> <span class="o">=</span> <span class="n">pcolormesh</span>
+<span class="n">Vlsv</span><span class="o">.</span><span class="n">contourf</span> <span class="o">=</span> <span class="n">contourf</span>
+<span class="n">Vlsv</span><span class="o">.</span><span class="n">contour</span> <span class="o">=</span> <span class="n">contour</span>
+<span class="n">Vlsv</span><span class="o">.</span><span class="n">streamplot</span> <span class="o">=</span> <span class="n">streamplot</span>
+<span class="n">Vlsv</span><span class="o">.</span><span class="n">vdfslice</span> <span class="o">=</span> <span class="n">vdfslice</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

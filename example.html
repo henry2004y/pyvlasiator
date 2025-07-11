@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example usage &mdash; pyvlasiator  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="pyvlasiator" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyvlasiator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#downloading-demo-data">Downloading demo data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#loading-vlsv-data">Loading VLSV data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#read-meta-data">Read meta data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-parameters">Read parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-variable">Read variable</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#plotting">Plotting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#d">1D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">2D</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#d-slice-of-3d-amr-data">2D slice of 3D AMR data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vdf">VDF</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyvlasiator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Example usage</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/example.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="example-usage">
+<h1>Example usage<a class="headerlink" href="#example-usage" title="Link to this heading"></a></h1>
+<p>Here we will demonstrate how to use <code class="docutils literal notranslate"><span class="pre">pyvlasiator</span></code> to process Vlasiator data.</p>
+<section id="downloading-demo-data">
+<h2>Downloading demo data<a class="headerlink" href="#downloading-demo-data" title="Link to this heading"></a></h2>
+<p>If you don’t have Vlasiator data to start with, you can download demo data with the following:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tarfile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/henry2004y/vlsv_data/master/testdata.tar.gz&quot;</span>
+<span class="n">testfiles</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">allow_redirects</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">open</span><span class="p">(</span><span class="n">testfiles</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;./data&quot;</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+   <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">testfiles</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+   <span class="n">file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">testfiles</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="loading-vlsv-data">
+<h2>Loading VLSV data<a class="headerlink" href="#loading-vlsv-data" title="Link to this heading"></a></h2>
+<section id="read-meta-data">
+<h3>Read meta data<a class="headerlink" href="#read-meta-data" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pyvlasiator.vlsv</span><span class="w"> </span><span class="kn">import</span> <span class="n">Vlsv</span>
+
+<span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;data/bulk.1d.vlsv&quot;</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">Vlsv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+<span class="n">meta</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>File       : bulk.1d.vlsv
+Time       : 10.0000
+Dimension  : 1
+Max AMR lvl: 0
+Has VDF    : True
+Variables  : [&#39;CellID&#39;, &#39;proton/vg_ptensor_diagonal&#39;, &#39;proton/vg_ptensor_offdiagonal&#39;, &#39;proton/vg_rho&#39;, &#39;proton/vg_v&#39;, &#39;vg_b_vol&#39;, &#39;vg_boundarytype&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="read-parameters">
+<h3>Read parameters<a class="headerlink" href="#read-parameters" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_parameter</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+<span class="n">t</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>10.0
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="read-variable">
+<h3>Read variable<a class="headerlink" href="#read-variable" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">read_variable</span><span class="p">(</span><span class="s2">&quot;CellID&quot;</span><span class="p">)</span>
+<span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10], dtype=uint64)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="plotting">
+<h2>Plotting<a class="headerlink" href="#plotting" title="Link to this heading"></a></h2>
+<p>To enable plotting functionalities, we need to first import the corresponding submodule:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyvlasiator.plot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="d">
+<h3>1D<a class="headerlink" href="#d" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;proton/vg_rho&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fcb93d55a90&gt;]
+</pre></div>
+</div>
+<img alt="_images/900c3dadb81dd1ba2d3ee6fbf1cda6413745a28e7832dbf9ad282b33af7f9fb0.png" src="_images/900c3dadb81dd1ba2d3ee6fbf1cda6413745a28e7832dbf9ad282b33af7f9fb0.png" />
+</div>
+</div>
+</section>
+<section id="id1">
+<h3>2D<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;data/bulk.2d.vlsv&quot;</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">Vlsv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+<span class="n">meta</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="s2">&quot;vg_b_vol&quot;</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">meta</span><span class="o">.</span><span class="n">streamplot</span><span class="p">(</span><span class="s2">&quot;proton/vg_v&quot;</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="s2">&quot;xy&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.streamplot.StreamplotSet at 0x7fcb91831590&gt;
+</pre></div>
+</div>
+<img alt="_images/11f0e00dcc0eef0a2fe3f633741ebc0fa33cafcf91e877c6c845ebc6ba5db126.png" src="_images/11f0e00dcc0eef0a2fe3f633741ebc0fa33cafcf91e877c6c845ebc6ba5db126.png" />
+</div>
+</div>
+<p>Field solver grid variables are also supported via the same APIs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meta</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="s2">&quot;fg_b&quot;</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">meta</span><span class="o">.</span><span class="n">streamplot</span><span class="p">(</span><span class="s2">&quot;fg_b&quot;</span><span class="p">,</span> <span class="n">comp</span><span class="o">=</span><span class="s2">&quot;xy&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.streamplot.StreamplotSet at 0x7fcb93a48690&gt;
+</pre></div>
+</div>
+<img alt="_images/2271a7d2931599b1f7f661f4a84753ee362b633233416e17c2f43a36e7425518.png" src="_images/2271a7d2931599b1f7f661f4a84753ee362b633233416e17c2f43a36e7425518.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="d-slice-of-3d-amr-data">
+<h2>2D slice of 3D AMR data<a class="headerlink" href="#d-slice-of-3d-amr-data" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;data/bulk.amr.vlsv&quot;</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">Vlsv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+<span class="n">meta</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="s2">&quot;proton/vg_rho&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.QuadMesh at 0x7fcb906c8210&gt;
+</pre></div>
+</div>
+<img alt="_images/c10663a6fc5f8589af7f9c70399fca512f7088d16837bcd066f41f0e78aca6da.png" src="_images/c10663a6fc5f8589af7f9c70399fca512f7088d16837bcd066f41f0e78aca6da.png" />
+</div>
+</div>
+</section>
+<section id="vdf">
+<h2>VDF<a class="headerlink" href="#vdf" title="Link to this heading"></a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;data/bulk.1d.vlsv&quot;</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">Vlsv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="n">meta</span><span class="o">.</span><span class="n">vdfslice</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.QuadMesh at 0x7fcb9174e890&gt;
+</pre></div>
+</div>
+<img alt="_images/509d11022c25e54495d666bbf0afebc657bb6ca068caac762923b95a093d2b0b.png" src="_images/509d11022c25e54495d666bbf0afebc657bb6ca068caac762923b95a093d2b0b.png" />
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="pyvlasiator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

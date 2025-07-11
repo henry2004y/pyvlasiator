@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyvlasiator.vlsv.variables &mdash; pyvlasiator  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyvlasiator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyvlasiator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyvlasiator.vlsv.variables</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyvlasiator.vlsv.variables</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Predefined physical constants</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">pi</span>
+
+<span class="n">QE</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.60217662e-19</span>  <span class="c1"># electron charge, [C]</span>
+<span class="n">ME</span> <span class="o">=</span> <span class="mf">9.10938356e-31</span>  <span class="c1"># electron mass, [kg]</span>
+<span class="n">QI</span> <span class="o">=</span> <span class="mf">1.60217662e-19</span>  <span class="c1"># proton mass, [C]</span>
+<span class="n">MI</span> <span class="o">=</span> <span class="mf">1.673557546e-27</span>  <span class="c1"># proton mass, [kg]</span>
+<span class="n">C</span> <span class="o">=</span> <span class="mf">299792458.0</span>  <span class="c1"># speed of light, [m/s]</span>
+<span class="n">MU0</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="mf">1e-7</span>  <span class="c1"># Vacuum permeability, [H/m]</span>
+<span class="n">EPSILON0</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">C</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">MU0</span><span class="p">)</span>  <span class="c1"># Vacuum permittivity, [F/m]</span>
+<span class="n">KB</span> <span class="o">=</span> <span class="mf">1.38064852e-23</span>  <span class="c1"># Boltzmann constant, [m²kg/(s²K)]</span>
+<span class="n">RE</span> <span class="o">=</span> <span class="mf">6.371e6</span>  <span class="c1"># Earth radius, [m]</span>
+<span class="n">RMERCURY</span> <span class="o">=</span> <span class="mf">2.4397e6</span> <span class="c1"># Mercury radius, [m]</span>
+
+<span class="n">speciesdict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;avgs&quot;</span><span class="p">:</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;proton&quot;</span><span class="p">:</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;helium&quot;</span><span class="p">:</span> <span class="s2">&quot;He&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;oxygen&quot;</span><span class="p">:</span> <span class="s2">&quot;O&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;electron&quot;</span><span class="p">:</span> <span class="s2">&quot;e&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">speciesamu</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;avgs&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;proton&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;helium&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;oxygen&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="s2">&quot;electron&quot;</span><span class="p">:</span> <span class="mf">5.4461702e-4</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">speciescharge</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;avgs&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;proton&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;helium&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;oxygen&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;electron&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Define units, LaTeX markup names, and LaTeX markup units for intrinsic values</span>
+<span class="n">units_predefined</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Rhom&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;kg/m3&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\rho_m$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{kg}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-3}$&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;rhoq&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;C/m3&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\rho_q$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{C}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-3}$&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;rho&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;1/m3&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$n_\mathrm</span><span class="si">{p}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{m}</span><span class="s2">^{-3}$&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;rho_v&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;1/m2s&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\Gamma_\mathrm</span><span class="si">{p}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{m}</span><span class="s2">^{-2}$s&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;v&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;m/s&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$V$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{m}</span><span class="s2">\,\mathrm</span><span class="si">{s}</span><span class="s2">^{-1}$&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$B$&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;b_vor&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$B_\mathrm</span><span class="si">{vol}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;background_b&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$B_\mathrm</span><span class="si">{bg}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;perturbed_b&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$B_\mathrm</span><span class="si">{pert}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;bgb&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$B_\mathrm</span><span class="si">{bg}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;perb&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;B_\mathrm</span><span class="si">{pert}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;perb_vor&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;B_\mathrm{vol,pert}$&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;e&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;V/m&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$E$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;e_vor&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;V/m&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$E_\mathrm</span><span class="si">{vol}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;exhall_000_100&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,000,100}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;exhall_001_101&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,001,101}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;exhall_010_110&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,010,110}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;exhall_011_111&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,011,111}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;eyhall_000_010&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,000,010}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;eyhall_001_011&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,001,011}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;eyhall_100_110&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,100,110}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;eyhall_101_111&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,101,111}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ezhall_000_001&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,000,001}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ezhall_010_011&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,010,011}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ezhall_100_101&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,100,101}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;ezhall_110_111&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;V/m&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$E_\mathrm{Hall,110,111}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{V}</span><span class="s2">\,\mathrm</span><span class="si">{m}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;pressure&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$P$&quot;</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;pressure_dt2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$P_{\mathrm</span><span class="si">{d}</span><span class="s2">t/2}}$&quot;</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;pressure_r&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$P_r$&quot;</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;pressure_v&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$P_v$&quot;</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;ptensordiagonar&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{P}</span><span class="s2">_\mathrm</span><span class="si">{diag}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;ptensoroffdiagonar&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathcal</span><span class="si">{P}</span><span class="s2">_\mathrm{off-diag}$&quot;</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;minvalue&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;s3/m6&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$f_\mathrm</span><span class="si">{Min}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{m}</span><span class="s2">^{-6}\,\mathrm</span><span class="si">{s}</span><span class="s2">^</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;effectivesparsitythreshold&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;s3/m6&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$f_\mathrm</span><span class="si">{Min}</span><span class="s2">$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{m}</span><span class="s2">^{-6}\,\mathrm</span><span class="si">{s}</span><span class="s2">^</span><span class="si">{3}</span><span class="s2">$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;rho_loss_adjust&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;1/m3&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\Delta_\mathrm</span><span class="si">{loss}</span><span class="s2"> n_\mathrm</span><span class="si">{p}</span><span class="s2">$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{m}</span><span class="s2">^{-3}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;energydensity&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;eV/cm3&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\rho_{\mathrm</span><span class="si">{energy}</span><span class="s2">}$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{eV}</span><span class="s2">\,\mathrm</span><span class="si">{cm}</span><span class="s2">^{-3}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;precipitationdiffflux&quot;</span><span class="p">:</span> <span class="p">(</span>
+        <span class="s2">&quot;1/(cm2 sr s eV)&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\Delta F_\mathrm</span><span class="si">{precipitation}</span><span class="s2">$&quot;</span><span class="p">,</span>
+        <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{cm}</span><span class="s2">^{-2} \,\mathrm</span><span class="si">{sr}</span><span class="s2">^{-1}\,\mathrm</span><span class="si">{s}</span><span class="s2">^{-1}\,\mathrm</span><span class="si">{eV}</span><span class="s2">^{-1}$&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$T$&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Tpar&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$T$&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Tperp&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$T$&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Panisotropy&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$P_\perp / P_\parallel$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Tanisotropy&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$T_\perp / T_\parallel$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;VS&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;m/s&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$V_S$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{m}</span><span class="s2">\,\mathrm</span><span class="si">{s}</span><span class="s2">^{-1}$&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;VA&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;m/s&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$V_A$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\mathrm</span><span class="si">{m}</span><span class="s2">\,\mathrm</span><span class="si">{s}</span><span class="s2">^{-1}$&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;MS&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$M_S$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;MA&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$M_A$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Ppar&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$P_\parallel$&quot;</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Pperp&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;Pa&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$P_\perp$&quot;</span><span class="p">,</span> <span class="s2">&quot;Pa&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Beta&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\beta$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;BetaStar&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\beta^\ast$&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Gyroperiod&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$T_</span><span class="si">{gyro}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;PlasmaPeriod&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$T_</span><span class="si">{plasma}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Gyrofrequency&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;rad/s&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\omega_</span><span class="si">{g}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\mathrm</span><span class="si">{rad}</span><span class="s2">/\mathrm</span><span class="si">{s}</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="s2">&quot;Omegap&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;rad/s&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;$\omega_</span><span class="si">{p}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\mathrm</span><span class="si">{rad}</span><span class="s2">/\mathrm</span><span class="si">{s}</span><span class="s2">&quot;</span><span class="p">),</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="pass_op">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/vlsv/variables/index.html#pyvlasiator.vlsv.variables.pass_op">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">pass_op</span><span class="p">(</span><span class="n">variable</span><span class="p">):</span>
+    <span class="c1"># do nothing</span>
+    <span class="k">return</span> <span class="n">variable</span></div>
+
+
+
+<div class="viewcode-block" id="magnitude">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/vlsv/variables/index.html#pyvlasiator.vlsv.variables.magnitude">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">magnitude</span><span class="p">(</span><span class="n">variable</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">variable</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="sumv">
+<a class="viewcode-back" href="../../../autoapi/pyvlasiator/vlsv/variables/index.html#pyvlasiator.vlsv.variables.sumv">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">sumv</span><span class="p">(</span><span class="n">variable</span><span class="p">):</span>
+    <span class="c1"># Note: this is used to sum over multipops, thus the summing axis is zero</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">variable</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Number of dimensions is too large&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># First dimension: populations</span>
+        <span class="c1"># Second dimension: cells</span>
+        <span class="c1"># Third dimension: components</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">variable</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Dict of operators. The user can apply these to any variable,</span>
+<span class="c1"># including more general datareducers. Can only be used to reduce one</span>
+<span class="c1"># variable at a time</span>
+<span class="n">data_operators</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">data_operators</span><span class="p">[</span><span class="s2">&quot;pass&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pass_op</span>
+<span class="n">data_operators</span><span class="p">[</span><span class="s2">&quot;magnitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">magnitude</span>
+<span class="n">data_operators</span><span class="p">[</span><span class="s2">&quot;sum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sumv</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Hongyang Zhou.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
