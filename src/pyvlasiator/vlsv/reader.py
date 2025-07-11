@@ -484,8 +484,8 @@ class Vlsv:
 
             return lsize
 
+        nIORanks = self.read_parameter("numWritingRanks")  # Int32
         if fgDecomposition is None:
-            nIORanks = self.read_parameter("numWritingRanks")  # Int32
             fgDecomposition = getDomainDecomposition(bbox, nIORanks)
 
         offsetnow = 0
