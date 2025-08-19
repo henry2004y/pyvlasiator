@@ -357,6 +357,7 @@ def _plot2d(
     if not meta.has_variable(var):
         raise ValueError(f"Variable {var} not found in the file")
 
+    normal = -1  # Default value
     if meta.ndims() == 3 or meta.maxamr > 0:
         # check if origin and normal exist in kwargs
         normal = kwargs["normal"] if "normal" in kwargs else 1
@@ -373,7 +374,7 @@ def _plot2d(
     x1, x2 = get_axis(pArgs.axisunit, pArgs.plotrange, pArgs.sizes)
 
     if var in ("fg_b", "fg_e", "vg_b_vol", "vg_e_vol") or var.endswith("vg_v"):
-        _fillinnerBC(data)
+        _fillinnerBC(meta, data, pArgs, normal)
 
     norm, ticks = set_colorbar(colorscale, vmin, vmax, data)
 
@@ -797,11 +798,35 @@ def get_axis(axisunit: AxisUnit, plotrange: tuple, sizes: tuple) -> tuple:
     return x, y
 
 
-def _fillinnerBC(data: np.ndarray):
+def _fillinnerBC(meta: Vlsv, data: np.ndarray, pArgs: PlotArgs, normal: int):
     """
-    Fill sparsity/inner boundary cells with NaN.
+    Fill sparsity/inner boundary cells with NaN based on density.
     """
-    data[data == 0] = np.nan
+    rho_var = None
+    # Prioritize proton density, then any other density
+    if "proton/vg_rho" in meta.variable:
+        rho_var = "proton/vg_rho"
+    else:
+        for var_name in meta.variable:
+            if var_name.endswith("vg_rho"):
+                rho_var = var_name
+                break
+
+    if rho_var:
+        if meta.ndims() == 3 or meta.maxamr > 0:
+            # For 3D data, we need to get a slice of the density
+            rho_data = prep2dslice(meta, rho_var, normal, -1, pArgs)
+        else:
+            # For 2D data, we get the 2D array
+            rho_data = prep2d(meta, rho_var, -1)
+
+        # Ensure rho_data and data have the same shape
+        if rho_data.shape == data.shape:
+            data[rho_data == 0] = np.nan
+        else:
+            warnings.warn(f"Could not apply inner boundary mask: density shape {rho_data.shape} and data shape {data.shape} mismatch.")
+    else:
+        warnings.warn("Could not find a density variable (e.g., 'proton/vg_rho') to mask inner boundary.")
 
 
 def set_colorbar(
