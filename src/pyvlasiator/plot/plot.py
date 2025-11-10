@@ -809,14 +809,15 @@ def _fillinnerBC(data: np.ndarray, meta: Vlsv, var: str, pArgs: PlotArgs, normal
         # Default to proton density for field quantities
         rho_var = "proton/vg_rho"
 
-    if meta.has_variable(rho_var):
-        if normal != -1:
-            rho_data = prep2dslice(meta, rho_var, normal, -1, pArgs)
-        else:
-            rho_data = prep2d(meta, rho_var, -1)
-        data[rho_data == 0] = np.nan
-    else:
+    if not meta.has_variable(rho_var):
         data[data == 0] = np.nan
+        return
+
+    if normal != -1:
+        rho_data = prep2dslice(meta, rho_var, normal, -1, pArgs)
+    else:
+        rho_data = prep2d(meta, rho_var, -1)
+    data[rho_data == 0] = np.nan
 
 
 def set_colorbar(
