@@ -369,11 +369,12 @@ def _plot2d(
     else:
         pArgs = set_args(meta, var, axisunit)
         data = prep2d(meta, var, comp)
+        normal = -1
 
     x1, x2 = get_axis(pArgs.axisunit, pArgs.plotrange, pArgs.sizes)
 
     if var in ("fg_b", "fg_e", "vg_b_vol", "vg_e_vol") or var.endswith("vg_v"):
-        _fillinnerBC(data)
+        _fillinnerBC(data, meta, var, pArgs, normal)
 
     norm, ticks = set_colorbar(colorscale, vmin, vmax, data)
 
@@ -797,11 +798,26 @@ def get_axis(axisunit: AxisUnit, plotrange: tuple, sizes: tuple) -> tuple:
     return x, y
 
 
-def _fillinnerBC(data: np.ndarray):
+def _fillinnerBC(data: np.ndarray, meta: Vlsv, var: str, pArgs: PlotArgs, normal: int):
     """
-    Fill sparsity/inner boundary cells with NaN.
+    Fill sparsity/inner boundary cells with NaN using density as a mask.
     """
-    data[data == 0] = np.nan
+    if "/" in var:
+        species = var.split("/")[0]
+        rho_var = f"{species}/vg_rho"
+    else:
+        # Default to proton density for field quantities
+        rho_var = "proton/vg_rho"
+
+    if not meta.has_variable(rho_var):
+        data[data == 0] = np.nan
+        return
+
+    if normal != -1:
+        rho_data = prep2dslice(meta, rho_var, normal, -1, pArgs)
+    else:
+        rho_data = prep2d(meta, rho_var, -1)
+    data[rho_data == 0] = np.nan
 
 
 def set_colorbar(
