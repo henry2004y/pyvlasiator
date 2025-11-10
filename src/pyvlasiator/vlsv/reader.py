@@ -43,6 +43,7 @@ class Vlsv:
         self.celldict = {}
         self.maxamr = -1
         self.vg_indexes_on_fg = np.array([])  # SEE: map_vg_onto_fg(self)
+        self.precipitationenergybins = {}
 
         self._read_xml_footer()
 
