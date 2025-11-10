@@ -1,6 +1,6 @@
 [project]
 name = "pyvlasiator"
-version = "0.1.9"
+version = "0.1.10"
 description = "Python utilities for processing Vlasiator data"
 authors = [
     {name = "Hongyang Zhou", email = "hyzhou@umich.edu"},
