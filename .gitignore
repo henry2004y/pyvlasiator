@@ -11,6 +11,7 @@ logfile.txt
 *.egg-info
 requirements.txt
 requirements-dev.txt
+uv.lock
 
 # MacOS
 .DS_Store
