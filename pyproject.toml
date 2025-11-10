@@ -1,28 +1,31 @@
-[tool.poetry]
+[project]
 name = "pyvlasiator"
 version = "0.1.9"
 description = "Python utilities for processing Vlasiator data"
-authors = ["Hongyang Zhou <hyzhou@umich.edu>"]
+authors = [
+    {name = "Hongyang Zhou", email = "hyzhou@umich.edu"},
+]
 readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.25.1",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-numpy = "^1.25.1"
-matplotlib = {version = "^3.7.2", optional = true}
-
-[tool.poetry.extras]
-plot = ["matplotlib"]
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
-pytest-benchmark = "^4.0.0"
-pytest-cov = "^4.1.0"
-requests = "^2.31.0"
-jupyter = "^1.0.0"
-myst-nb = "^1.0.0"
-sphinx-autoapi = "^3.0.0"
-sphinx-rtd-theme = "^1.2.2"
+[project.optional-dependencies]
+plot = [
+    "matplotlib>=3.7.2",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-benchmark>=4.0.0",
+    "pytest-cov>=4.1.0",
+    "requests>=2.31.0",
+    "jupyter>=1.0.0",
+    "myst-nb>=1.0.0",
+    "sphinx-autoapi>=3.0.0",
+    "sphinx-rtd-theme>=1.2.2",
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

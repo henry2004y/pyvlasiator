@@ -8,6 +8,9 @@ dist/
 *.tar.gz
 tests/data/
 logfile.txt
+*.egg-info
+requirements.txt
+requirements-dev.txt
 
 # MacOS
 .DS_Store
